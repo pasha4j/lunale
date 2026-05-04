@@ -4,7 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <meta name="theme-color" content="#0a0a0e" />
-<title>Lunale — The moon guessing game</title>
+<title>Lunale - The moon guessing game</title>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M16GY57YP3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M16GY57YP3');
+</script>
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="%23d4d8e0"/><circle cx="60" cy="38" r="6" fill="%23808693" opacity="0.6"/><circle cx="38" cy="58" r="5" fill="%23808693" opacity="0.55"/><circle cx="58" cy="64" r="4" fill="%23808693" opacity="0.45"/><circle cx="34" cy="38" r="3" fill="%23808693" opacity="0.5"/></svg>'>
 <style>
   :root {
@@ -34,7 +42,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 18px 14px 40px;
+    padding: 12px 14px 24px;
     max-width: 480px;
     margin: 0 auto;
   }
@@ -58,48 +66,48 @@
     letter-spacing: 0.3px;
   }
   .icons {
-    margin-top: 10px;
+    margin-top: 6px;
     display: flex;
     justify-content: center;
-    gap: 18px;
+    gap: 12px;
   }
   .icon-btn {
-    background: var(--card);
-    border: 1.5px solid var(--border-strong);
-    color: var(--fg);
-    width: 40px; height: 40px;
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    width: 32px; height: 32px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 18px;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    font-size: 16px;
+    transition: background 0.15s, opacity 0.15s, transform 0.1s;
   }
-  .icon-btn:hover { background: #23232c; border-color: var(--accent); }
+  .icon-btn:hover { opacity: 0.7; }
   .icon-btn:active { transform: scale(0.94); }
 
   .moon-stage {
     width: 100%;
-    margin-top: 18px;
+    margin-top: 12px;
     background: #000;
     border-radius: 14px;
-    padding: 18px 0;
+    padding: 12px 0;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
   }
   canvas#moon {
-    width: 280px; height: 280px;
-    max-width: 88vw;
-    max-height: 88vw;
+    width: 220px; height: 220px;
+    max-width: 70vw;
+    max-height: 70vw;
     display: block;
   }
 
   .input-row {
     width: 100%;
-    margin-top: 18px;
+    margin-top: 12px;
     display: flex;
     gap: 8px;
   }
@@ -140,14 +148,14 @@
   }
 
   .attempts-label {
-    margin-top: 18px;
-    font-size: 13px;
+    margin-top: 10px;
+    font-size: 12px;
     color: var(--fg-dim);
     letter-spacing: 0.4px;
     text-transform: uppercase;
   }
   .guesses {
-    margin-top: 8px;
+    margin-top: 4px;
     width: 100%;
     list-style: none;
     padding: 0;
@@ -155,31 +163,31 @@
   .guesses li {
     background: var(--card);
     border: 1px solid var(--border);
-    padding: 14px 16px;
-    border-radius: 10px;
-    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 18px;
+    font-size: 15px;
   }
   .guesses .pct {
     font-weight: 700;
-    font-size: 20px;
-    width: 72px;
+    font-size: 17px;
+    width: 60px;
     flex-shrink: 0;
   }
   .guesses .clue {
     text-align: right;
     color: var(--fg);
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
   .guesses .clue .dir {
-    font-size: 26px;
+    font-size: 20px;
     line-height: 1;
     font-weight: 900;
     color: var(--accent);
@@ -187,7 +195,7 @@
     transform: translateY(-1px);
   }
   .guesses .clue .dir.exact {
-    font-size: 22px;
+    font-size: 18px;
     color: var(--good);
   }
   .toast {
@@ -433,8 +441,8 @@
     <h1>Lunale</h1>
     <div class="subtitle">The moon guessing game</div>
     <div class="icons">
-      <button class="icon-btn" id="btn-help" aria-label="Help" title="How to play">?</button>
-      <button class="icon-btn" id="btn-stats" aria-label="Stats" title="Statistics">📊</button>
+      <button class="icon-btn" id="btn-help" aria-label="Help" title="How to play"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+      <button class="icon-btn" id="btn-stats" aria-label="Stats" title="Statistics"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></button>
     </div>
   </div>
 
@@ -491,20 +499,25 @@
   <div class="modal-bg" id="modal-end">
     <div class="modal" role="dialog" aria-labelledby="end-title">
       <button class="close" data-close>×</button>
-      <h2 id="end-title">—</h2>
+      <h2 id="end-title">-</h2>
       <div class="end-moon"><canvas id="end-canvas" width="360" height="360"></canvas></div>
       <div class="end-result">
-        <div class="ans" id="end-pct">—</div>
-        <div class="phase" id="end-phase">—</div>
+        <div class="ans" id="end-pct">-</div>
+        <div class="phase" id="end-phase">-</div>
         <div class="verdict" id="end-verdict"></div>
       </div>
-      <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">—</span></p>
+      <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
     </div>
   </div>
 
 <script>
 (() => {
   'use strict';
+
+  // ---- Analytics helper ----
+  function track(event, params) {
+    if (typeof gtag === 'function') gtag('event', event, params);
+  }
 
   // ---- Config ----
   const MAX_ATTEMPTS = 4;
@@ -550,8 +563,8 @@
 
   function clueFor(diff) {
     const d = Math.abs(diff);
-    if (d === 0) return { text: '🥳 🎉🎉🎉', exact: true };
-    if (d <= 4)  return { text: 'Boiling! 🔥' };
+    if (d === 0) return { text: 'Nailed it!', exact: true };
+    if (d <= 4)  return { text: 'Boiling!' };
     if (d <= 10) return { text: 'Hot!' };
     if (d <= 15) return { text: 'Getting Hot' };
     if (d <= 30) return { text: 'Cold' };
@@ -612,7 +625,7 @@
     const stored = readStored();
     if (!stored) return freshState();
     if (stored.date === today) return stored;
-    // New day — keep stats, reset today's guesses
+    // New day - keep stats, reset today's guesses
     return Object.assign({}, stored, {
       date: today,
       guesses: [],
@@ -743,58 +756,19 @@
   }
 
   function openModal(id) {
-    stopHelpAnim();
     document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('show'));
     $(id).classList.add('show');
-    if (id === 'modal-help') startHelpAnim();
+    if (id === 'modal-help') renderHelpMoon();
   }
 
   function closeModals() {
     document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('show'));
-    stopHelpAnim();
   }
 
-  // ---- Help-modal moon animation ----
-  // Slowly sweep through phases (waxing 1→100, then waning 100→1) to
-  // demonstrate the concept. Stops when the modal closes to save battery.
-  let helpAnimId = null;
-  const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function startHelpAnim() {
-    stopHelpAnim();
+  // ---- Help-modal moon (static) ----
+  function renderHelpMoon() {
     const canvas = $('help-moon');
-    if (!canvas) return;
-
-    if (REDUCED_MOTION) {
-      // Static demo phase — 50% waxing — for users who prefer no motion.
-      drawMoon(canvas, 50, true);
-      return;
-    }
-
-    const start = performance.now();
-    const CYCLE_MS = 28000; // 28s for a full waxing+waning loop
-
-    function frame(t) {
-      const elapsed = ((t - start) % CYCLE_MS) / CYCLE_MS; // 0..1
-      let pct, waxing;
-      if (elapsed < 0.5) {
-        pct = Math.max(1, Math.round(elapsed * 2 * 100));
-        waxing = true;
-      } else {
-        pct = Math.max(1, Math.round((1 - (elapsed - 0.5) * 2) * 100));
-        waxing = false;
-      }
-      drawMoon(canvas, pct, waxing);
-      helpAnimId = requestAnimationFrame(frame);
-    }
-    helpAnimId = requestAnimationFrame(frame);
-  }
-
-  function stopHelpAnim() {
-    if (helpAnimId) {
-      cancelAnimationFrame(helpAnimId);
-      helpAnimId = null;
-    }
+    if (canvas) drawMoon(canvas, 50, true);
   }
 
   document.querySelectorAll('.modal-bg').forEach(bg => {
@@ -810,6 +784,12 @@
   });
 
   // ---- Render guess list ----
+  function scrollToLastGuess() {
+    const list = $('guesses');
+    const last = list.lastElementChild;
+    if (last) last.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
   function renderGuesses() {
     const list = $('guesses');
     list.innerHTML = '';
@@ -931,21 +911,41 @@
     state.guesses.push(n);
     input.value = '';
 
+    const diff = ANSWER.percentage - n;
+    const distance = Math.abs(diff);
+    track('guess_submitted', {
+      guess_number: state.guesses.length,
+      guess_value: n,
+      distance: distance,
+      direction: diff > 0 ? 'higher' : diff < 0 ? 'lower' : 'exact'
+    });
+
     if (n === ANSWER.percentage) {
       state.ended = true;
       state.won = true;
       onGameEnd();
+      track('game_won', {
+        attempts_used: state.guesses.length,
+        answer: ANSWER.percentage
+      });
     } else if (state.guesses.length >= MAX_ATTEMPTS) {
       state.ended = true;
       state.won = false;
       onGameEnd();
+      track('game_lost', {
+        answer: ANSWER.percentage,
+        closest_guess: state.guesses.reduce((best, g) =>
+          Math.abs(g - ANSWER.percentage) < Math.abs(best - ANSWER.percentage) ? g : best
+        )
+      });
     }
 
     renderGuesses();
+    scrollToLastGuess();
     writeStored(state);
     if (state.ended) {
       lockGame();
-      setTimeout(showEndGame, 600);
+      setTimeout(showEndGame, state.won ? 1500 : 800);
     } else {
       input.focus();
     }
@@ -985,8 +985,15 @@
   $('guess').addEventListener('keydown', e => {
     if (e.key === 'Enter') submitGuess();
   });
-  $('btn-help').addEventListener('click', () => openModal('modal-help'));
-  $('btn-stats').addEventListener('click', () => { renderStats(); openModal('modal-stats'); });
+  $('btn-help').addEventListener('click', () => {
+    track('help_click');
+    openModal('modal-help');
+  });
+  $('btn-stats').addEventListener('click', () => {
+    track('stats_click');
+    renderStats();
+    openModal('modal-stats');
+  });
 
   // ---- Init ----
   function init() {
@@ -997,14 +1004,29 @@
       // Show end-game modal automatically on revisit so the player sees today's result
       setTimeout(showEndGame, 200);
     }
-    // First-time visit: pop help
-    if (!readStored()) {
-      setTimeout(() => openModal('modal-help'), 300);
-    }
+    // First-time visitors can tap the help icon themselves
   }
 
   // Wait for first paint before init so canvas reflows correctly
   requestAnimationFrame(init);
+
+  // ---- Analytics: game load & drop-off ----
+  if (state.ended) {
+    track('return_visit', { result: state.won ? 'won' : 'lost' });
+  } else if (state.guesses.length > 0) {
+    track('game_resumed', { guesses_so_far: state.guesses.length });
+  } else {
+    track('game_start', { date: state.date });
+  }
+
+  window.addEventListener('beforeunload', () => {
+    if (!state.ended && state.guesses.length > 0) {
+      track('game_abandoned', {
+        guesses_made: state.guesses.length,
+        max_attempts: MAX_ATTEMPTS
+      });
+    }
+  });
 
   // Re-render moon if window resizes (canvas physical size doesn't actually change, but just in case)
   window.addEventListener('resize', renderMoon);
