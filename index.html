@@ -13,6 +13,9 @@
   gtag('js', new Date());
   gtag('config', 'G-M16GY57YP3');
 </script>
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9260381495727061"
+     crossorigin="anonymous"></script>
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="%23d4d8e0"/><circle cx="60" cy="38" r="6" fill="%23808693" opacity="0.6"/><circle cx="38" cy="58" r="5" fill="%23808693" opacity="0.55"/><circle cx="58" cy="64" r="4" fill="%23808693" opacity="0.45"/><circle cx="34" cy="38" r="3" fill="%23808693" opacity="0.5"/></svg>'>
 <style>
   :root {
@@ -190,10 +193,14 @@
     font-size: 20px;
     line-height: 1;
     font-weight: 900;
-    color: var(--accent);
     display: inline-block;
     transform: translateY(-1px);
   }
+  .guesses .clue .dir.freezing { color: #cdd5de; }
+  .guesses .clue .dir.cold { color: #6ba3d6; }
+  .guesses .clue .dir.getting-hot { color: #c8b44a; }
+  .guesses .clue .dir.hot { color: #c8844a; }
+  .guesses .clue .dir.boiling { color: #c85a5a; }
   .guesses .clue .dir.exact {
     font-size: 18px;
     color: var(--good);
@@ -460,6 +467,17 @@
 
   <div id="game-over-msg" class="game-over-locked" style="display:none;">Come back tomorrow for a new moon.</div>
 
+  <!-- Ad unit -->
+  <div style="text-align:center; margin:16px auto; max-width:400px;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9260381495727061"
+         data-ad-slot="auto"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <!-- Help modal -->
@@ -563,12 +581,12 @@
 
   function clueFor(diff) {
     const d = Math.abs(diff);
-    if (d === 0) return { text: 'Nailed it!', exact: true };
-    if (d <= 4)  return { text: 'Boiling!' };
-    if (d <= 10) return { text: 'Hot!' };
-    if (d <= 15) return { text: 'Getting Hot' };
-    if (d <= 30) return { text: 'Cold' };
-    return { text: 'Freezing' };
+    if (d === 0) return { text: 'Nailed it!', exact: true, cls: 'exact' };
+    if (d <= 4)  return { text: 'Boiling!', cls: 'boiling' };
+    if (d <= 10) return { text: 'Hot!', cls: 'hot' };
+    if (d <= 15) return { text: 'Getting Hot', cls: 'getting-hot' };
+    if (d <= 30) return { text: 'Cold', cls: 'cold' };
+    return { text: 'Freezing', cls: 'freezing' };
   }
 
   // ---- Persistence ----
@@ -801,7 +819,7 @@
       if (c.exact) {
         arrowHtml = '<span class="dir exact">★</span>';
       } else {
-        arrowHtml = '<span class="dir" aria-label="' +
+        arrowHtml = '<span class="dir ' + c.cls + '" aria-label="' +
           (diff > 0 ? 'higher' : 'lower') + '">' +
           (diff > 0 ? '▲' : '▼') + '</span>';
       }
@@ -1032,5 +1050,8 @@
   window.addEventListener('resize', renderMoon);
 })();
 </script>
+<footer style="text-align:center;padding:12px 0 18px;font-size:.75rem;opacity:.5">
+  <a href="privacy.html" style="color:#fff">Privacy Policy</a>
+</footer>
 </body>
 </html>
