@@ -92,6 +92,12 @@
     margin-left: 6px;
     filter: drop-shadow(0 0 8px rgba(253, 246, 224, 0.55));
   }
+  .title-logo {
+    max-height: 66px;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+  }
   .subtitle {
     font-size: 13px;
     color: var(--fg-dim);
@@ -520,41 +526,8 @@
 <body>
   <div class="header">
     <h1>
-<!--       <svg class="title-moon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <radialGradient id="moonGlow" cx="38%" cy="38%" r="62%">
-            <stop offset="0%" stop-color="#fdf6e0"/>
-            <stop offset="60%" stop-color="#e6ecf6"/>
-            <stop offset="100%" stop-color="#a8c5e6"/>
-          </radialGradient>
-        </defs> -->
-        <circle cx="16" cy="16" r="13" fill="url(#moonGlow)"/>
-        <circle cx="20.5" cy="13" r="2" fill="#9bb1ce" opacity="0.45"/>
-        <circle cx="13" cy="19" r="1.6" fill="#9bb1ce" opacity="0.4"/>
-        <circle cx="19" cy="20" r="1.1" fill="#9bb1ce" opacity="0.35"/>
-      </svg>
-      <span class="title-luna">Luna</span><span class="title-le">le</span>
-      
-<!--       <svg class="title-moon-new" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <radialGradient id="newMoonHalo" cx="50%" cy="50%" r="50%">
-            <stop offset="55%" stop-color="#fdf6e0" stop-opacity="0"/>
-            <stop offset="68%" stop-color="#fdf6e0" stop-opacity="0.55"/>
-            <stop offset="82%" stop-color="#a8c5e6" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#a8c5e6" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="newMoonDisk" cx="42%" cy="40%" r="58%">
-            <stop offset="0%" stop-color="#1a1d2a"/>
-            <stop offset="100%" stop-color="#0a0a0e"/>
-          </radialGradient>
-        </defs>
-        <circle cx="16" cy="16" r="15" fill="url(#newMoonHalo)"/>
-        <circle cx="16" cy="16" r="10" fill="url(#newMoonDisk)"/>
-        <circle cx="16" cy="16" r="10" fill="none" stroke="#fdf6e0" stroke-opacity="0.35" stroke-width="0.6"/>
-      </svg> -->
-
+      <img src="lunale_logo.png" alt="Lunale - The moon guessing game" class="title-logo">
     </h1>
-    <div class="subtitle">The moon guessing game</div>
     <div class="icons">
       <button class="icon-btn" id="btn-help" aria-label="Help" title="How to play"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
       <button class="icon-btn" id="btn-stats" aria-label="Stats" title="Statistics"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></button>
@@ -627,11 +600,8 @@
       <div class="help-moon-stage" aria-hidden="true">
         <canvas id="help-moon" width="240" height="240"></canvas>
       </div>
-      <p>Identify the moon phase in 3 rounds.</p>
-      <p><b>Round 1</br></b>Guess the illumination percentage in <b>4 attempts.</b> After each guess you'll see how close you were and which direction to go.</p>
-      <p><b>Round 2</br></b>Is it waxing, waning, new, or full?</p>
-      <p><b>Round 3</br></b>Crescent, gibbous, or quarter? (Skipped on New or Full moons.)</p>
-      <p>Answer all rounds correctly to earn </br> the <b><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 60" width="16" height="16" style="vertical-align:middle;margin-right:2px" aria-hidden="true"><polygon points="24,2 9,36 39,36" fill="#7c3aed"/><ellipse cx="24" cy="36" rx="15" ry="3.5" fill="#9f67f5"/><circle cx="24" cy="21" r="5" fill="#fbbf24"/><circle cx="26.8" cy="19.5" r="4.2" fill="#7c3aed"/><circle cx="24" cy="40" r="5.5" fill="#fde68a"/><circle cx="21.5" cy="39" r="1.1" fill="#1e1b4b"/><circle cx="26.5" cy="39" r="1.1" fill="#1e1b4b"/><path d="M21.5 41.8 Q24 43.5 26.5 41.8" stroke="#7c3aed" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M15 43 Q9 56 7 58 L41 58 Q39 56 33 43 Z" fill="#4c1d95"/><polygon points="17,49 17.8,51.5 20.5,51.5 18.3,53 19.1,55.5 17,54 14.9,55.5 15.7,53 13.5,51.5 16.2,51.5" fill="#fbbf24" opacity="0.8"/></svg> Lunar Master</b> badge!</p>
+      <p></b>Guess the moon illumination percentage in <b>4 attempts.</b> </br>After each guess you'll see how close you were and which direction to go ▲ ▼. </br> Then anwer two question about the moon phase.</p>
+      <p>Answer all questions correctly to earn </br> the <b> Lunar Oracle</b> badge!</p>
       <p class="footnote">A new moon arrives every day at midnight, your local time.</p>
     </div>
   </div>
@@ -649,7 +619,7 @@
       </div>
       <div class="stat-master-row">
         <div class="val" id="stat-masters">0</div>
-        <div class="lbl"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 60" width="13" height="13" aria-hidden="true"><polygon points="24,2 9,36 39,36" fill="#7c3aed"/><ellipse cx="24" cy="36" rx="15" ry="3.5" fill="#9f67f5"/><circle cx="24" cy="21" r="5" fill="#fbbf24"/><circle cx="26.8" cy="19.5" r="4.2" fill="#7c3aed"/><circle cx="24" cy="40" r="5.5" fill="#fde68a"/><circle cx="21.5" cy="39" r="1.1" fill="#1e1b4b"/><circle cx="26.5" cy="39" r="1.1" fill="#1e1b4b"/><path d="M21.5 41.8 Q24 43.5 26.5 41.8" stroke="#7c3aed" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M15 43 Q9 56 7 58 L41 58 Q39 56 33 43 Z" fill="#4c1d95"/><polygon points="17,49 17.8,51.5 20.5,51.5 18.3,53 19.1,55.5 17,54 14.9,55.5 15.7,53 13.5,51.5 16.2,51.5" fill="#fbbf24" opacity="0.8"/><circle cx="30" cy="50" r="1.2" fill="#c4b5fd" opacity="0.7"/></svg> Lunar Master Badges</div>
+        <div class="lbl">Lunar Oracle Badges</div>
       </div>
       <div class="dist">
         <h3>Guess Distribution</h3>
@@ -671,8 +641,8 @@
       </div>
       <div id="lunar-master-badge" style="display:none">
         <div class="lunar-master-label" id="badge-subtitle">You answered all rounds correctly and </br> earned a badge!</div>
-        <div class="lunar-master"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 60" width="56" height="56" aria-hidden="true"><polygon points="24,2 9,36 39,36" fill="#7c3aed"/><ellipse cx="24" cy="36" rx="15" ry="3.5" fill="#9f67f5"/><circle cx="24" cy="21" r="5" fill="#fbbf24"/><circle cx="26.8" cy="19.5" r="4.2" fill="#7c3aed"/><circle cx="24" cy="40" r="5.5" fill="#fde68a"/><circle cx="21.5" cy="39" r="1.1" fill="#1e1b4b"/><circle cx="26.5" cy="39" r="1.1" fill="#1e1b4b"/><path d="M21.5 41.8 Q24 43.5 26.5 41.8" stroke="#7c3aed" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M15 43 Q9 56 7 58 L41 58 Q39 56 33 43 Z" fill="#4c1d95"/><polygon points="17,49 17.8,51.5 20.5,51.5 18.3,53 19.1,55.5 17,54 14.9,55.5 15.7,53 13.5,51.5 16.2,51.5" fill="#fbbf24" opacity="0.8"/><circle cx="30" cy="50" r="1.2" fill="#c4b5fd" opacity="0.7"/><circle cx="32" cy="54" r="0.8" fill="#fbbf24" opacity="0.6"/></svg></div>
-        <div class="lunar-master-label">Lunar Master</div>
+        <div class="lunar-master"><img src="lunar_oracle_badge.png" width="56" height="56" alt="Lunar Oracle badge" /></div>
+        <div class="lunar-master-label">Lunar Oracle</div>
       </div>
       <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
     </div>
