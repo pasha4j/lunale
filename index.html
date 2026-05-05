@@ -516,6 +516,15 @@
   .phase-btn.correct { background: #162b1c; border-color: var(--good); color: var(--good); }
   .phase-btn.incorrect { background: #2b1616; border-color: var(--bad); color: var(--bad); }
   .phase-btn:disabled { cursor: default; opacity: 1; }
+  .share-btn {
+    display: block; width: 100%; margin-top: 16px;
+    padding: 10px 0; border: none; border-radius: 8px;
+    background: var(--accent); color: #0d0d12;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    letter-spacing: 0.4px; transition: opacity 0.15s;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-btn:active { transform: scale(0.97); }
   .skip-msg { text-align: center; color: var(--fg-dim); font-size: 13px; font-style: italic; padding: 8px 0; }
   .lunar-master { text-align: center; margin-bottom: 2px; line-height: 1; }
   .stat-master-row { margin-top: 8px; background: #1d1d24; border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(251,191,36,0.28); }
@@ -663,6 +672,7 @@
         <div class="lunar-master-label">Lunar Oracle</div>
       </div>
       <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
+      <button class="share-btn" id="share-btn" onclick="shareResult()">Share Result</button>
     </div>
   </div>
 
@@ -1372,6 +1382,52 @@
 
   // Re-render moon if window resizes (canvas physical size doesn't actually change, but just in case)
   window.addEventListener('resize', renderMoon);
+
+  // ---- Share ----
+  function buildShareText() {
+    function guessEmoji(guess) {
+      const d = Math.abs(ANSWER.percentage - guess);
+      if (d === 0) return '🎯';
+      if (d <= 4)  return '🔥';
+      if (d <= 10) return '☀️';
+      if (d <= 15) return '🌤️';
+      if (d <= 30) return '❄️';
+      return '🧊';
+    }
+    function moonEmoji(pct, waxing) {
+      if (pct >= 98)       return '🌕';
+      if (pct <= 2)        return '🌑';
+      if (pct < 50)        return waxing ? '🌒' : '🌘';
+      if (pct === 50)      return waxing ? '🌓' : '🌗';
+      return waxing ? '🌔' : '🌖';
+    }
+    // Puzzle number: days since 2025-01-01
+    const epoch = new Date('2026-05-01');
+    const today = new Date(state.date);
+    const puzzleNum = Math.floor((today - epoch) / 864e5) + 1;
+
+    const attemptsStr = state.won ? state.guesses.length + '/' + MAX_ATTEMPTS : 'X/' + MAX_ATTEMPTS;
+    const moon = moonEmoji(ANSWER.percentage, ANSWER.waxing);
+    const guessRow = state.guesses.map(guessEmoji).join('');
+
+    return 'Lunale #' + puzzleNum + ' ' + attemptsStr + ' ' + moon + '\n' +
+           guessRow + '\n' +
+           'thelunale.com';
+  }
+
+  window.shareResult = function() {
+    const text = buildShareText();
+    if (navigator.share) {
+      navigator.share({ text: text }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Result copied to clipboard!');
+      }).catch(() => {
+        showToast('Could not copy — try manually selecting the text.');
+      });
+    }
+    track('share_result');
+  };
 })();
 </script>
 <footer style="text-align:center;padding:12px 0 18px;font-size:.75rem;opacity:.5">
