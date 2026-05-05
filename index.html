@@ -477,6 +477,8 @@
   .ri-step.done { color: var(--fg); }
   .ri-sep { color: var(--border-strong); }
   .round-section { width: 100%; margin-top: 12px; }
+  #round2-section { margin-top: 0; }
+  #round3-section { margin-top: 12px; }
   .round-label {
     font-size: 13px; color: var(--fg-dim); text-align: center;
     margin-bottom: 8px; letter-spacing: 0.3px;
@@ -503,6 +505,10 @@
   .lunar-master-label {
     text-align: center; color: #f0c040; font-size: 13px; font-weight: 700;
     letter-spacing: 0.6px; margin-bottom: 10px; text-transform: uppercase;
+  }
+  #badge-subtitle {
+    color: #a8c5e6; font-size: 12px; font-weight: 400;
+    text-transform: none; letter-spacing: 0.2px; margin-top: 14px;
   }
 
   /* Reduced motion */
@@ -567,8 +573,8 @@
     <span class="ri-step" id="ri-3">Round 3</span>
   </div>
 
-  <div id="round3-section" class="round-section">
-  <div class="round-label" id="round3-label">Round 1 - Illumination %</div>
+  <div id="round1-section" class="round-section">
+  <div class="round-label" id="round1-label">Round 1 - Guess Illumination % (four tries)</div>
   <div class="input-row">
     <input type="tel" inputmode="numeric" pattern="[0-9]*" id="guess" placeholder="Guess 1–100%" min="1" max="100" autocomplete="off" />
     <button class="primary" id="btn-guess">Guess</button>
@@ -577,12 +583,10 @@
   <div class="attempts-label" id="attempts-label">Attempts: 0/4</div>
   <ul class="guesses" id="guesses"></ul>
 
-  <div id="game-over-msg" class="game-over-locked" style="display:none;">Come back tomorrow for a new moon.</div>
-  </div><!-- end round3-section -->
-
-  <div id="round1-section" class="round-section" style="display:none">
-    <div class="round-label">Round 2 - Direction</div>
-    <div class="phase-btns grid-2x2" id="round1-btns">
+  </div><!-- end round1-section -->
+  <div id="round2-section" class="round-section" style="display:none">
+    <div class="round-label">Round 2 - Guess Direction</div>
+    <div class="phase-btns grid-2x2" id="round2-btns">
       <button class="phase-btn" data-val="waxing">Waxing</button>
       <button class="phase-btn" data-val="waning">Waning</button>
       <button class="phase-btn" data-val="new">New</button>
@@ -590,15 +594,16 @@
     </div>
   </div>
 
-  <div id="round2-section" class="round-section" style="display:none">
-    <div class="round-label" id="round2-label">Round 3 - Phase type</div>
-    <div id="round2-skip-msg" class="skip-msg" style="display:none">Round 3 skipped - New or Full Moon!</div>
-    <div class="phase-btns grid-2x2" id="round2-btns">
+  <div id="round3-section" class="round-section" style="display:none">
+    <div class="round-label" id="round3-label">Round 3 - Guess Phase Type</div>
+    <div id="round3-skip-msg" class="skip-msg" style="display:none">Round 3 skipped - New or Full Moon!</div>
+    <div class="phase-btns grid-2x2" id="round3-btns">
       <button class="phase-btn" data-val="crescent">Crescent</button>
       <button class="phase-btn" data-val="gibbous">Gibbous</button>
       <button class="phase-btn" data-val="first_quarter">1st Quarter</button>
       <button class="phase-btn" data-val="third_quarter">3rd Quarter</button>
     </div>
+  <div id="game-over-msg" class="game-over-locked" style="display:none;">Come back tomorrow for a new moon.</div>
   </div>
 
   <!-- Ad unit -->
@@ -626,7 +631,7 @@
       <p><b>Round 1</br></b>Guess the illumination percentage in <b>4 attempts.</b> After each guess you'll see how close you were and which direction to go.</p>
       <p><b>Round 2</br></b>Is it waxing, waning, new, or full?</p>
       <p><b>Round 3</br></b>Crescent, gibbous, or quarter? (Skipped on New or Full moons.)</p>
-      <p>Answer all rounds correctly to earn the <b><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 60" width="16" height="16" style="vertical-align:middle;margin-right:2px" aria-hidden="true"><polygon points="24,2 9,36 39,36" fill="#7c3aed"/><ellipse cx="24" cy="36" rx="15" ry="3.5" fill="#9f67f5"/><circle cx="24" cy="21" r="5" fill="#fbbf24"/><circle cx="26.8" cy="19.5" r="4.2" fill="#7c3aed"/><circle cx="24" cy="40" r="5.5" fill="#fde68a"/><circle cx="21.5" cy="39" r="1.1" fill="#1e1b4b"/><circle cx="26.5" cy="39" r="1.1" fill="#1e1b4b"/><path d="M21.5 41.8 Q24 43.5 26.5 41.8" stroke="#7c3aed" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M15 43 Q9 56 7 58 L41 58 Q39 56 33 43 Z" fill="#4c1d95"/><polygon points="17,49 17.8,51.5 20.5,51.5 18.3,53 19.1,55.5 17,54 14.9,55.5 15.7,53 13.5,51.5 16.2,51.5" fill="#fbbf24" opacity="0.8"/></svg> Lunar Master</b> badge!</p>
+      <p>Answer all rounds correctly to earn </br> the <b><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 60" width="16" height="16" style="vertical-align:middle;margin-right:2px" aria-hidden="true"><polygon points="24,2 9,36 39,36" fill="#7c3aed"/><ellipse cx="24" cy="36" rx="15" ry="3.5" fill="#9f67f5"/><circle cx="24" cy="21" r="5" fill="#fbbf24"/><circle cx="26.8" cy="19.5" r="4.2" fill="#7c3aed"/><circle cx="24" cy="40" r="5.5" fill="#fde68a"/><circle cx="21.5" cy="39" r="1.1" fill="#1e1b4b"/><circle cx="26.5" cy="39" r="1.1" fill="#1e1b4b"/><path d="M21.5 41.8 Q24 43.5 26.5 41.8" stroke="#7c3aed" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M15 43 Q9 56 7 58 L41 58 Q39 56 33 43 Z" fill="#4c1d95"/><polygon points="17,49 17.8,51.5 20.5,51.5 18.3,53 19.1,55.5 17,54 14.9,55.5 15.7,53 13.5,51.5 16.2,51.5" fill="#fbbf24" opacity="0.8"/></svg> Lunar Master</b> badge!</p>
       <p class="footnote">A new moon arrives every day at midnight, your local time.</p>
     </div>
   </div>
@@ -658,15 +663,16 @@
     <div class="modal" role="dialog" aria-labelledby="end-title">
       <button class="close" data-close>×</button>
       <h2 id="end-title">-</h2>
-      <div id="lunar-master-badge" style="display:none">
-        <div class="lunar-master"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 60" width="56" height="56" aria-hidden="true"><polygon points="24,2 9,36 39,36" fill="#7c3aed"/><ellipse cx="24" cy="36" rx="15" ry="3.5" fill="#9f67f5"/><circle cx="24" cy="21" r="5" fill="#fbbf24"/><circle cx="26.8" cy="19.5" r="4.2" fill="#7c3aed"/><circle cx="24" cy="40" r="5.5" fill="#fde68a"/><circle cx="21.5" cy="39" r="1.1" fill="#1e1b4b"/><circle cx="26.5" cy="39" r="1.1" fill="#1e1b4b"/><path d="M21.5 41.8 Q24 43.5 26.5 41.8" stroke="#7c3aed" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M15 43 Q9 56 7 58 L41 58 Q39 56 33 43 Z" fill="#4c1d95"/><polygon points="17,49 17.8,51.5 20.5,51.5 18.3,53 19.1,55.5 17,54 14.9,55.5 15.7,53 13.5,51.5 16.2,51.5" fill="#fbbf24" opacity="0.8"/><circle cx="30" cy="50" r="1.2" fill="#c4b5fd" opacity="0.7"/><circle cx="32" cy="54" r="0.8" fill="#fbbf24" opacity="0.6"/></svg></div>
-        <div class="lunar-master-label">Lunar Master!</div>
-      </div>
       <div class="end-moon"><canvas id="end-canvas" width="360" height="360"></canvas></div>
       <div class="end-result">
         <div class="ans" id="end-pct">-</div>
         <div class="phase" id="end-phase">-</div>
         <div class="verdict" id="end-verdict"></div>
+      </div>
+      <div id="lunar-master-badge" style="display:none">
+        <div class="lunar-master-label" id="badge-subtitle">You answered all rounds correctly and </br> earned a badge!</div>
+        <div class="lunar-master"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 60" width="56" height="56" aria-hidden="true"><polygon points="24,2 9,36 39,36" fill="#7c3aed"/><ellipse cx="24" cy="36" rx="15" ry="3.5" fill="#9f67f5"/><circle cx="24" cy="21" r="5" fill="#fbbf24"/><circle cx="26.8" cy="19.5" r="4.2" fill="#7c3aed"/><circle cx="24" cy="40" r="5.5" fill="#fde68a"/><circle cx="21.5" cy="39" r="1.1" fill="#1e1b4b"/><circle cx="26.5" cy="39" r="1.1" fill="#1e1b4b"/><path d="M21.5 41.8 Q24 43.5 26.5 41.8" stroke="#7c3aed" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M15 43 Q9 56 7 58 L41 58 Q39 56 33 43 Z" fill="#4c1d95"/><polygon points="17,49 17.8,51.5 20.5,51.5 18.3,53 19.1,55.5 17,54 14.9,55.5 15.7,53 13.5,51.5 16.2,51.5" fill="#fbbf24" opacity="0.8"/><circle cx="30" cy="50" r="1.2" fill="#c4b5fd" opacity="0.7"/><circle cx="32" cy="54" r="0.8" fill="#fbbf24" opacity="0.6"/></svg></div>
+        <div class="lunar-master-label">Lunar Master</div>
       </div>
       <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
     </div>
@@ -972,22 +978,22 @@
   function renderPhaseRounds() {
     const r = getCurrentRound();
     updateRoundIndicator();
-    // round3-section = illumination (always visible — it's now Round 1)
-    $('round3-section').style.display = '';
-    // round1-section = direction question (now Round 2) — show after illumination is done
-    $('round1-section').style.display = (r < 2) ? 'none' : '';
-    // round2-section = phase type question (now Round 3) — show after direction answered
-    $('round2-section').style.display = (r < 3) ? 'none' : '';
+    // round1-section = illumination (always visible — it's now Round 1)
+    $('round1-section').style.display = '';
+    // round2-section = direction question (now Round 2) — show after illumination is done
+    $('round2-section').style.display = (r < 2) ? 'none' : '';
+    // round3-section = phase type question (now Round 3) — show after direction answered
+    $('round3-section').style.display = (r < 3) ? 'none' : '';
     if (state.round1 !== null) {
-      applyPhaseButtonResult($('round1-btns'), state.round1, correctRound1Answer());
+      applyPhaseButtonResult($('round2-btns'), state.round1, correctRound1Answer());
     }
     if (state.round2Skipped) {
-      $('round2-section').style.display = '';
-      $('round2-skip-msg').style.display = '';
-      $('round2-btns').style.display = 'none';
-      $('round2-label').style.display = 'none';
+      $('round3-section').style.display = '';
+      $('round3-skip-msg').style.display = '';
+      $('round3-btns').style.display = 'none';
+      $('round3-label').style.display = 'none';
     } else if (state.round2 !== null) {
-      applyPhaseButtonResult($('round2-btns'), state.round2, correctRound2Answer());
+      applyPhaseButtonResult($('round3-btns'), state.round2, correctRound2Answer());
     }
   }
   function finishGame() {
@@ -1018,17 +1024,17 @@
       return;
     }
     updateRoundIndicator();
-    $('round1-section').style.display = '';
+    $('round2-section').style.display = '';
     if (state.round1 !== null) {
       // Direction already answered in a prior session — jump to phase type
       if (state.round2Skipped || state.round2 !== null) {
         finishGame();
         return;
       }
-      $('round2-section').style.display = '';
-      $('round2-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      $('round3-section').style.display = '';
+      $('round3-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } else {
-      $('round1-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      $('round2-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }
   function submitRound1(val) {
@@ -1037,24 +1043,24 @@
     state.round1 = val;
     state.round1Correct = (val === correct);
     track('round1_submitted', { selection: val, correct: state.round1Correct, correct_answer: correct });
-    applyPhaseButtonResult($('round1-btns'), val, correct);
+    applyPhaseButtonResult($('round2-btns'), val, correct);
     // Only skip Round 3 (phase type) when the user's new/full pick is actually correct.
     // If they picked new/full but it's wrong, let them still attempt the phase type round.
     const correctlyPickedNewOrFull = state.round1Correct && (val === 'new' || val === 'full');
     if (correctlyPickedNewOrFull) {
       state.round2Skipped = true;
       writeStored(state);
-      $('round2-section').style.display = '';
-      $('round2-skip-msg').style.display = '';
-      $('round2-btns').style.display = 'none';
-      $('round2-label').style.display = 'none';
+      $('round3-section').style.display = '';
+      $('round3-skip-msg').style.display = '';
+      $('round3-btns').style.display = 'none';
+      $('round3-label').style.display = 'none';
       setTimeout(finishGame, 900);
     } else {
       writeStored(state);
       setTimeout(() => {
-        $('round2-section').style.display = '';
+        $('round3-section').style.display = '';
         updateRoundIndicator();
-        $('round2-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        $('round3-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, 500);
     }
   }
@@ -1064,15 +1070,15 @@
     state.round2 = val;
     state.round2Correct = (val === correct);
     track('round2_submitted', { selection: val, correct: state.round2Correct, correct_answer: correct });
-    applyPhaseButtonResult($('round2-btns'), val, correct);
+    applyPhaseButtonResult($('round3-btns'), val, correct);
     writeStored(state);
     setTimeout(finishGame, 700);
   }
   function setupPhaseButtons() {
-    document.querySelectorAll('#round1-btns .phase-btn').forEach(btn => {
+    document.querySelectorAll('#round2-btns .phase-btn').forEach(btn => {
       btn.addEventListener('click', () => submitRound1(btn.dataset.val));
     });
-    document.querySelectorAll('#round2-btns .phase-btn').forEach(btn => {
+    document.querySelectorAll('#round3-btns .phase-btn').forEach(btn => {
       btn.addEventListener('click', () => submitRound2(btn.dataset.val));
     });
   }
