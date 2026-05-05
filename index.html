@@ -4,6 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <meta name="theme-color" content="#0a0a0e" />
+<meta name="description" content="Guess the moon's illumination percentage in 4 tries. A new puzzle everyday." />
+<link rel="canonical" href="https://thelunale.com" />
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://thelunale.com" />
+<meta property="og:title" content="Lunale - The moon guessing game" />
+<meta property="og:description" content="Guess the moon's illumination percentage in 4 tries. A new puzzle everyday." />
+<meta property="og:image" content="https://thelunale.com/og-image.png" />
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Lunale - The moon guessing game" />
+<meta name="twitter:description" content="Guess the moon's illumination percentage in 4 tries. A new puzzle everyday." />
+<meta name="twitter:image" content="https://thelunale.com/og-image.png" />
 <title>Lunale - The moon guessing game</title>
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-M16GY57YP3"></script>
@@ -524,6 +537,11 @@
 </style>
 </head>
 <body>
+  <noscript>
+    <div style="background:#1a1a22;color:#ece8df;text-align:center;padding:24px 16px;font-family:system-ui,sans-serif;">
+      Lunale requires JavaScript to play. Please enable JavaScript in your browser settings and reload the page.
+    </div>
+  </noscript>
   <div class="header">
     <h1>
       <img src="lunale_logo.png" alt="Lunale - The moon guessing game" class="title-logo">
@@ -584,7 +602,7 @@
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-9260381495727061"
-         data-ad-slot="auto"
+         data-ad-slot="6866072111"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -594,21 +612,21 @@
 
   <!-- Help modal -->
   <div class="modal-bg" id="modal-help">
-    <div class="modal modal-help" role="dialog" aria-labelledby="help-title">
+    <div class="modal modal-help" role="dialog" aria-modal="true" aria-labelledby="help-title">
       <button class="close" data-close>×</button>
       <h2 id="help-title">How to play</h2>
       <div class="help-moon-stage" aria-hidden="true">
         <canvas id="help-moon" width="240" height="240"></canvas>
       </div>
-      <p></b>Guess the moon illumination percentage in <b>4 attempts.</b> </br>After each guess you'll see how close you were and which direction to go ▲ ▼. </br> Then anwer two question about the moon phase.</p>
-      <p>Answer all questions correctly to earn </br> the <b> Lunar Oracle</b> badge!</p>
+      <p>Guess the moon illumination percentage in <b>4 attempts.</b> <br>After each guess you'll see how close you were and which direction to go ▲ ▼. <br> Then answer two questions about the moon phase.</p>
+      <p>Answer all questions correctly to earn <br> the <b> Lunar Oracle</b> badge!</p>
       <p class="footnote">A new moon arrives every day at midnight, your local time.</p>
     </div>
   </div>
 
   <!-- Stats modal -->
   <div class="modal-bg" id="modal-stats">
-    <div class="modal" role="dialog" aria-labelledby="stats-title">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="stats-title">
       <button class="close" data-close>×</button>
       <h2 id="stats-title">Statistics</h2>
       <div class="stats-grid">
@@ -630,7 +648,7 @@
 
   <!-- End-game modal -->
   <div class="modal-bg" id="modal-end">
-    <div class="modal" role="dialog" aria-labelledby="end-title">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="end-title">
       <button class="close" data-close>×</button>
       <h2 id="end-title">-</h2>
       <div class="end-moon"><canvas id="end-canvas" width="360" height="360"></canvas></div>
@@ -640,7 +658,7 @@
         <div class="verdict" id="end-verdict"></div>
       </div>
       <div id="lunar-master-badge" style="display:none">
-        <div class="lunar-master-label" id="badge-subtitle">You answered all rounds correctly and </br> earned a badge!</div>
+        <div class="lunar-master-label" id="badge-subtitle">You answered all rounds correctly and <br> earned a badge!</div>
         <div class="lunar-master"><img src="lunar_oracle_badge.png" width="56" height="56" alt="Lunar Oracle badge" /></div>
         <div class="lunar-master-label">Lunar Oracle</div>
       </div>
@@ -656,6 +674,7 @@
   function track(event, params) {
     if (typeof gtag === 'function') gtag('event', event, params);
   }
+  window.track = track;
 
   // ---- Config ----
   const MAX_ATTEMPTS = 4;
