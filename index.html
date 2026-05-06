@@ -409,24 +409,24 @@
     align-items: center;
   }
   .dist-row .bar-fill {
-    background: var(--accent);
+    background: #3a4a5e;
     height: 100%;
     min-width: 24px;
     text-align: right;
     padding-right: 8px;
     font-weight: 700;
-    color: var(--accent-dark);
+    color: #8aadcc;
     font-size: 12px;
     line-height: 22px;
     transition: width 0.4s;
   }
   .dist-row .bar-fill.empty {
-    background: #2c2c36;
-    color: var(--fg-dim);
+    background: #22222c;
+    color: #55545a;
   }
   .dist-row .bar-fill.win-row {
-    background: var(--good);
-    color: #062b0d;
+    background: #2a5038;
+    color: #7ecb9a;
   }
 
   .help-section {
@@ -502,7 +502,25 @@
   .round-label {
     font-size: 13px; color: var(--fg-dim); text-align: center;
     margin-bottom: 8px; letter-spacing: 0.3px;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
   }
+  .hint-btn {
+    width: 15px; height: 15px; flex-shrink: 0;
+    background: transparent; border: 1px solid var(--fg-dim);
+    border-radius: 50%; color: var(--fg-dim); font-size: 9px;
+    cursor: pointer; font-weight: 700; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0;
+  }
+  .hint-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .hint-modal { max-width: 300px; }
+  .hint-modal h4 { font-size: 14px; font-weight: 700; margin: 0 0 6px; color: var(--fg); }
+  .hint-modal p { font-size: 12px; color: var(--fg-dim); margin: 0 0 10px; line-height: 1.4; }
+  .hint-examples { display: flex; gap: 10px; justify-content: center; margin-top: 2px; }
+  .hint-examples + .hint-examples { margin-top: 8px; }
+  .hint-example { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .hint-example canvas { background: #000; border-radius: 50%; }
+  .hint-example span { font-size: 10px; color: var(--fg-dim); text-align: center; }
   .phase-btns { display: grid; gap: 8px; width: 100%; }
   .phase-btns.grid-2x2 { grid-template-columns: 1fr 1fr; }
   .phase-btn {
@@ -529,8 +547,10 @@
   .skip-msg { text-align: center; color: var(--fg-dim); font-size: 13px; font-style: italic; padding: 8px 0; }
   .lunar-master { text-align: center; margin-bottom: 2px; line-height: 1; }
   .stat-master-row { margin-top: 8px; background: #1d1d24; border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(251,191,36,0.28); }
-  .stat-master-row .val { font-size: 20px; font-weight: 700; color: #fbbf24; }
-  .stat-master-row .lbl { font-size: 10px; color: var(--fg-dim); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .stat-master-row .lbl { font-size: 10px; color: var(--fg-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge-count-display { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .badge-count-display img { display: block; }
+  .badge-xcount { font-size: 26px; font-weight: 800; color: #fbbf24; line-height: 1; }
   .lunar-master-label {
     text-align: center; color: #f0c040; font-size: 13px; font-weight: 700;
     letter-spacing: 0.6px; margin-bottom: 10px; text-transform: uppercase;
@@ -585,7 +605,7 @@
   </div>
 
   <div id="round1-section" class="round-section">
-  <div class="round-label" id="round1-label">Round 1 - Guess Illumination % (four tries)</div>
+  <div class="round-label" id="round1-label">Round 1 - Guess Illumination %<button class="hint-btn" onclick="openHint('round1')" aria-label="Round 1 hint">?</button></div>
   <div class="input-row">
     <input type="tel" inputmode="numeric" pattern="[0-9]*" id="guess" placeholder="Guess 1–100%" min="1" max="100" autocomplete="off" />
     <button class="primary" id="btn-guess">Guess</button>
@@ -596,7 +616,7 @@
 
   </div><!-- end round1-section -->
   <div id="round2-section" class="round-section" style="display:none">
-    <div class="round-label">Round 2 - Guess Direction</div>
+    <div class="round-label">Round 2 - Guess Direction<button class="hint-btn" onclick="openHint('round2')" aria-label="Round 2 hint">?</button></div>
     <div class="phase-btns grid-2x2" id="round2-btns">
       <button class="phase-btn" data-val="waxing">Waxing</button>
       <button class="phase-btn" data-val="waning">Waning</button>
@@ -606,7 +626,7 @@
   </div>
 
   <div id="round3-section" class="round-section" style="display:none">
-    <div class="round-label" id="round3-label">Round 3 - Guess Phase Type</div>
+    <div class="round-label" id="round3-label">Round 3 - Guess Phase Type<button class="hint-btn" onclick="openHint('round3')" aria-label="Round 3 hint">?</button></div>
     <div id="round3-skip-msg" class="skip-msg" style="display:none">Round 3 skipped - New or Full Moon!</div>
     <div class="phase-btns grid-2x2" id="round3-btns">
       <button class="phase-btn" data-val="crescent">Crescent</button>
@@ -639,7 +659,7 @@
         <canvas id="help-moon" width="240" height="240"></canvas>
       </div>
       <p>Guess the moon illumination percentage in <b>4 attempts.</b> <br>After each guess you'll see how close you were and which direction to go ▲ ▼. <br> Then answer two questions about the moon phase.</p>
-      <p>Answer all questions correctly to earn <br> the <b> Lunar Oracle</b> badge!</p>
+      <p>Answer all questions correctly to earn <br> the <b>Lunar Wizard</b> badge!</p>
       <p class="footnote">A new moon arrives every day at midnight, your local time.</p>
     </div>
   </div>
@@ -656,13 +676,24 @@
         <div class="stat-card"><div class="val" id="stat-maxstreak">0</div><div class="lbl">Max</div></div>
       </div>
       <div class="stat-master-row">
-        <div class="val" id="stat-masters">0</div>
-        <div class="lbl">Lunar Oracle Badges</div>
+        <div class="badge-count-display">
+          <img src="lunar_oracle_badge.png" width="44" height="44" alt="Lunar Wizard badge" />
+          <div class="badge-xcount">×<span id="stat-masters">0</span></div>
+        </div>
+        <div class="lbl">Lunar Wizard Badges</div>
       </div>
       <div class="dist">
         <h3>Guess Distribution</h3>
         <div id="dist-rows"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- Hint popup -->
+  <div class="modal-bg" id="hint-popup" style="display:none" onclick="if(event.target===this)closeHint()">
+    <div class="modal hint-modal" role="dialog" aria-modal="true">
+      <button class="close" onclick="closeHint()">×</button>
+      <div id="hint-content"></div>
     </div>
   </div>
 
@@ -679,8 +710,8 @@
       </div>
       <div id="lunar-master-badge" style="display:none">
         <div class="lunar-master-label" id="badge-subtitle">You answered all rounds correctly and <br> earned a badge!</div>
-        <div class="lunar-master"><img src="lunar_oracle_badge.png" width="56" height="56" alt="Lunar Oracle badge" /></div>
-        <div class="lunar-master-label">Lunar Oracle</div>
+        <div class="lunar-master"><img src="lunar_oracle_badge.png" width="56" height="56" alt="Lunar Wizard badge" /></div>
+        <div class="lunar-master-label">Lunar Wizard</div>
       </div>
       <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
       <button class="share-btn" id="share-btn" onclick="shareResult()">Share Result</button>
@@ -846,14 +877,13 @@
 
     ctx.clearRect(0, 0, W, H);
 
-    // Subtle outer glow when waxing/full to hint at a real moon
-    if (illuminationPct > 60) {
-      const grad = ctx.createRadialGradient(cx, cy, r, cx, cy, r * 1.18);
-      grad.addColorStop(0, 'rgba(255,240,200,0.10)');
-      grad.addColorStop(1, 'rgba(255,240,200,0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-    }
+    // Back glow - always drawn to reveal the dark edge of the moon disk
+    const glowAlpha = illuminationPct >= 90 ? 0.28 : illuminationPct >= 70 ? 0.16 : illuminationPct >= 40 ? 0.09 : 0.05;
+    const grad = ctx.createRadialGradient(cx, cy, r * 0.88, cx, cy, r * 1.28);
+    grad.addColorStop(0, `rgba(200,220,255,${glowAlpha})`);
+    grad.addColorStop(1, 'rgba(200,220,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
 
     // Always draw the dark disk first (very dim earthshine)
     ctx.save();
@@ -1174,18 +1204,29 @@
     rows.innerHTML = '';
     const max = Math.max(1, ...Object.values(state.distribution));
     const winningGuess = state.won ? state.guesses.length : null;
+    const rowPalette = [
+      { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
+      { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
+      { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
+      { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
+    ];
     for (let i = 1; i <= MAX_ATTEMPTS; i++) {
       const count = state.distribution[i] || 0;
       const pct = (count / max) * 100;
       const row = document.createElement('div');
       row.className = 'dist-row';
       const isWinning = i === winningGuess && state.date === todayLocalStr() && state.ended;
+      const isEmpty = count === 0;
+      const p = rowPalette[i - 1];
+      const fillStyle = isEmpty
+        ? 'background:#22222c;color:#55545a'
+        : isWinning
+          ? 'background:' + p.winBg + ';color:' + p.winFg
+          : 'background:' + p.bg + ';color:' + p.fg;
       row.innerHTML =
         '<span class="num">' + i + '</span>' +
-        '<span class="bar"><span class="bar-fill ' +
-          (count === 0 ? 'empty' : '') + ' ' +
-          (isWinning ? 'win-row' : '') +
-        '" style="width:' + Math.max(pct, count === 0 ? 8 : 16) + '%">' + count + '</span></span>';
+        '<span class="bar"><span class="bar-fill" style="width:' +
+          Math.max(pct, isEmpty ? 8 : 16) + '%;' + fillStyle + '">' + count + '</span></span>';
       rows.appendChild(row);
     }
   }
@@ -1394,44 +1435,114 @@
   // Re-render moon if window resizes (canvas physical size doesn't actually change, but just in case)
   window.addEventListener('resize', renderMoon);
 
-  // ---- Share ----
-  function buildShareText() {
-    function guessEmoji(guess) {
-      const d = Math.abs(ANSWER.percentage - guess);
-      if (d === 0) return '🎯';
-      if (d <= 4)  return '🔥';
-      if (d <= 10) return '☀️';
-      if (d <= 15) return '🌤️';
-      if (d <= 30) return '❄️';
-      return '🧊';
+  // ---- Hint popups ----
+  window.openHint = function(round) {
+    const popup = document.getElementById('hint-popup');
+    const content = document.getElementById('hint-content');
+    if (round === 'round1') {
+      content.innerHTML =
+        '<h4>What is Illumination?</h4>' +
+        '<p>The % of the moon\'s face lit by the sun.<br>0% = New Moon &nbsp;·&nbsp; 100% = Full Moon.</p>' +
+        '<div class="hint-examples">' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="10" data-w="1" width="60" height="60"></canvas><span>10% Crescent</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="50" data-w="1" width="60" height="60"></canvas><span>50% Quarter</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="90" data-w="1" width="60" height="60"></canvas><span>90% Gibbous</span></div>' +
+        '</div>';
+    } else if (round === 'round2') {
+      content.innerHTML =
+        '<h4>Waxing vs Waning</h4>' +
+        '<p>Waxing: growing brighter, lit on the right.<br>Waning: growing dimmer, lit on the left.<br>New &amp; Full moons are neither.</p>' +
+        '<div class="hint-examples">' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="2" data-w="1" width="60" height="60"></canvas><span>New</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="30" data-w="1" width="60" height="60"></canvas><span>Waxing →</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="30" data-w="0" width="60" height="60"></canvas><span>← Waning</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="100" data-w="1" width="60" height="60"></canvas><span>Full</span></div>' +
+        '</div>';
+    } else if (round === 'round3') {
+      content.innerHTML =
+        '<h4>Moon Phase Types</h4>' +
+        '<p>Crescent: &lt;50% lit &nbsp;·&nbsp; Quarter: exactly 50%<br>Gibbous: &gt;50% lit &nbsp;·&nbsp; Full: 100%</p>' +
+        '<div class="hint-examples">' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="20" data-w="1" width="60" height="60"></canvas><span>Crescent</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="50" data-w="1" width="60" height="60"></canvas><span>1st Quarter</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="75" data-w="1" width="60" height="60"></canvas><span>Gibbous</span></div>' +
+          '<div class="hint-example"><canvas class="hmm" data-pct="100" data-w="1" width="60" height="60"></canvas><span>Full</span></div>' +
+        '</div>';
     }
+    popup.querySelectorAll('.hmm').forEach(c => {
+      drawMoon(c, parseInt(c.dataset.pct), c.dataset.w === '1');
+    });
+    popup.style.display = 'flex';
+  };
+  window.closeHint = function() {
+    document.getElementById('hint-popup').style.display = 'none';
+  };
+
+  // ---- Share ----
+  function shareData() {
     function moonEmoji(pct, waxing) {
-      if (pct >= 98)       return '🌕';
-      if (pct <= 2)        return '🌑';
-      if (pct < 50)        return waxing ? '🌒' : '🌘';
-      if (pct === 50)      return waxing ? '🌓' : '🌗';
+      if (pct >= 98)  return '🌕';
+      if (pct <= 2)   return '🌑';
+      if (pct < 50)   return waxing ? '🌒' : '🌘';
+      if (pct === 50) return waxing ? '🌓' : '🌗';
       return waxing ? '🌔' : '🌖';
     }
-    // Puzzle number: days since 2025-01-01
+    function guessColor(diff) {
+      const d = Math.abs(diff);
+      if (d === 0)  return '#67d77f';
+      if (d <= 4)   return '#c85a5a';
+      if (d <= 10)  return '#c8844a';
+      if (d <= 15)  return '#c8b44a';
+      if (d <= 30)  return '#6ba3d6';
+      return '#cdd5de';
+    }
     const epoch = new Date('2026-05-01');
-    const today = new Date(state.date);
-    const puzzleNum = Math.floor((today - epoch) / 864e5) + 1;
-
+    const puzzleNum = Math.floor((new Date(state.date) - epoch) / 864e5) + 1;
     const attemptsStr = state.won ? state.guesses.length + '/' + MAX_ATTEMPTS : 'X/' + MAX_ATTEMPTS;
     const moon = moonEmoji(ANSWER.percentage, ANSWER.waxing);
-    const guessRow = state.guesses.map(guessEmoji).join('');
+    const wizardLine = isLunarMaster() ? '\nLunar Wizard' : '';
+    const wizardHtml = isLunarMaster() ? '<br><span style="color:#fbbf24;font-weight:700">Lunar Wizard</span>' : '';
 
-    return 'Lunale #' + puzzleNum + ' ' + attemptsStr + ' ' + moon + '\n' +
-           guessRow + '\n' +
-           'thelunale.com';
+    const guessSymbols = state.guesses.map(g => {
+      const diff = ANSWER.percentage - g;
+      return diff === 0 ? '⭐' : diff > 0 ? '🔺' : '🔻';
+    });
+    const guessHtmlSpans = state.guesses.map(g => {
+      const diff = ANSWER.percentage - g;
+      const sym = diff === 0 ? '⭐' : diff > 0 ? '🔺' : '🔻';
+      return '<span style="color:' + guessColor(diff) + ';font-weight:900">' + sym + '</span>';
+    });
+
+    const headline = 'Lunale #' + puzzleNum + ' ' + attemptsStr + ' ' + moon;
+    const plainText = headline + '\n' + guessSymbols.join('\n') + wizardLine + '\nthelunale.com';
+    const html = '<div style="font-family:sans-serif;line-height:1.6">' +
+      headline + '<br>' +
+      guessHtmlSpans.join('<br>') +
+      wizardHtml + '<br>thelunale.com</div>';
+
+    return { plainText, html };
   }
 
   window.shareResult = function() {
-    const text = buildShareText();
+    const { plainText, html } = shareData();
     if (navigator.share) {
-      navigator.share({ text: text }).catch(() => {});
+      navigator.share({ text: plainText }).catch(() => {});
+    } else if (navigator.clipboard && window.ClipboardItem) {
+      const item = new ClipboardItem({
+        'text/plain': new Blob([plainText], { type: 'text/plain' }),
+        'text/html':  new Blob([html],      { type: 'text/html'  }),
+      });
+      navigator.clipboard.write([item]).then(() => {
+        showToast('Result copied to clipboard!');
+      }).catch(() => {
+        navigator.clipboard.writeText(plainText).then(() => {
+          showToast('Result copied to clipboard!');
+        }).catch(() => {
+          showToast('Could not copy — try manually selecting the text.');
+        });
+      });
     } else {
-      navigator.clipboard.writeText(text).then(() => {
+      navigator.clipboard.writeText(plainText).then(() => {
         showToast('Result copied to clipboard!');
       }).catch(() => {
         showToast('Could not copy — try manually selecting the text.');
