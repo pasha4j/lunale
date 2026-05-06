@@ -1439,7 +1439,9 @@
   window.openHint = function(round) {
     const popup = document.getElementById('hint-popup');
     const content = document.getElementById('hint-content');
+    let hintName = '';
     if (round === 'round1') {
+      hintName = 'illumination';
       content.innerHTML =
         '<h4>What is Illumination?</h4>' +
         '<p>The % of the moon\'s face lit by the sun.<br>0% = New Moon &nbsp;·&nbsp; 100% = Full Moon.</p>' +
@@ -1449,6 +1451,7 @@
           '<div class="hint-example"><canvas class="hmm" data-pct="90" data-w="1" width="60" height="60"></canvas><span>90% Gibbous</span></div>' +
         '</div>';
     } else if (round === 'round2') {
+      hintName = 'waxing_waning';
       content.innerHTML =
         '<h4>Waxing vs Waning</h4>' +
         '<p>Waxing: growing brighter, lit on the right.<br>Waning: growing dimmer, lit on the left.<br>New &amp; Full moons are neither.</p>' +
@@ -1459,6 +1462,7 @@
           '<div class="hint-example"><canvas class="hmm" data-pct="100" data-w="1" width="60" height="60"></canvas><span>Full</span></div>' +
         '</div>';
     } else if (round === 'round3') {
+      hintName = 'phase_types';
       content.innerHTML =
         '<h4>Moon Phase Types</h4>' +
         '<p>Crescent: &lt;50% lit &nbsp;·&nbsp; Quarter: exactly 50%<br>Gibbous: &gt;50% lit &nbsp;·&nbsp; Full: 100%</p>' +
@@ -1468,6 +1472,9 @@
           '<div class="hint-example"><canvas class="hmm" data-pct="75" data-w="1" width="60" height="60"></canvas><span>Gibbous</span></div>' +
           '<div class="hint-example"><canvas class="hmm" data-pct="100" data-w="1" width="60" height="60"></canvas><span>Full</span></div>' +
         '</div>';
+    }
+    if (hintName) {
+      track('hint_popup_open', { round: round, hint_name: hintName });
     }
     popup.querySelectorAll('.hmm').forEach(c => {
       drawMoon(c, parseInt(c.dataset.pct), c.dataset.w === '1');
