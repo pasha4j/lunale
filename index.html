@@ -11,13 +11,13 @@
 <meta property="og:url" content="https://thelunale.com" />
 <meta property="og:title" content="Lunale - Daily Moon Phase Illumination Guessing Game" />
 <meta property="og:description" content="Guess the moon's illumination percentage in 4 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
-<meta property="og:image" content="https://thelunale.com/og-image.jpg" />
-<meta property="og:logo" content="https://thelunale.com/lunale_logo.png" />
+<meta property="og:image" content="https://thelunale.com/assets/images/og-image.jpg" />
+<meta property="og:logo" content="https://thelunale.com/assets/images/lunale_logo.png" />
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Lunale - Daily Moon Phase Illumination Guessing Game" />
 <meta name="twitter:description" content="Guess the moon's illumination percentage in 4 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
-<meta name="twitter:image" content="https://thelunale.com/og-image.jpg" />
+<meta name="twitter:image" content="https://thelunale.com/assets/images/og-image.jpg" />
 <title>Lunale - Daily Moon Phase Illumination Guessing Game</title>
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-M16GY57YP3"></script>
@@ -30,8 +30,8 @@
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9260381495727061"
      crossorigin="anonymous"></script>
-<link rel="icon" type="image/png" href="lunale_logo.png">
-<link rel="preload" as="image" href="moon.jpg">
+<link rel="icon" type="image/png" href="assets/images/lunale_logo.png">
+<link rel="preload" as="image" href="assets/images/moon.jpg">
 <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
@@ -42,7 +42,7 @@
   </noscript>
   <div class="header">
     <h1>
-      <img src="lunale_title.png" alt="" class="title-logo" width="640" height="144" decoding="async" fetchpriority="high" aria-hidden="true">
+      <img src="assets/images/lunale_title.png" alt="" class="title-logo" width="640" height="144" decoding="async" fetchpriority="high" aria-hidden="true">
       <span class="visually-hidden">Lunale - The moon guessing game</span>
     </h1>
     <div class="icons">
@@ -137,7 +137,7 @@
       </div>
       <div class="stat-wizard-row">
         <div class="badge-count-display">
-          <img src="lunar_wizard_badge.png" width="44" height="44" alt="Lunar Wizard badge" />
+          <img src="assets/images/lunar_wizard_badge.png" width="44" height="44" alt="Lunar Wizard badge" />
           <div class="badge-xcount">×<span id="stat-wizards">0</span></div>
         </div>
         <div class="lbl">Lunar Wizard Badges</div>
@@ -170,7 +170,7 @@
       </div>
       <div id="lunar-wizard-badge" style="display:none">
         <div class="lunar-wizard-label" id="badge-subtitle">You answered all rounds correctly and <br> earned a badge!</div>
-        <div class="lunar-wizard"><img src="lunar_wizard_badge.png" width="56" height="56" alt="Lunar Wizard badge" /></div>
+        <div class="lunar-wizard"><img src="assets/images/lunar_wizard_badge.png" width="56" height="56" alt="Lunar Wizard badge" /></div>
         <div class="lunar-wizard-label">Lunar Wizard</div>
       </div>
       <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
@@ -204,7 +204,7 @@
   window.track = track;
 
   // ---- Config ----
-  const MOON_SRC = 'moon.jpg';
+  const MOON_SRC = 'assets/images/moon.jpg';
 
   // ---- Persistence ----
   // localStorage is primary because document.cookie is silently dropped on
