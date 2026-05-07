@@ -517,13 +517,13 @@
   .share-btn:hover { opacity: 0.85; }
   .share-btn:active { transform: scale(0.97); }
   .skip-msg { text-align: center; color: var(--fg-dim); font-size: 13px; font-style: italic; padding: 8px 0; }
-  .lunar-master { text-align: center; margin-bottom: 2px; line-height: 1; }
-  .stat-master-row { margin-top: 8px; background: #1d1d24; border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(251,191,36,0.28); }
-  .stat-master-row .lbl { font-size: 10px; color: var(--fg-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .lunar-wizard { text-align: center; margin-bottom: 2px; line-height: 1; }
+  .stat-wizard-row { margin-top: 8px; background: #1d1d24; border-radius: 8px; padding: 10px; text-align: center; border: 1px solid rgba(251,191,36,0.28); }
+  .stat-wizard-row .lbl { font-size: 10px; color: var(--fg-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
   .badge-count-display { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .badge-count-display img { display: block; }
   .badge-xcount { font-size: 26px; font-weight: 800; color: #fbbf24; line-height: 1; }
-  .lunar-master-label {
+  .lunar-wizard-label {
     text-align: center; color: #f0c040; font-size: 13px; font-weight: 700;
     letter-spacing: 0.6px; margin-bottom: 10px; text-transform: uppercase;
   }

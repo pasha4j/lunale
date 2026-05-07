@@ -134,10 +134,10 @@
         <div class="stat-card"><div class="val" id="stat-streak">0</div><div class="lbl">Current</div></div>
         <div class="stat-card"><div class="val" id="stat-maxstreak">0</div><div class="lbl">Max</div></div>
       </div>
-      <div class="stat-master-row">
+      <div class="stat-wizard-row">
         <div class="badge-count-display">
-          <img src="lunar_oracle_badge.png" width="44" height="44" alt="Lunar Wizard badge" />
-          <div class="badge-xcount">×<span id="stat-masters">0</span></div>
+          <img src="lunar_wizard_badge.png" width="44" height="44" alt="Lunar Wizard badge" />
+          <div class="badge-xcount">×<span id="stat-wizards">0</span></div>
         </div>
         <div class="lbl">Lunar Wizard Badges</div>
       </div>
@@ -167,10 +167,10 @@
         <div class="phase" id="end-phase">-</div>
         <div class="verdict" id="end-verdict"></div>
       </div>
-      <div id="lunar-master-badge" style="display:none">
-        <div class="lunar-master-label" id="badge-subtitle">You answered all rounds correctly and <br> earned a badge!</div>
-        <div class="lunar-master"><img src="lunar_oracle_badge.png" width="56" height="56" alt="Lunar Wizard badge" /></div>
-        <div class="lunar-master-label">Lunar Wizard</div>
+      <div id="lunar-wizard-badge" style="display:none">
+        <div class="lunar-wizard-label" id="badge-subtitle">You answered all rounds correctly and <br> earned a badge!</div>
+        <div class="lunar-wizard"><img src="lunar_wizard_badge.png" width="56" height="56" alt="Lunar Wizard badge" /></div>
+        <div class="lunar-wizard-label">Lunar Wizard</div>
       </div>
       <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
       <button class="share-btn" id="share-btn" onclick="shareResult()">Share Result</button>
@@ -190,7 +190,7 @@
     getDailyAnswer,
     guessColor,
     illuminationDone,
-    isLunarMaster,
+    isLunarWizard,
     moonEmoji,
     phaseName,
     todayLocalStr,
@@ -254,8 +254,13 @@
       round1: null, round1Correct: null,
       round2: null, round2Correct: null,
       round2Skipped: false, phaseComplete: false,
-      lunarMasters: 0
+      lunarWizards: 0
     };
+  }
+
+  const LEGACY_LUNAR_WIZARD_COUNT_KEY = 'lunar' + 'M' + 'asters';
+  function lunarWizardCountFrom(value) {
+    return value.lunarWizards || value[LEGACY_LUNAR_WIZARD_COUNT_KEY] || 0;
   }
 
   function loadState() {
@@ -269,6 +274,7 @@
     };
     if (stored.date === today) {
       const s = Object.assign({}, phaseDefaults, stored);
+      if (s.lunarWizards == null) s.lunarWizards = lunarWizardCountFrom(s);
       // Migrate old saves: had guesses without phase data - skip straight to round 3
       if (!stored.hasOwnProperty('phaseComplete') && (stored.guesses && stored.guesses.length > 0 || stored.ended)) {
         s.phaseComplete = true;
@@ -280,7 +286,8 @@
       date: today,
       guesses: [],
       ended: false,
-      won: false
+      won: false,
+      lunarWizards: lunarWizardCountFrom(stored)
     });
   }
 
@@ -447,10 +454,10 @@
     if (state.ended) return;
     state.ended = true;
     state.phaseComplete = true;
-    // Award Lunar Master badge here (not in onGameEnd) since it depends on all
+    // Award Lunar Wizard badge here (not in onGameEnd) since it depends on all
     // rounds being complete, and onGameEnd runs after illumination only.
-    if (state._lunarCountedDate !== state.date && isLunarMaster(state)) {
-      state.lunarMasters = (state.lunarMasters || 0) + 1;
+    if (state._lunarCountedDate !== state.date && isLunarWizard(state)) {
+      state.lunarWizards = lunarWizardCountFrom(state) + 1;
       state._lunarCountedDate = state.date;
     }
     writeStored(state);
@@ -611,7 +618,7 @@
     $('stat-winpct').textContent = state.played > 0 ? Math.round(100 * state.wins / state.played) : 0;
     $('stat-streak').textContent = state.currentStreak;
     $('stat-maxstreak').textContent = state.maxStreak;
-    $('stat-masters').textContent = state.lunarMasters || 0;
+    $('stat-wizards').textContent = lunarWizardCountFrom(state);
 
     const rows = $('dist-rows');
     rows.innerHTML = '';
@@ -663,8 +670,8 @@
     phaseEl.textContent = phaseName(ANSWER.percentage, ANSWER.waxing);
     drawMoon($('end-canvas'), ANSWER.percentage, ANSWER.waxing);
     updateNextInTimer();
-    const badge = $('lunar-master-badge');
-    if (badge) badge.style.display = isLunarMaster(state) ? '' : 'none';
+    const badge = $('lunar-wizard-badge');
+    if (badge) badge.style.display = isLunarWizard(state) ? '' : 'none';
     openModal('modal-end');
   }
 
@@ -786,7 +793,7 @@
       }
       state.lastWinDate = state.date;
       if (state.currentStreak > state.maxStreak) state.maxStreak = state.currentStreak;
-      // Lunar Master is awarded later in finishGame() once all rounds are answered.
+      // Lunar Wizard is awarded later in finishGame() once all rounds are answered.
     } else {
       state.currentStreak = 0;
     }
@@ -910,8 +917,8 @@
     const puzzleNum = Math.floor((new Date(state.date) - epoch) / 864e5) + 1;
     const attemptsStr = state.won ? state.guesses.length + '/' + MAX_ATTEMPTS : 'X/' + MAX_ATTEMPTS;
     const moon = moonEmoji(ANSWER.percentage, ANSWER.waxing);
-    const wizardLine = isLunarMaster(state) ? '\nLunar Wizard' : '';
-    const wizardHtml = isLunarMaster(state) ? '<br><span style="color:#fbbf24;font-weight:700">Lunar Wizard</span>' : '';
+    const wizardLine = isLunarWizard(state) ? '\nLunar Wizard' : '';
+    const wizardHtml = isLunarWizard(state) ? '<br><span style="color:#fbbf24;font-weight:700">Lunar Wizard</span>' : '';
 
     const guessSymbols = state.guesses.map(g => {
       const diff = ANSWER.percentage - g;

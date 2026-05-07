@@ -65,7 +65,7 @@
     return state.won || state.guesses.length >= maxAttempts;
   }
 
-  function isLunarMaster(state) {
+  function isLunarWizard(state) {
     if (!state.ended || !state.won) return false;
     if (!state.round1Correct) return false;
     if (!state.round2Skipped && !state.round2Correct) return false;
@@ -99,7 +99,7 @@
     guessColor,
     hashStr,
     illuminationDone,
-    isLunarMaster,
+    isLunarWizard,
     moonEmoji,
     phaseName,
     todayLocalStr,

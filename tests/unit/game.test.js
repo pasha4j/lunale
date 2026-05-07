@@ -15,7 +15,7 @@ const {
   guessColor,
   hashStr,
   illuminationDone,
-  isLunarMaster,
+  isLunarWizard,
   moonEmoji,
   phaseName,
   todayLocalStr,
@@ -102,8 +102,8 @@ describe('state-derived helpers', () => {
     expect(MAX_ATTEMPTS).toBe(4);
   });
 
-  test('detects Lunar Master state', () => {
-    expect(isLunarMaster({
+  test('detects Lunar Wizard state', () => {
+    expect(isLunarWizard({
       ended: true,
       won: true,
       round1Correct: true,
@@ -111,7 +111,7 @@ describe('state-derived helpers', () => {
       round2Skipped: false,
     })).toBe(true);
 
-    expect(isLunarMaster({
+    expect(isLunarWizard({
       ended: true,
       won: true,
       round1Correct: true,
@@ -119,7 +119,7 @@ describe('state-derived helpers', () => {
       round2Skipped: true,
     })).toBe(true);
 
-    expect(isLunarMaster({
+    expect(isLunarWizard({
       ended: true,
       won: true,
       round1Correct: true,
