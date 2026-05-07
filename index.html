@@ -326,6 +326,12 @@
     padding-top: 14px;
     border-top: 1px solid var(--border);
   }
+  .modal-help .help-start {
+    display: none;
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px 0;
+  }
   .help-moon-stage {
     display: flex;
     justify-content: center;
@@ -658,9 +664,10 @@
       <div class="help-moon-stage" aria-hidden="true">
         <canvas id="help-moon" width="240" height="240"></canvas>
       </div>
-      <p>Guess the moon illumination percentage in <b>4 attempts.</b> <br>After each guess you'll see how close you were and which direction to go ▲ ▼. <br> Then answer two questions about the moon phase.</p>
-      <p>Answer all questions correctly to earn <br> the <b>Lunar Wizard</b> badge!</p>
+      <p>Guess the moon illumination percentage in <b>4 attempts.</b> <br>After each guess you'll see how close you were and which direction to go ▲ ▼.</p>
+      <p>Then answer two more questions to earn <br> the <b>Lunar Wizard</b> badge!</p>
       <p class="footnote">A new moon arrives every day at midnight, your local time.</p>
+      <button class="primary help-start" id="help-start">Start</button>
     </div>
   </div>
 
@@ -859,6 +866,7 @@
     });
   }
 
+  const hadStoredStateOnLoad = readStored() !== null;
   let state = loadState();
   const ANSWER = getDailyAnswer(state.date);
 
@@ -1140,6 +1148,12 @@
     if (id === 'modal-help') renderHelpMoon();
   }
 
+  function openHelpModal(autoOpened = false) {
+    const startButton = $('help-start');
+    if (startButton) startButton.style.display = autoOpened ? 'block' : 'none';
+    openModal('modal-help');
+  }
+
   function closeModals() {
     document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('show'));
   }
@@ -1386,7 +1400,11 @@
   });
   $('btn-help').addEventListener('click', () => {
     track('help_click');
-    openModal('modal-help');
+    openHelpModal(false);
+  });
+  $('help-start').addEventListener('click', () => {
+    closeModals();
+    $('guess').focus();
   });
   $('btn-stats').addEventListener('click', () => {
     track('stats_click');
@@ -1407,8 +1425,10 @@
     if (state.ended) {
       // Show end-game modal automatically on revisit so the player sees today's result
       setTimeout(showEndGame, 200);
+    } else if (!hadStoredStateOnLoad) {
+      writeStored(state);
+      setTimeout(() => openHelpModal(true), 200);
     }
-    // First-time visitors can tap the help icon themselves
   }
 
   // Wait for first paint before init so canvas reflows correctly
