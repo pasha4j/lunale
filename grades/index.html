@@ -61,6 +61,72 @@
   .date { color: var(--muted); font-size: 0.78rem; font-family: 'DM Mono', monospace; }
 
   footer { color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 3rem; font-family: 'DM Mono', monospace; }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (max-width: 640px)  { .kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-height: 110px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card.empty { opacity: 0.45; }
+  .kpi-card .kpi-subject {
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+  .kpi-card .kpi-letter {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .kpi-card .kpi-letter.a { color: #4ade80; }
+  .kpi-card .kpi-letter.b { color: #60a5fa; }
+  .kpi-card .kpi-letter.c { color: #fbbf24; }
+  .kpi-card .kpi-letter.d { color: #f97316; }
+  .kpi-card .kpi-letter.f { color: #f87171; }
+  .kpi-card .kpi-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: auto;
+  }
+  .kpi-card .kpi-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .kpi-card .kpi-trend { font-size: 0.85rem; font-weight: 600; }
+  .kpi-card .kpi-trend.up   { color: var(--up); }
+  .kpi-card .kpi-trend.dn   { color: var(--dn); }
+  .kpi-card .kpi-trend.flat { color: var(--muted); }
+  .kpi-card .kpi-course {
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
 </head>
 <body>
@@ -71,6 +137,50 @@
 
         <section class="student-block">
           <h2 class="student-name">Mariella</h2>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-subject">Math</div>
+              <div class="kpi-letter b">B</div>
+              <div class="kpi-course">Algebra 2</div>
+              <div class="kpi-bottom"><span class="kpi-pct">87.8%</span><span class="kpi-trend dn">▼ 1.0</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Science</div>
+              <div class="kpi-letter a">A</div>
+              <div class="kpi-course">Biology</div>
+              <div class="kpi-bottom"><span class="kpi-pct">91.5%</span><span class="kpi-trend dn">▼ 1.3</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">English</div>
+              <div class="kpi-letter c">C</div>
+              <div class="kpi-course">English 10</div>
+              <div class="kpi-bottom"><span class="kpi-pct">78.6%</span><span class="kpi-trend dn">▼ 3.1</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Social Studies</div>
+              <div class="kpi-letter b">B</div>
+              <div class="kpi-course">Hon Am Civ 10</div>
+              <div class="kpi-bottom"><span class="kpi-pct">84.7%</span><span class="kpi-trend up">▲ 0.3</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Spanish</div>
+              <div class="kpi-letter a">A</div>
+              <div class="kpi-course">Spanish 3</div>
+              <div class="kpi-bottom"><span class="kpi-pct">93.3%</span><span class="kpi-trend up">▲ 0.2</span></div>
+            </div>
+            <div class="kpi-card empty">
+              <div class="kpi-subject">Phys Ed</div>
+              <div class="kpi-letter" style="color:var(--muted);">—</div>
+              <div class="kpi-course">Not enrolled</div>
+              <div class="kpi-bottom"><span class="kpi-pct">—</span><span class="kpi-trend flat">→</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Health</div>
+              <div class="kpi-letter c">C</div>
+              <div class="kpi-course">Health Well 10</div>
+              <div class="kpi-bottom"><span class="kpi-pct">75.8%</span><span class="kpi-trend up">▲ 10.0</span></div>
+            </div>
+          </div>
           <div class="grade-grid">
             <div class="chart-wrap">
               <canvas id="chart_Mariella"></canvas>
@@ -133,10 +243,25 @@
             data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08"], datasets: [{"label": "Algebra 2 - Reiner/Hinds 25/26", "data": [77.14, 88.85, 88.85, 88.85, 87.85], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Biology 25-26", "data": [91.23, 92.21, 92.85, 92.85, 91.52], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "English 10 - Hogan", "data": [93.97, 81.9, 81.72, 81.72, 78.58], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health Well 10# - Balasco", "data": [81.54, 81.54, 82.35, 65.88, 75.83], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Hon Am Civ 10 - Bienkowski", "data": [70.0, 70.0, 84.38, 84.38, 84.71], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish 3 - Matteo", "data": [95.1, 93.82, 93.83, 93.12, 93.31], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Keystone Review Course", "data": [null, 5.0, 5.0, 5.0, 5.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
             options: {
               responsive: true,
-              interaction: { mode: 'index', intersect: false },
+              interaction: { mode: 'nearest', intersect: true },
+              hover: { mode: 'nearest', intersect: true },
               plugins: {
                 legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
-                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+                tooltip: {
+                  mode: 'nearest',
+                  intersect: true,
+                  displayColors: true,
+                  backgroundColor: 'rgba(17,24,39,0.95)',
+                  borderColor: '#1e293b',
+                  borderWidth: 1,
+                  titleColor: '#e2e8f0',
+                  bodyColor: '#e2e8f0',
+                  padding: 10,
+                  callbacks: {
+                    title: function(items) { return items[0].dataset.label; },
+                    label:  function(c) { return (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A') + '  ·  ' + c.label; }
+                  }
+                }
               },
               scales: {
                 x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
@@ -149,6 +274,50 @@
         
         <section class="student-block">
           <h2 class="student-name">Roman</h2>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-subject">Math</div>
+              <div class="kpi-letter d">D</div>
+              <div class="kpi-course">Alg 1 (Hon)</div>
+              <div class="kpi-bottom"><span class="kpi-pct">65.1%</span><span class="kpi-trend up">▲ 0.4</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Science</div>
+              <div class="kpi-letter c">C</div>
+              <div class="kpi-course">Science 8 (Hon)</div>
+              <div class="kpi-bottom"><span class="kpi-pct">72.9%</span><span class="kpi-trend up">▲ 3.6</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">English</div>
+              <div class="kpi-letter a">A</div>
+              <div class="kpi-course">LanArts/Eng8Hon</div>
+              <div class="kpi-bottom"><span class="kpi-pct">100.0%</span><span class="kpi-trend flat">→</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Social Studies</div>
+              <div class="kpi-letter a">A</div>
+              <div class="kpi-course">SocStu 8 (Hon)</div>
+              <div class="kpi-bottom"><span class="kpi-pct">100.0%</span><span class="kpi-trend flat">→</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Spanish</div>
+              <div class="kpi-letter c">C</div>
+              <div class="kpi-course">Spanish Level 1</div>
+              <div class="kpi-bottom"><span class="kpi-pct">78.8%</span><span class="kpi-trend up">▲ 5.4</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Phys Ed</div>
+              <div class="kpi-letter a">A</div>
+              <div class="kpi-course">Phys Ed 8</div>
+              <div class="kpi-bottom"><span class="kpi-pct">100.0%</span><span class="kpi-trend flat">→</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Health</div>
+              <div class="kpi-letter b">B</div>
+              <div class="kpi-course">Health 8</div>
+              <div class="kpi-bottom"><span class="kpi-pct">85.4%</span><span class="kpi-trend flat">→</span></div>
+            </div>
+          </div>
           <div class="grade-grid">
             <div class="chart-wrap">
               <canvas id="chart_Roman"></canvas>
@@ -229,10 +398,25 @@
             data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08"], datasets: [{"label": "Alg 1 (Hon) - Stackhouse", "data": [65.08, 66.02, 64.67, 64.67, 65.08], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Computers 8 - McNulty (A5)", "data": [87.22, 87.22, 87.22, 9.0, 9.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health 8 - Dimitriou", "data": [56.25, 56.25, 56.25, 85.42, 85.42], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "LanArts/Eng8Hon - LaBold", "data": [100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Phys Ed 8 - Fox", "data": [100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Science 8 (Hon) - Berlin", "data": [64.15, 64.15, 65.16, 69.35, 72.94], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Albrecht", "data": [100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [78.7, 72.25, 72.25, 73.37, 78.77], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A4)", "data": [null, 39.0, 39.0, 39.0, 39.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
             options: {
               responsive: true,
-              interaction: { mode: 'index', intersect: false },
+              interaction: { mode: 'nearest', intersect: true },
+              hover: { mode: 'nearest', intersect: true },
               plugins: {
                 legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
-                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+                tooltip: {
+                  mode: 'nearest',
+                  intersect: true,
+                  displayColors: true,
+                  backgroundColor: 'rgba(17,24,39,0.95)',
+                  borderColor: '#1e293b',
+                  borderWidth: 1,
+                  titleColor: '#e2e8f0',
+                  bodyColor: '#e2e8f0',
+                  padding: 10,
+                  callbacks: {
+                    title: function(items) { return items[0].dataset.label; },
+                    label:  function(c) { return (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A') + '  ·  ' + c.label; }
+                  }
+                }
               },
               scales: {
                 x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
@@ -245,6 +429,50 @@
         
         <section class="student-block">
           <h2 class="student-name">Eric</h2>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-subject">Math</div>
+              <div class="kpi-letter c">C</div>
+              <div class="kpi-course">Alg 1 (Hon)</div>
+              <div class="kpi-bottom"><span class="kpi-pct">71.3%</span><span class="kpi-trend up">▲ 2.3</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Science</div>
+              <div class="kpi-letter c">C</div>
+              <div class="kpi-course">Science 8 (Hon)</div>
+              <div class="kpi-bottom"><span class="kpi-pct">78.2%</span><span class="kpi-trend up">▲ 0.9</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">English</div>
+              <div class="kpi-letter b">B</div>
+              <div class="kpi-course">LanArts/Eng8Hon</div>
+              <div class="kpi-bottom"><span class="kpi-pct">86.6%</span><span class="kpi-trend dn">▼ 3.0</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Social Studies</div>
+              <div class="kpi-letter a">A</div>
+              <div class="kpi-course">SocStu 8 (Hon)</div>
+              <div class="kpi-bottom"><span class="kpi-pct">98.4%</span><span class="kpi-trend flat">→</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Spanish</div>
+              <div class="kpi-letter d">D</div>
+              <div class="kpi-course">Spanish Level 1</div>
+              <div class="kpi-bottom"><span class="kpi-pct">66.0%</span><span class="kpi-trend up">▲ 3.3</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Phys Ed</div>
+              <div class="kpi-letter a">A</div>
+              <div class="kpi-course">Phys Ed 8</div>
+              <div class="kpi-bottom"><span class="kpi-pct">100.0%</span><span class="kpi-trend flat">→</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-subject">Health</div>
+              <div class="kpi-letter b">B</div>
+              <div class="kpi-course">Health 8</div>
+              <div class="kpi-bottom"><span class="kpi-pct">81.4%</span><span class="kpi-trend up">▲ 2.5</span></div>
+            </div>
+          </div>
           <div class="grade-grid">
             <div class="chart-wrap">
               <canvas id="chart_Eric"></canvas>
@@ -325,10 +553,25 @@
             data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08"], datasets: [{"label": "Alg 1 (Hon) - Hansberry", "data": [69.0, 69.0, 69.0, 69.0, 71.3], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "LanArts/Eng8Hon - Hollister", "data": [87.5, 89.58, 89.58, 89.58, 86.61], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Science 8 (Hon) - Versace", "data": [77.27, 77.27, 77.27, 77.27, 78.15], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Benson", "data": [98.44, 98.44, 98.44, 98.44, 98.44], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [64.51, 59.53, 59.53, 62.7, 66.01], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health 8 - Hunt", "data": [null, 78.95, 78.95, 78.95, 81.4], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "FCS 8 - Young (A4)", "data": [null, 25.0, 25.0, 25.0, 25.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A3)", "data": [null, 38.0, 38.0, 38.0, 38.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Phys Ed 8 - Hoerger", "data": [null, null, null, null, 100.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
             options: {
               responsive: true,
-              interaction: { mode: 'index', intersect: false },
+              interaction: { mode: 'nearest', intersect: true },
+              hover: { mode: 'nearest', intersect: true },
               plugins: {
                 legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
-                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+                tooltip: {
+                  mode: 'nearest',
+                  intersect: true,
+                  displayColors: true,
+                  backgroundColor: 'rgba(17,24,39,0.95)',
+                  borderColor: '#1e293b',
+                  borderWidth: 1,
+                  titleColor: '#e2e8f0',
+                  bodyColor: '#e2e8f0',
+                  padding: 10,
+                  callbacks: {
+                    title: function(items) { return items[0].dataset.label; },
+                    label:  function(c) { return (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A') + '  ·  ' + c.label; }
+                  }
+                }
               },
               scales: {
                 x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
