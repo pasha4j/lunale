@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grade Tracker — Council Rock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:      #0a0f1a;
+    --surface: #111827;
+    --border:  #1e293b;
+    --text:    #e2e8f0;
+    --muted:   #64748b;
+    --accent:  #6EE7B7;
+    --up:      #4ade80;
+    --dn:      #f87171;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 2rem; }
+
+  header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+  header h1 span { color: var(--accent); }
+  .subtitle { color: var(--muted); margin-top: 0.3rem; font-size: 0.9rem; font-family: 'DM Mono', monospace; }
+
+  .student-block { margin-bottom: 3.5rem; }
+  .student-name {
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem;
+    padding-left: 1rem; border-left: 3px solid var(--accent);
+  }
+
+  .grade-grid { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; }
+  @media (max-width: 900px) { .grade-grid { grid-template-columns: 1fr; } }
+
+  .chart-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .table-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem; overflow-x: auto;
+  }
+
+  .grade-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .grade-table th { color: var(--muted); font-weight: 600; text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .grade-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .grade-table tr:last-child td { border-bottom: none; }
+  .course-name { font-weight: 500; }
+  .score { font-family: 'DM Mono', monospace; font-weight: 600; font-size: 0.95rem; }
+  .score.a { color: #4ade80; }
+  .score.b { color: #60a5fa; }
+  .score.c { color: #fbbf24; }
+  .score.d { color: #f97316; }
+  .score.f { color: #f87171; }
+  .trend .up { color: var(--up); font-size: 0.82rem; }
+  .trend .dn { color: var(--dn); font-size: 0.82rem; }
+  .trend .flat { color: var(--muted); font-size: 0.82rem; }
+  .date { color: var(--muted); font-size: 0.78rem; font-family: 'DM Mono', monospace; }
+
+  footer { color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 3rem; font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Grade <span>Tracker</span></h1>
+  <p class="subtitle">Council Rock School District · Last updated 2026-05-08 20:02</p>
+</header>
+
+        <section class="student-block">
+          <h2 class="student-name">Mariella</h2>
+          <div class="grade-grid">
+            <div class="chart-wrap">
+              <canvas id="chart_Mariella"></canvas>
+            </div>
+            <div class="table-wrap">
+              <table class="grade-table">
+                <thead><tr><th>Course</th><th>Grade</th><th>Trend</th><th>As of</th></tr></thead>
+                <tbody>
+                <tr>
+                  <td class="course-name">Algebra 2 - Reiner/Hinds 25/26</td>
+                  <td class="score b">87.8%</td>
+                  <td class="trend"><span class="dn">▼ 1.0</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Biology 25-26</td>
+                  <td class="score a">91.5%</td>
+                  <td class="trend"><span class="dn">▼ 1.3</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">English 10 - Hogan</td>
+                  <td class="score c">78.6%</td>
+                  <td class="trend"><span class="dn">▼ 3.1</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Health Well 10# - Balasco</td>
+                  <td class="score c">75.8%</td>
+                  <td class="trend"><span class="up">▲ 10.0</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Hon Am Civ 10 - Bienkowski</td>
+                  <td class="score b">84.7%</td>
+                  <td class="trend"><span class="up">▲ 0.3</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Spanish 3 - Matteo</td>
+                  <td class="score a">93.3%</td>
+                  <td class="trend"><span class="up">▲ 0.2</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Keystone Review Course</td>
+                  <td class="score f">5.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        <script>
+        (function(){
+          var ctx = document.getElementById('chart_Mariella').getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08"], datasets: [{"label": "Algebra 2 - Reiner/Hinds 25/26", "data": [77.14, 88.85, 88.85, 88.85, 87.85], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Biology 25-26", "data": [91.23, 92.21, 92.85, 92.85, 91.52], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "English 10 - Hogan", "data": [93.97, 81.9, 81.72, 81.72, 78.58], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health Well 10# - Balasco", "data": [81.54, 81.54, 82.35, 65.88, 75.83], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Hon Am Civ 10 - Bienkowski", "data": [70.0, 70.0, 84.38, 84.38, 84.71], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish 3 - Matteo", "data": [95.1, 93.82, 93.83, 93.12, 93.31], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Keystone Review Course", "data": [null, 5.0, 5.0, 5.0, 5.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
+            options: {
+              responsive: true,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
+                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+              },
+              scales: {
+                x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                y: { min: 50, max: 100, ticks: { color: '#94a3b8', callback: function(v){ return v+'%'; } }, grid: { color: '#1e293b' } }
+              }
+            }
+          });
+        })();
+        </script>
+        
+        <section class="student-block">
+          <h2 class="student-name">Roman</h2>
+          <div class="grade-grid">
+            <div class="chart-wrap">
+              <canvas id="chart_Roman"></canvas>
+            </div>
+            <div class="table-wrap">
+              <table class="grade-table">
+                <thead><tr><th>Course</th><th>Grade</th><th>Trend</th><th>As of</th></tr></thead>
+                <tbody>
+                <tr>
+                  <td class="course-name">Alg 1 (Hon) - Stackhouse</td>
+                  <td class="score d">65.1%</td>
+                  <td class="trend"><span class="up">▲ 0.4</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Computers 8 - McNulty (A5)</td>
+                  <td class="score f">9.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Health 8 - Dimitriou</td>
+                  <td class="score b">85.4%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">LanArts/Eng8Hon - LaBold</td>
+                  <td class="score a">100.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Phys Ed 8 - Fox</td>
+                  <td class="score a">100.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Science 8 (Hon) - Berlin</td>
+                  <td class="score c">72.9%</td>
+                  <td class="trend"><span class="up">▲ 3.6</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">SocStu 8 (Hon) - Albrecht</td>
+                  <td class="score a">100.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Spanish Level 1 - Moyer</td>
+                  <td class="score c">78.8%</td>
+                  <td class="trend"><span class="up">▲ 5.4</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Guided Ex 8 - Lonergan (T1)</td>
+                  <td class="score f">10.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Tech Ed 8 - Chieffo (A4)</td>
+                  <td class="score f">39.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        <script>
+        (function(){
+          var ctx = document.getElementById('chart_Roman').getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08"], datasets: [{"label": "Alg 1 (Hon) - Stackhouse", "data": [65.08, 66.02, 64.67, 64.67, 65.08], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Computers 8 - McNulty (A5)", "data": [87.22, 87.22, 87.22, 9.0, 9.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health 8 - Dimitriou", "data": [56.25, 56.25, 56.25, 85.42, 85.42], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "LanArts/Eng8Hon - LaBold", "data": [100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Phys Ed 8 - Fox", "data": [100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Science 8 (Hon) - Berlin", "data": [64.15, 64.15, 65.16, 69.35, 72.94], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Albrecht", "data": [100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [78.7, 72.25, 72.25, 73.37, 78.77], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A4)", "data": [null, 39.0, 39.0, 39.0, 39.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
+            options: {
+              responsive: true,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
+                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+              },
+              scales: {
+                x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                y: { min: 50, max: 100, ticks: { color: '#94a3b8', callback: function(v){ return v+'%'; } }, grid: { color: '#1e293b' } }
+              }
+            }
+          });
+        })();
+        </script>
+        
+        <section class="student-block">
+          <h2 class="student-name">Eric</h2>
+          <div class="grade-grid">
+            <div class="chart-wrap">
+              <canvas id="chart_Eric"></canvas>
+            </div>
+            <div class="table-wrap">
+              <table class="grade-table">
+                <thead><tr><th>Course</th><th>Grade</th><th>Trend</th><th>As of</th></tr></thead>
+                <tbody>
+                <tr>
+                  <td class="course-name">Alg 1 (Hon) - Hansberry</td>
+                  <td class="score c">71.3%</td>
+                  <td class="trend"><span class="up">▲ 2.3</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">LanArts/Eng8Hon - Hollister</td>
+                  <td class="score b">86.6%</td>
+                  <td class="trend"><span class="dn">▼ 3.0</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Science 8 (Hon) - Versace</td>
+                  <td class="score c">78.2%</td>
+                  <td class="trend"><span class="up">▲ 0.9</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">SocStu 8 (Hon) - Benson</td>
+                  <td class="score a">98.4%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Spanish Level 1 - Moyer</td>
+                  <td class="score d">66.0%</td>
+                  <td class="trend"><span class="up">▲ 3.3</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Health 8 - Hunt</td>
+                  <td class="score b">81.4%</td>
+                  <td class="trend"><span class="up">▲ 2.5</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">FCS 8 - Young (A4)</td>
+                  <td class="score f">25.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Guided Ex 8 - Lonergan (T1)</td>
+                  <td class="score f">10.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Tech Ed 8 - Chieffo (A3)</td>
+                  <td class="score f">38.0%</td>
+                  <td class="trend"><span class="flat">→</span></td>
+                  <td class="date">2026-05-08</td>
+                </tr>
+                <tr>
+                  <td class="course-name">Phys Ed 8 - Hoerger</td>
+                  <td class="score a">100.0%</td>
+                  <td class="trend"></td>
+                  <td class="date">2026-05-08</td>
+                </tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        <script>
+        (function(){
+          var ctx = document.getElementById('chart_Eric').getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08"], datasets: [{"label": "Alg 1 (Hon) - Hansberry", "data": [69.0, 69.0, 69.0, 69.0, 71.3], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "LanArts/Eng8Hon - Hollister", "data": [87.5, 89.58, 89.58, 89.58, 86.61], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Science 8 (Hon) - Versace", "data": [77.27, 77.27, 77.27, 77.27, 78.15], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Benson", "data": [98.44, 98.44, 98.44, 98.44, 98.44], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [64.51, 59.53, 59.53, 62.7, 66.01], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health 8 - Hunt", "data": [null, 78.95, 78.95, 78.95, 81.4], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "FCS 8 - Young (A4)", "data": [null, 25.0, 25.0, 25.0, 25.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A3)", "data": [null, 38.0, 38.0, 38.0, 38.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Phys Ed 8 - Hoerger", "data": [null, null, null, null, 100.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
+            options: {
+              responsive: true,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
+                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+              },
+              scales: {
+                x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                y: { min: 50, max: 100, ticks: { color: '#94a3b8', callback: function(v){ return v+'%'; } }, grid: { color: '#1e293b' } }
+              }
+            }
+          });
+        })();
+        </script>
+        
+<footer>Generated by canvas_grades.py · Data stored in grades_data.json</footer>
+</body>
+</html>
