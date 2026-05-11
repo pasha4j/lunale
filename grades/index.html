@@ -32,16 +32,89 @@
     padding-left: 1rem; border-left: 3px solid var(--accent);
   }
 
+  /* ── KPI cards ─────────────────────────────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem 0.95rem;
+    display: flex; flex-direction: column; gap: 0.35rem;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .kpi-card:hover { border-color: #334155; transform: translateY(-1px); }
+  .kpi-subject {
+    font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .kpi-course {
+    font-size: 0.72rem; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .kpi-row {
+    display: flex; align-items: baseline; gap: 0.55rem;
+    margin-top: 0.15rem;
+  }
+  .kpi-letter {
+    font-size: 1.7rem; font-weight: 800; line-height: 1;
+    font-family: 'DM Sans', sans-serif; letter-spacing: -0.02em;
+  }
+  .kpi-pct {
+    font-size: 0.95rem; font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    opacity: 0.85;
+  }
+  .kpi-arrow {
+    margin-left: auto;
+    font-size: 1.1rem; line-height: 1; font-weight: 700;
+  }
+  .kpi-arrow.up   { color: var(--up); }
+  .kpi-arrow.dn   { color: var(--dn); }
+  .kpi-arrow.flat { color: var(--muted); }
+  .kpi-letter.a, .kpi-pct.a { color: #4ade80; }
+  .kpi-letter.b, .kpi-pct.b { color: #60a5fa; }
+  .kpi-letter.c, .kpi-pct.c { color: #fbbf24; }
+  .kpi-letter.d, .kpi-pct.d { color: #f97316; }
+  .kpi-letter.f, .kpi-pct.f { color: #f87171; }
+
   .grade-grid { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; }
   @media (max-width: 900px) { .grade-grid { grid-template-columns: 1fr; } }
 
   .chart-wrap {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 1.25rem;
+    position: relative;
+    height: 380px;
   }
+  .chart-wrap canvas { width: 100% !important; height: 100% !important; }
   .table-wrap {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 1.25rem; overflow-x: auto;
+  }
+
+  /* ── Mobile tweaks ─────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    header h1 { font-size: 1.5rem; }
+    .student-name { font-size: 1.15rem; }
+    .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
+    .kpi-card { padding: 0.65rem 0.7rem; border-radius: 10px; }
+    .kpi-letter { font-size: 1.4rem; }
+    .kpi-pct { font-size: 0.8rem; }
+    .kpi-arrow { font-size: 0.95rem; }
+    .chart-wrap { padding: 0.75rem; height: 320px; }
+    .table-wrap { padding: 0.75rem; }
+    .grade-table th, .grade-table td { padding: 0.45rem 0.5rem; font-size: 0.8rem; }
+  }
+  @media (max-width: 380px) {
+    .kpi-grid { grid-template-columns: 1fr; }
   }
 
   .grade-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
@@ -66,11 +139,66 @@
 <body>
 <header>
   <h1>Grade <span>Tracker</span></h1>
-  <p class="subtitle">Council Rock School District · Last updated 2026-05-11 15:13</p>
+  <p class="subtitle">Council Rock School District · Last updated 2026-05-11 19:21</p>
 </header>
 
         <section class="student-block">
           <h2 class="student-name">Mariella</h2>
+          <div class="kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-subject">Math</div>
+                <div class="kpi-course" title="Algebra 2 - Reiner/Hinds 25/26">Algebra 2 - Reiner/Hinds 25/26</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B+</span>
+                  <span class="kpi-pct b">87.8%</span>
+                  <span class="kpi-arrow flat" title="No change">→</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Science</div>
+                <div class="kpi-course" title="Biology 25-26">Biology 25-26</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B</span>
+                  <span class="kpi-pct b">85.3%</span>
+                  <span class="kpi-arrow dn" title="Down 6.2%">▼</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">English</div>
+                <div class="kpi-course" title="English 10 - Hogan">English 10 - Hogan</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter c">C+</span>
+                  <span class="kpi-pct c">78.9%</span>
+                  <span class="kpi-arrow up" title="Up 0.3%">▲</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Social Studies</div>
+                <div class="kpi-course" title="Hon Am Civ 10 - Bienkowski">Hon Am Civ 10 - Bienkowski</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B</span>
+                  <span class="kpi-pct b">84.7%</span>
+                  <span class="kpi-arrow flat" title="No change">→</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Spanish</div>
+                <div class="kpi-course" title="Spanish 3 - Matteo">Spanish 3 - Matteo</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter a">A</span>
+                  <span class="kpi-pct a">93.5%</span>
+                  <span class="kpi-arrow up" title="Up 0.2%">▲</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Health</div>
+                <div class="kpi-course" title="Health Well 10# - Balasco">Health Well 10# - Balasco</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter a">A-</span>
+                  <span class="kpi-pct a">90.0%</span>
+                  <span class="kpi-arrow up" title="Up 14.2%">▲</span>
+                </div>
+              </div></div>
           <div class="grade-grid">
             <div class="chart-wrap">
               <canvas id="chart_Mariella"></canvas>
@@ -128,19 +256,54 @@
         <script>
         (function(){
           var ctx = document.getElementById('chart_Mariella').getContext('2d');
+          var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08", "2026-05-11"], datasets: [{"label": "Algebra 2 - Reiner/Hinds 25/26", "data": [77.14, 88.85, 88.85, 88.85, 87.85, 87.85], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Biology 25-26", "data": [91.23, 92.21, 92.85, 92.85, 91.52, 85.27], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "English 10 - Hogan", "data": [93.97, 81.9, 81.72, 81.72, 78.58, 78.92], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health Well 10# - Balasco", "data": [81.54, 81.54, 82.35, 65.88, 75.83, 90.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Hon Am Civ 10 - Bienkowski", "data": [70.0, 70.0, 84.38, 84.38, 84.71, 84.71], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish 3 - Matteo", "data": [95.1, 93.82, 93.83, 93.12, 93.31, 93.5], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Keystone Review Course", "data": [null, 5.0, 5.0, 5.0, 5.0, 5.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
+            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08", "2026-05-11"], datasets: [{"label": "Algebra 2 - Reiner/Hinds 25/26", "data": [77.14, 88.85, 88.85, 88.85, 87.85, 87.85], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Biology 25-26", "data": [91.23, 92.21, 92.85, 92.85, 91.52, 85.27], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 10 - Hogan", "data": [93.97, 81.9, 81.72, 81.72, 78.58, 78.92], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Health Well 10# - Balasco", "data": [81.54, 81.54, 82.35, 65.88, 75.83, 90.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Am Civ 10 - Bienkowski", "data": [70.0, 70.0, 84.38, 84.38, 84.71, 84.71], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 3 - Matteo", "data": [95.1, 93.82, 93.83, 93.12, 93.31, 93.5], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Keystone Review Course", "data": [null, 5.0, 5.0, 5.0, 5.0, 5.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
-              interaction: { mode: 'index', intersect: false },
+              maintainAspectRatio: false,
+              interaction: { mode: 'nearest', intersect: false, axis: 'xy' },
               plugins: {
-                legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
-                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+                legend: {
+                  position: isMobile ? 'bottom' : 'top',
+                  labels: {
+                    color: '#e2e8f0',
+                    font: { family: 'DM Sans', size: isMobile ? 10 : 12 },
+                    boxWidth: isMobile ? 10 : 14,
+                    padding: isMobile ? 6 : 10
+                  }
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(15,23,42,0.95)',
+                  borderColor: '#334155',
+                  borderWidth: 1,
+                  titleColor: '#e2e8f0',
+                  bodyColor: '#e2e8f0',
+                  padding: 10,
+                  displayColors: true,
+                  callbacks: {
+                    title: function(items) {
+                      if (!items || !items.length) return '';
+                      return items[0].label;
+                    },
+                    label: function(c) {
+                      var v = (c.parsed.y !== null && c.parsed.y !== undefined) ? c.parsed.y.toFixed(1) + '%' : 'N/A';
+                      return c.dataset.label + ' — ' + v;
+                    }
+                  }
+                }
               },
               scales: {
-                x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
-                y: { min: 50, max: 100, ticks: { color: '#94a3b8', callback: function(v){ return v+'%'; } }, grid: { color: '#1e293b' } }
+                x: {
+                  ticks: { color: '#94a3b8', maxRotation: 0, autoSkip: true, maxTicksLimit: isMobile ? 4 : 8, font: { size: isMobile ? 10 : 12 } },
+                  grid: { color: '#1e293b' }
+                },
+                y: {
+                  min: 50, max: 100,
+                  ticks: { color: '#94a3b8', font: { size: isMobile ? 10 : 12 }, callback: function(v){ return v+'%'; } },
+                  grid: { color: '#1e293b' }
+                }
               }
             }
           });
@@ -149,6 +312,70 @@
         
         <section class="student-block">
           <h2 class="student-name">Roman</h2>
+          <div class="kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-subject">Math</div>
+                <div class="kpi-course" title="Alg 1 (Hon) - Stackhouse">Alg 1 (Hon) - Stackhouse</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter d">D</span>
+                  <span class="kpi-pct d">65.1%</span>
+                  <span class="kpi-arrow flat" title="No change">→</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Science</div>
+                <div class="kpi-course" title="Science 8 (Hon) - Berlin">Science 8 (Hon) - Berlin</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter c">C</span>
+                  <span class="kpi-pct c">75.8%</span>
+                  <span class="kpi-arrow up" title="Up 2.9%">▲</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">English</div>
+                <div class="kpi-course" title="LanArts/Eng8Hon - LaBold">LanArts/Eng8Hon - LaBold</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B</span>
+                  <span class="kpi-pct b">86.7%</span>
+                  <span class="kpi-arrow dn" title="Down 13.3%">▼</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Social Studies</div>
+                <div class="kpi-course" title="SocStu 8 (Hon) - Albrecht">SocStu 8 (Hon) - Albrecht</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter a">A</span>
+                  <span class="kpi-pct a">93.3%</span>
+                  <span class="kpi-arrow dn" title="Down 6.7%">▼</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Spanish</div>
+                <div class="kpi-course" title="Spanish Level 1 - Moyer">Spanish Level 1 - Moyer</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B-</span>
+                  <span class="kpi-pct b">81.5%</span>
+                  <span class="kpi-arrow up" title="Up 2.8%">▲</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Phys Ed</div>
+                <div class="kpi-course" title="Phys Ed 8 - Fox">Phys Ed 8 - Fox</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter a">A</span>
+                  <span class="kpi-pct a">96.7%</span>
+                  <span class="kpi-arrow dn" title="Down 3.3%">▼</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Health</div>
+                <div class="kpi-course" title="Health 8 - Dimitriou">Health 8 - Dimitriou</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B+</span>
+                  <span class="kpi-pct b">89.7%</span>
+                  <span class="kpi-arrow up" title="Up 4.3%">▲</span>
+                </div>
+              </div></div>
           <div class="grade-grid">
             <div class="chart-wrap">
               <canvas id="chart_Roman"></canvas>
@@ -224,19 +451,54 @@
         <script>
         (function(){
           var ctx = document.getElementById('chart_Roman').getContext('2d');
+          var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08", "2026-05-11"], datasets: [{"label": "Alg 1 (Hon) - Stackhouse", "data": [65.08, 66.02, 64.67, 64.67, 65.08, 65.08], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Computers 8 - McNulty (A5)", "data": [87.22, 87.22, 87.22, 9.0, 9.0, 9.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health 8 - Dimitriou", "data": [56.25, 56.25, 56.25, 85.42, 85.42, 89.71], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "LanArts/Eng8Hon - LaBold", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 86.67], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Phys Ed 8 - Fox", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 96.67], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Science 8 (Hon) - Berlin", "data": [64.15, 64.15, 65.16, 69.35, 72.94, 75.84], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Albrecht", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 93.33], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [78.7, 72.25, 72.25, 73.37, 78.77, 81.53], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0, 10.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A4)", "data": [null, 39.0, 39.0, 39.0, 39.0, 39.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
+            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08", "2026-05-11"], datasets: [{"label": "Alg 1 (Hon) - Stackhouse", "data": [65.08, 66.02, 64.67, 64.67, 65.08, 65.08], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Computers 8 - McNulty (A5)", "data": [87.22, 87.22, 87.22, 9.0, 9.0, 9.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Health 8 - Dimitriou", "data": [56.25, 56.25, 56.25, 85.42, 85.42, 89.71], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "LanArts/Eng8Hon - LaBold", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 86.67], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Phys Ed 8 - Fox", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 96.67], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Science 8 (Hon) - Berlin", "data": [64.15, 64.15, 65.16, 69.35, 72.94, 75.84], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Albrecht", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 93.33], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [78.7, 72.25, 72.25, 73.37, 78.77, 81.53], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0, 10.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A4)", "data": [null, 39.0, 39.0, 39.0, 39.0, 39.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
-              interaction: { mode: 'index', intersect: false },
+              maintainAspectRatio: false,
+              interaction: { mode: 'nearest', intersect: false, axis: 'xy' },
               plugins: {
-                legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
-                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+                legend: {
+                  position: isMobile ? 'bottom' : 'top',
+                  labels: {
+                    color: '#e2e8f0',
+                    font: { family: 'DM Sans', size: isMobile ? 10 : 12 },
+                    boxWidth: isMobile ? 10 : 14,
+                    padding: isMobile ? 6 : 10
+                  }
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(15,23,42,0.95)',
+                  borderColor: '#334155',
+                  borderWidth: 1,
+                  titleColor: '#e2e8f0',
+                  bodyColor: '#e2e8f0',
+                  padding: 10,
+                  displayColors: true,
+                  callbacks: {
+                    title: function(items) {
+                      if (!items || !items.length) return '';
+                      return items[0].label;
+                    },
+                    label: function(c) {
+                      var v = (c.parsed.y !== null && c.parsed.y !== undefined) ? c.parsed.y.toFixed(1) + '%' : 'N/A';
+                      return c.dataset.label + ' — ' + v;
+                    }
+                  }
+                }
               },
               scales: {
-                x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
-                y: { min: 50, max: 100, ticks: { color: '#94a3b8', callback: function(v){ return v+'%'; } }, grid: { color: '#1e293b' } }
+                x: {
+                  ticks: { color: '#94a3b8', maxRotation: 0, autoSkip: true, maxTicksLimit: isMobile ? 4 : 8, font: { size: isMobile ? 10 : 12 } },
+                  grid: { color: '#1e293b' }
+                },
+                y: {
+                  min: 50, max: 100,
+                  ticks: { color: '#94a3b8', font: { size: isMobile ? 10 : 12 }, callback: function(v){ return v+'%'; } },
+                  grid: { color: '#1e293b' }
+                }
               }
             }
           });
@@ -245,6 +507,70 @@
         
         <section class="student-block">
           <h2 class="student-name">Eric</h2>
+          <div class="kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-subject">Math</div>
+                <div class="kpi-course" title="Alg 1 (Hon) - Hansberry">Alg 1 (Hon) - Hansberry</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter d">D+</span>
+                  <span class="kpi-pct d">69.7%</span>
+                  <span class="kpi-arrow dn" title="Down 1.6%">▼</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Science</div>
+                <div class="kpi-course" title="Science 8 (Hon) - Versace">Science 8 (Hon) - Versace</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter c">C+</span>
+                  <span class="kpi-pct c">78.2%</span>
+                  <span class="kpi-arrow flat" title="No change">→</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">English</div>
+                <div class="kpi-course" title="LanArts/Eng8Hon - Hollister">LanArts/Eng8Hon - Hollister</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B</span>
+                  <span class="kpi-pct b">86.6%</span>
+                  <span class="kpi-arrow flat" title="No change">→</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Social Studies</div>
+                <div class="kpi-course" title="SocStu 8 (Hon) - Benson">SocStu 8 (Hon) - Benson</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter a">A+</span>
+                  <span class="kpi-pct a">98.7%</span>
+                  <span class="kpi-arrow up" title="Up 0.2%">▲</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Spanish</div>
+                <div class="kpi-course" title="Spanish Level 1 - Moyer">Spanish Level 1 - Moyer</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter c">C-</span>
+                  <span class="kpi-pct c">71.2%</span>
+                  <span class="kpi-arrow up" title="Up 5.2%">▲</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Phys Ed</div>
+                <div class="kpi-course" title="Phys Ed 8 - Hoerger">Phys Ed 8 - Hoerger</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter a">A+</span>
+                  <span class="kpi-pct a">100.0%</span>
+                  <span class="kpi-arrow flat" title="No change">→</span>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-subject">Health</div>
+                <div class="kpi-course" title="Health 8 - Hunt">Health 8 - Hunt</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter b">B</span>
+                  <span class="kpi-pct b">84.9%</span>
+                  <span class="kpi-arrow up" title="Up 3.5%">▲</span>
+                </div>
+              </div></div>
           <div class="grade-grid">
             <div class="chart-wrap">
               <canvas id="chart_Eric"></canvas>
@@ -320,19 +646,54 @@
         <script>
         (function(){
           var ctx = document.getElementById('chart_Eric').getContext('2d');
+          var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08", "2026-05-11"], datasets: [{"label": "Alg 1 (Hon) - Hansberry", "data": [69.0, 69.0, 69.0, 69.0, 71.3, 69.71], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "LanArts/Eng8Hon - Hollister", "data": [87.5, 89.58, 89.58, 89.58, 86.61, 86.61], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Science 8 (Hon) - Versace", "data": [77.27, 77.27, 77.27, 77.27, 78.15, 78.15], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Benson", "data": [98.44, 98.44, 98.44, 98.44, 98.44, 98.69], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [64.51, 59.53, 59.53, 62.7, 66.01, 71.2], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Health 8 - Hunt", "data": [null, 78.95, 78.95, 78.95, 81.4, 84.91], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "FCS 8 - Young (A4)", "data": [null, 25.0, 25.0, 25.0, 25.0, 25.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0, 10.0], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A3)", "data": [null, 38.0, 38.0, 38.0, 38.0, 38.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}, {"label": "Phys Ed 8 - Hoerger", "data": [null, null, null, null, 100.0, 100.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 8, "spanGaps": true}] },
+            data: { labels: ["2026-04-29", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-08", "2026-05-11"], datasets: [{"label": "Alg 1 (Hon) - Hansberry", "data": [69.0, 69.0, 69.0, 69.0, 71.3, 69.71], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "LanArts/Eng8Hon - Hollister", "data": [87.5, 89.58, 89.58, 89.58, 86.61, 86.61], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Science 8 (Hon) - Versace", "data": [77.27, 77.27, 77.27, 77.27, 78.15, 78.15], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "SocStu 8 (Hon) - Benson", "data": [98.44, 98.44, 98.44, 98.44, 98.44, 98.69], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish Level 1 - Moyer", "data": [64.51, 59.53, 59.53, 62.7, 66.01, 71.2], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Health 8 - Hunt", "data": [null, 78.95, 78.95, 78.95, 81.4, 84.91], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "FCS 8 - Young (A4)", "data": [null, 25.0, 25.0, 25.0, 25.0, 25.0], "borderColor": "#F87171", "backgroundColor": "#F8717122", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Guided Ex 8 - Lonergan (T1)", "data": [null, 10.0, 10.0, 10.0, 10.0, 10.0], "borderColor": "#38BDF8", "backgroundColor": "#38BDF822", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Tech Ed 8 - Chieffo (A3)", "data": [null, 38.0, 38.0, 38.0, 38.0, 38.0], "borderColor": "#FB923C", "backgroundColor": "#FB923C22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Phys Ed 8 - Hoerger", "data": [null, null, null, null, 100.0, 100.0], "borderColor": "#C084FC", "backgroundColor": "#C084FC22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
-              interaction: { mode: 'index', intersect: false },
+              maintainAspectRatio: false,
+              interaction: { mode: 'nearest', intersect: false, axis: 'xy' },
               plugins: {
-                legend: { labels: { color: '#e2e8f0', font: { family: 'DM Sans' } } },
-                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + (c.parsed.y !== null ? c.parsed.y.toFixed(1) + '%' : 'N/A'); } } }
+                legend: {
+                  position: isMobile ? 'bottom' : 'top',
+                  labels: {
+                    color: '#e2e8f0',
+                    font: { family: 'DM Sans', size: isMobile ? 10 : 12 },
+                    boxWidth: isMobile ? 10 : 14,
+                    padding: isMobile ? 6 : 10
+                  }
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(15,23,42,0.95)',
+                  borderColor: '#334155',
+                  borderWidth: 1,
+                  titleColor: '#e2e8f0',
+                  bodyColor: '#e2e8f0',
+                  padding: 10,
+                  displayColors: true,
+                  callbacks: {
+                    title: function(items) {
+                      if (!items || !items.length) return '';
+                      return items[0].label;
+                    },
+                    label: function(c) {
+                      var v = (c.parsed.y !== null && c.parsed.y !== undefined) ? c.parsed.y.toFixed(1) + '%' : 'N/A';
+                      return c.dataset.label + ' — ' + v;
+                    }
+                  }
+                }
               },
               scales: {
-                x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
-                y: { min: 50, max: 100, ticks: { color: '#94a3b8', callback: function(v){ return v+'%'; } }, grid: { color: '#1e293b' } }
+                x: {
+                  ticks: { color: '#94a3b8', maxRotation: 0, autoSkip: true, maxTicksLimit: isMobile ? 4 : 8, font: { size: isMobile ? 10 : 12 } },
+                  grid: { color: '#1e293b' }
+                },
+                y: {
+                  min: 50, max: 100,
+                  ticks: { color: '#94a3b8', font: { size: isMobile ? 10 : 12 }, callback: function(v){ return v+'%'; } },
+                  grid: { color: '#1e293b' }
+                }
               }
             }
           });
