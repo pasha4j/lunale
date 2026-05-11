@@ -4,12 +4,12 @@
 
 Play it at [thelunale.com](https://thelunale.com).
 
-Each day, players see a rendered moon phase and try to guess the moon's illumination percentage in four attempts. After the illumination round, they answer phase-direction and phase-type questions for a chance to earn a Lunar Wizard badge.
+Each day, players see a rendered moon phase and try to guess the moon's illumination percentage in six attempts. After the illumination round, they answer phase-direction and phase-type questions for a chance to earn a Lunar Wizard badge.
 
 ## Features
 
 - Daily deterministic puzzle
-- Four-guess illumination round with hot/cold clues and higher/lower hints
+- Six-guess illumination round with hot/cold clues and higher/lower hints
 - Follow-up phase rounds for waxing/waning and phase type
 - Local statistics, streaks, guess distribution, and badge count
 - Shareable result text

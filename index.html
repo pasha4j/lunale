@@ -4,19 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <meta name="theme-color" content="#0a0a0e" />
-<meta name="description" content="Guess the moon's illumination percentage in 4 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
+<meta name="description" content="Guess the moon's illumination percentage in 6 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
 <link rel="canonical" href="https://thelunale.com" />
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://thelunale.com" />
 <meta property="og:title" content="Lunale - Daily Moon Phase Illumination Guessing Game" />
-<meta property="og:description" content="Guess the moon's illumination percentage in 4 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
+<meta property="og:description" content="Guess the moon's illumination percentage in 6 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
 <meta property="og:image" content="https://thelunale.com/assets/images/og-image.jpg" />
 <meta property="og:logo" content="https://thelunale.com/assets/images/lunale_logo.png" />
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Lunale - Daily Moon Phase Illumination Guessing Game" />
-<meta name="twitter:description" content="Guess the moon's illumination percentage in 4 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
+<meta name="twitter:description" content="Guess the moon's illumination percentage in 6 tries. Each day brings a new moon phase puzzle. Can you figure out tonight's lunar illumination?" />
 <meta name="twitter:image" content="https://thelunale.com/assets/images/og-image.jpg" />
 <title>Lunale - Daily Moon Phase Illumination Guessing Game</title>
 <!-- Google Analytics 4 -->
@@ -70,7 +70,7 @@
     <button class="primary" id="btn-guess">Guess</button>
   </div>
 
-  <div class="attempts-label" id="attempts-label">Attempts: 0/4</div>
+  <div class="attempts-label" id="attempts-label">Attempts: 0/6</div>
   <ul class="guesses" id="guesses"></ul>
 
   </div><!-- end round1-section -->
@@ -117,7 +117,7 @@
       <div class="help-moon-stage" aria-hidden="true">
         <canvas id="help-moon" width="240" height="240"></canvas>
       </div>
-      <p>Guess the moon illumination percentage in <b>4 attempts.</b> <br>After each guess you'll see how close you were and which direction to go ▲ ▼.</p>
+      <p>Guess the moon illumination percentage in <b>6 attempts.</b> <br>After each guess you'll see how close you were and which direction to go ▲ ▼.</p>
       <p>Then answer two more questions to earn <br> the <b>Lunar Wizard</b> badge!</p>
       <p class="footnote">A new moon arrives every day at midnight, your local time.</p>
       <button class="primary help-start" id="help-start">Start</button>
@@ -173,7 +173,9 @@
         <div class="lunar-wizard"><img src="assets/images/lunar_wizard_badge.png" width="56" height="56" alt="Lunar Wizard badge" /></div>
         <div class="lunar-wizard-label">Lunar Wizard</div>
       </div>
-      <p style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
+      <button class="primary bonus-btn" id="bonus-btn" type="button" style="display:none">Play Bonus Rounds</button>
+      <p id="bonus-answered-row" class="bonus-answered-row" style="display:none;">Bonus questions answered: <span id="bonus-answered-count">0</span></p>
+      <p id="next-puzzle-row" style="text-align:center; color: var(--fg-dim); font-size: 13px; margin-top: 14px;">Next puzzle in <span id="next-in">-</span></p>
       <button class="share-btn" id="share-btn" onclick="shareResult()">Share Result</button>
     </div>
   </div>
@@ -250,7 +252,7 @@
       wins: 0,
       currentStreak: 0,
       maxStreak: 0,
-      distribution: { 1: 0, 2: 0, 3: 0, 4: 0 },
+      distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
       lastWinDate: null,
       round1: null, round1Correct: null,
       round2: null, round2Correct: null,
@@ -417,6 +419,8 @@
     drawMoon(document.getElementById('moon'), ANSWER.percentage, ANSWER.waxing);
   }
 
+  let awaitingBonusRound = false;
+
   // ---- Phase round helpers ----
   function getCurrentRound() {
     // New flow: Round 1 = illumination, Round 2 = direction, Round 3 = phase type
@@ -486,6 +490,33 @@
     renderStats();
     setTimeout(showEndGame, state.won ? 900 : 700);
   }
+
+  function resetEndModalActions() {
+    const bonusBtn = $('bonus-btn');
+    const bonusAnsweredRow = $('bonus-answered-row');
+    const nextRow = $('next-puzzle-row');
+    const shareBtn = $('share-btn');
+    if (bonusBtn) bonusBtn.style.display = 'none';
+    if (bonusAnsweredRow) bonusAnsweredRow.style.display = 'none';
+    if (nextRow) nextRow.style.display = '';
+    if (shareBtn) shareBtn.style.display = '';
+  }
+
+  function showRound1Result() {
+    if (state.ended) {
+      showEndGame();
+      return;
+    }
+    awaitingBonusRound = true;
+    showEndGame({ bonusPrompt: true });
+  }
+
+  function playBonusRounds() {
+    awaitingBonusRound = false;
+    closeModals();
+    advanceToDirectionRound();
+  }
+
   function advanceToDirectionRound() {
     // Called after illumination round finishes — show Round 2 (direction).
     // If phase rounds are already answered (e.g., resumed old save), end the game directly.
@@ -577,7 +608,10 @@
   }
 
   function closeModals() {
+    const shouldAdvanceToBonus = awaitingBonusRound && $('modal-end').classList.contains('show');
+    awaitingBonusRound = false;
     document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('show'));
+    if (shouldAdvanceToBonus) setTimeout(advanceToDirectionRound, 0);
   }
 
   // ---- Help-modal moon (static) ----
@@ -645,6 +679,8 @@
       { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
       { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
       { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
+      { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
+      { bg: '#2e4f6a', fg: '#7ab0d0', winBg: '#2a7a6a', winFg: '#6adcc0' },
     ];
     for (let i = 1; i <= MAX_ATTEMPTS; i++) {
       const count = state.distribution[i] || 0;
@@ -667,27 +703,53 @@
     }
   }
 
+  function correctBonusQuestionsAnswered() {
+    let count = 0;
+    if (state.round1Correct) count += 1;
+    if (!state.round2Skipped && state.round2Correct) count += 1;
+    return count;
+  }
+
   // ---- End game ----
-  function showEndGame() {
+  function showEndGame(options = {}) {
+    const bonusPrompt = options.bonusPrompt === true;
     const titleEl = $('end-title');
     const verdictEl = $('end-verdict');
     const ansEl = $('end-pct');
     const phaseEl = $('end-phase');
+    resetEndModalActions();
     if (state.won) {
       titleEl.textContent = 'Congrats!';
       verdictEl.textContent = 'You got it in ' + state.guesses.length + (state.guesses.length === 1 ? ' try.' : ' tries.');
       verdictEl.className = 'verdict win';
     } else {
-      titleEl.textContent = 'Try Again Tomorrow';
+      titleEl.textContent = bonusPrompt ? 'Try Bonus Rounds' : 'Try Again Tomorrow';
       verdictEl.textContent = 'Out of guesses!';
       verdictEl.className = 'verdict loss';
     }
     ansEl.textContent = ANSWER.percentage + '%';
-    phaseEl.textContent = phaseName(ANSWER.percentage, ANSWER.waxing);
+    phaseEl.textContent = bonusPrompt ? '' : phaseName(ANSWER.percentage, ANSWER.waxing);
+    phaseEl.style.display = bonusPrompt ? 'none' : '';
     drawMoon($('end-canvas'), ANSWER.percentage, ANSWER.waxing);
     updateNextInTimer();
     const badge = $('lunar-wizard-badge');
-    if (badge) badge.style.display = isLunarWizard(state) ? '' : 'none';
+    if (badge) badge.style.display = !bonusPrompt && isLunarWizard(state) ? '' : 'none';
+    if (bonusPrompt) {
+      const bonusBtn = $('bonus-btn');
+      const nextRow = $('next-puzzle-row');
+      const shareBtn = $('share-btn');
+      if (bonusBtn) bonusBtn.style.display = '';
+      if (nextRow) nextRow.style.display = 'none';
+      if (shareBtn) shareBtn.style.display = 'none';
+    } else {
+      const bonusAnsweredRow = $('bonus-answered-row');
+      const bonusAnsweredCount = $('bonus-answered-count');
+      const correctBonusCount = correctBonusQuestionsAnswered();
+      if (bonusAnsweredCount) bonusAnsweredCount.textContent = String(correctBonusCount);
+      if (bonusAnsweredRow) {
+        bonusAnsweredRow.style.display = correctBonusCount > 0 && !isLunarWizard(state) ? '' : 'none';
+      }
+    }
     openModal('modal-end');
   }
 
@@ -778,8 +840,8 @@
     writeStored(state);
     if (illDoneNow) {
       lockGame();
-      // Advance to Round 2 (direction) — game continues until phase rounds complete
-      setTimeout(advanceToDirectionRound, state.won ? 1100 : 700);
+      // Show the illumination result first. Bonus rounds continue from the modal button.
+      setTimeout(showRound1Result, state.won ? 1100 : 700);
     } else {
       input.focus();
     }
@@ -833,6 +895,7 @@
     renderStats();
     openModal('modal-stats');
   });
+  $('bonus-btn').addEventListener('click', playBonusRounds);
 
   // ---- Init ----
   function init() {

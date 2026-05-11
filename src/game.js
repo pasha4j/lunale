@@ -1,7 +1,7 @@
 (function(global) {
   'use strict';
 
-  const MAX_ATTEMPTS = 4;
+  const MAX_ATTEMPTS = 6;
 
   function todayLocalStr(date = new Date()) {
     return date.getFullYear() + '-' +

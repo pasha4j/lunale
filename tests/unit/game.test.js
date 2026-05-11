@@ -97,9 +97,9 @@ describe('state-derived helpers', () => {
   test('detects when illumination is complete', () => {
     expect(illuminationDone({ won: false, guesses: [] })).toBe(false);
     expect(illuminationDone({ won: true, guesses: [31] })).toBe(true);
-    expect(illuminationDone({ won: false, guesses: [1, 2, 3, 4] })).toBe(true);
+    expect(illuminationDone({ won: false, guesses: [1, 2, 3, 4, 5, 6] })).toBe(true);
     expect(illuminationDone({ won: false, guesses: [1, 2, 3] }, 3)).toBe(true);
-    expect(MAX_ATTEMPTS).toBe(4);
+    expect(MAX_ATTEMPTS).toBe(6);
   });
 
   test('detects Lunar Wizard state', () => {
