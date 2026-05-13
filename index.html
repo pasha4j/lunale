@@ -479,12 +479,20 @@
     if (state._lunarCountedDate !== state.date && isLunarWizard(state)) {
       state.lunarWizards = lunarWizardCountFrom(state) + 1;
       state._lunarCountedDate = state.date;
+      track('lunar_wizard_earned', {
+        guesses_made: state.guesses.length,
+        direction_correct: state.round1Correct,
+        phase_type_correct: state.round2Correct,
+        phase_type_skipped: state.round2Skipped
+      });
     }
     writeStored(state);
-    track('phase_rounds_complete', {
-      round1_correct: state.round1Correct,
-      round2_correct: state.round2Correct,
-      round2_skipped: state.round2Skipped
+    track('bonus_rounds_complete', {
+      direction_correct: state.round1Correct,
+      phase_type_correct: state.round2Correct,
+      phase_type_skipped: state.round2Skipped,
+      guesses_made: state.guesses.length,
+      result: state.won ? 'won' : 'lost'
     });
     updateRoundIndicator();
     renderStats();
@@ -508,10 +516,18 @@
       return;
     }
     awaitingBonusRound = true;
+    track('bonus_rounds_prompt_shown', {
+      result: state.won ? 'won' : 'lost',
+      guesses_made: state.guesses.length
+    });
     showEndGame({ bonusPrompt: true });
   }
 
   function playBonusRounds() {
+    track('bonus_rounds_started', {
+      result: state.won ? 'won' : 'lost',
+      guesses_made: state.guesses.length
+    });
     awaitingBonusRound = false;
     closeModals();
     advanceToDirectionRound();
@@ -543,7 +559,7 @@
     const correct = correctRound1Answer(ANSWER);
     state.round1 = val;
     state.round1Correct = (val === correct);
-    track('round1_submitted', { selection: val, correct: state.round1Correct, correct_answer: correct });
+    track('direction_round_submitted', { selection: val, correct: state.round1Correct, correct_answer: correct });
     applyPhaseButtonResult($('round2-btns'), val, correct);
     // Only skip Round 3 (phase type) when the user's new/full pick is actually correct.
     // If they picked new/full but it's wrong, let them still attempt the phase type round.
@@ -570,7 +586,7 @@
     const correct = correctRound2Answer(ANSWER);
     state.round2 = val;
     state.round2Correct = (val === correct);
-    track('round2_submitted', { selection: val, correct: state.round2Correct, correct_answer: correct });
+    track('phase_type_round_submitted', { selection: val, correct: state.round2Correct, correct_answer: correct });
     applyPhaseButtonResult($('round3-btns'), val, correct);
     writeStored(state);
     setTimeout(finishGame, 700);
@@ -609,6 +625,12 @@
 
   function closeModals() {
     const shouldAdvanceToBonus = awaitingBonusRound && $('modal-end').classList.contains('show');
+    if (shouldAdvanceToBonus) {
+      track('bonus_rounds_prompt_dismissed', {
+        result: state.won ? 'won' : 'lost',
+        guesses_made: state.guesses.length
+      });
+    }
     awaitingBonusRound = false;
     document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('show'));
     if (shouldAdvanceToBonus) setTimeout(advanceToDirectionRound, 0);
@@ -789,15 +811,24 @@
     const input = $('guess');
     const raw = input.value.trim();
     if (!raw) {
+      track('invalid_guess_submitted', { reason: 'empty' });
       showToast('Enter a number 1–100');
       return;
     }
     const n = parseInt(raw, 10);
     if (!Number.isFinite(n) || n < 1 || n > 100 || String(n) !== raw.replace(/^0+(?=\d)/, '')) {
+      track('invalid_guess_submitted', {
+        reason: 'invalid_format_or_range',
+        value_length: raw.length
+      });
       showToast('Whole numbers 1–100 only');
       return;
     }
     if (state.guesses.includes(n)) {
+      track('duplicate_guess_submitted', {
+        guess_value: n,
+        guesses_made: state.guesses.length
+      });
       showToast('Already guessed ' + n);
       return;
     }
@@ -807,7 +838,7 @@
 
     const diff = ANSWER.percentage - n;
     const distance = Math.abs(diff);
-    track('guess_submitted', {
+    track('illumination_guess_submitted', {
       guess_number: state.guesses.length,
       guess_value: n,
       distance: distance,
@@ -819,7 +850,7 @@
       state.won = true;
       illDoneNow = true;
       onGameEnd();
-      track('game_won', {
+      track('illumination_round_won', {
         attempts_used: state.guesses.length,
         answer: ANSWER.percentage
       });
@@ -827,7 +858,7 @@
       state.won = false;
       illDoneNow = true;
       onGameEnd();
-      track('game_lost', {
+      track('illumination_round_lost', {
         answer: ANSWER.percentage,
         closest_guess: state.guesses.reduce((best, g) =>
           Math.abs(g - ANSWER.percentage) < Math.abs(best - ANSWER.percentage) ? g : best
@@ -887,6 +918,7 @@
     openHelpModal(false);
   });
   $('help-start').addEventListener('click', () => {
+    track('help_start_click');
     closeModals();
     $('guess').focus();
   });
@@ -932,7 +964,8 @@
     if (!state.ended && state.guesses.length > 0) {
       track('game_abandoned', {
         guesses_made: state.guesses.length,
-        max_attempts: MAX_ATTEMPTS
+        max_attempts: MAX_ATTEMPTS,
+        transport_type: 'beacon'
       });
     }
   });
@@ -948,6 +981,7 @@
   window.addEventListener('resize', scheduleRenderMoon, { passive: true });
 
   // ---- Hint popups ----
+  let activeHint = null;
   window.openHint = function(round) {
     const popup = document.getElementById('hint-popup');
     const content = document.getElementById('hint-content');
@@ -986,6 +1020,7 @@
         '</div>';
     }
     if (hintName) {
+      activeHint = { round: round, hintName: hintName };
       track('hint_popup_open', { round: round, hint_name: hintName });
     }
     popup.querySelectorAll('.hmm').forEach(c => {
@@ -994,6 +1029,10 @@
     popup.style.display = 'flex';
   };
   window.closeHint = function() {
+    if (activeHint) {
+      track('hint_popup_close', { round: activeHint.round, hint_name: activeHint.hintName });
+      activeHint = null;
+    }
     document.getElementById('hint-popup').style.display = 'none';
   };
 
@@ -1051,7 +1090,11 @@
         showToast('Could not copy — try manually selecting the text.');
       });
     }
-    track('share_result');
+    track('share_result', {
+      result: state.won ? 'won' : 'lost',
+      guesses_made: state.guesses.length,
+      lunar_wizard: isLunarWizard(state)
+    });
   };
 })();
 </script>
