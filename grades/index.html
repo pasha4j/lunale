@@ -22,9 +22,17 @@
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 2rem; }
 
   header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
+  .head-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
   header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
   header h1 span { color: var(--accent); }
   .subtitle { color: var(--muted); margin-top: 0.3rem; font-size: 0.9rem; font-family: 'DM Mono', monospace; }
+  .nav-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.6rem 1rem; color: var(--accent); text-decoration: none; font-weight: 600;
+    font-size: 0.9rem; white-space: nowrap; transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .nav-link:hover { border-color: var(--accent); transform: translateY(-1px); }
 
   .student-block { margin-bottom: 3.5rem; }
   .student-name {
@@ -138,8 +146,13 @@
 </head>
 <body>
 <header>
-  <h1>Grade <span>Tracker</span></h1>
-  <p class="subtitle">Council Rock School District · Last updated 2026-09-04 23:12</p>
+  <div class="head-row">
+    <div>
+      <h1>Grade <span>Tracker</span></h1>
+      <p class="subtitle">Council Rock School District · Last updated 2026-09-05 13:33</p>
+    </div>
+    <a class="nav-link" href="https://thelunale.com/homework/">📋 Homework →</a>
+  </div>
 </header>
 
         <section class="student-block">
@@ -151,7 +164,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -160,7 +173,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A-</span>
                   <span class="kpi-pct a">90.7%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -169,7 +182,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -178,43 +191,11 @@
                 <div class="kpi-row">
                   <span class="kpi-letter b">B</span>
                   <span class="kpi-pct b">83.3%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div></div>
-          <div class="grade-grid">
-            <div class="chart-wrap">
-              <canvas id="chart_M"></canvas>
-            </div>
-            <div class="table-wrap">
-              <table class="grade-table">
-                <thead><tr><th>Course</th><th>Grade</th><th>Trend</th><th>As of</th></tr></thead>
-                <tbody>
-                <tr>
-                  <td class="course-name">Spanish 4 - Deola</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">Chemistry - Arnoldi 26.27</td>
-                  <td class="score a">90.7%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">Hon Wld Hist - Boekamp</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27</td>
-                  <td class="score b">83.3%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr></tbody>
-              </table>
-            </div>
+          <div class="chart-wrap">
+            <canvas id="chart_M"></canvas>
           </div>
         </section>
         <script>
@@ -223,7 +204,7 @@
           var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-09-04"], datasets: [{"label": "Spanish 4 - Deola", "data": [100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Chemistry - Arnoldi 26.27", "data": [90.67], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Wld Hist - Boekamp", "data": [100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27", "data": [83.26], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
+            data: { labels: ["2026-09-04", "2026-09-05"], datasets: [{"label": "Spanish 4 - Deola", "data": [100.0, 100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Chemistry - Arnoldi 26.27", "data": [90.67, 90.67], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Wld Hist - Boekamp", "data": [100.0, 100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27", "data": [83.26, 83.26], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
               maintainAspectRatio: false,
@@ -283,7 +264,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -292,7 +273,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -301,37 +282,11 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div></div>
-          <div class="grade-grid">
-            <div class="chart-wrap">
-              <canvas id="chart_R"></canvas>
-            </div>
-            <div class="table-wrap">
-              <table class="grade-table">
-                <thead><tr><th>Course</th><th>Grade</th><th>Trend</th><th>As of</th></tr></thead>
-                <tbody>
-                <tr>
-                  <td class="course-name">Honors Biology - Mohl</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">Hon Algebra 2 2026-27 - Cislak</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">Spanish 2 - Merenda</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr></tbody>
-              </table>
-            </div>
+          <div class="chart-wrap">
+            <canvas id="chart_R"></canvas>
           </div>
         </section>
         <script>
@@ -340,7 +295,7 @@
           var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-09-04"], datasets: [{"label": "Honors Biology - Mohl", "data": [100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [100.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 2 - Merenda", "data": [100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
+            data: { labels: ["2026-09-04", "2026-09-05"], datasets: [{"label": "Honors Biology - Mohl", "data": [100.0, 100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [100.0, 100.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 2 - Merenda", "data": [100.0, 100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
               maintainAspectRatio: false,
@@ -400,7 +355,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -409,7 +364,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -418,7 +373,7 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div>
               <div class="kpi-card">
@@ -427,43 +382,11 @@
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No prior data">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
               </div></div>
-          <div class="grade-grid">
-            <div class="chart-wrap">
-              <canvas id="chart_E"></canvas>
-            </div>
-            <div class="table-wrap">
-              <table class="grade-table">
-                <thead><tr><th>Course</th><th>Grade</th><th>Trend</th><th>As of</th></tr></thead>
-                <tbody>
-                <tr>
-                  <td class="course-name">Latin 1 - Philbin</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">Honors English 9 - Simon</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">Honors Biology - Vierick</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr>
-                <tr>
-                  <td class="course-name">Hon Am Civ 9 - Rapp</td>
-                  <td class="score a">100.0%</td>
-                  <td class="trend"></td>
-                  <td class="date">2026-09-04</td>
-                </tr></tbody>
-              </table>
-            </div>
+          <div class="chart-wrap">
+            <canvas id="chart_E"></canvas>
           </div>
         </section>
         <script>
@@ -472,7 +395,7 @@
           var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-09-04"], datasets: [{"label": "Latin 1 - Philbin", "data": [100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors English 9 - Simon", "data": [100.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors Biology - Vierick", "data": [100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Am Civ 9 - Rapp", "data": [100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
+            data: { labels: ["2026-09-04", "2026-09-05"], datasets: [{"label": "Latin 1 - Philbin", "data": [100.0, 100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors English 9 - Simon", "data": [100.0, 100.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors Biology - Vierick", "data": [100.0, 100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Am Civ 9 - Rapp", "data": [100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
               maintainAspectRatio: false,
