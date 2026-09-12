@@ -54,8 +54,9 @@
     padding: 0.85rem 0.95rem;
     display: flex; flex-direction: column; gap: 0.35rem;
     transition: border-color 0.15s ease, transform 0.15s ease;
+    text-decoration: none; color: inherit; cursor: pointer;
   }
-  .kpi-card:hover { border-color: #334155; transform: translateY(-1px); }
+  .kpi-card:hover { border-color: var(--accent); transform: translateY(-1px); }
   .kpi-subject {
     font-size: 0.7rem; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.08em;
@@ -149,7 +150,7 @@
   <div class="head-row">
     <div>
       <h1>Grade <span>Tracker</span></h1>
-      <p class="subtitle">Council Rock School District · Last updated 2026-09-11 16:01</p>
+      <p class="subtitle">Council Rock School District · Last updated 2026-09-12 13:17</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/homework/">📋 Homework →</a>
   </div>
@@ -158,7 +159,7 @@
         <section class="student-block">
           <h2 class="student-name">M.</h2>
           <div class="kpi-grid">
-              <div class="kpi-card">
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Spanish" title="See Spanish 4 - Deola assignments">
                 <div class="kpi-subject">Spanish</div>
                 <div class="kpi-course" title="Spanish 4 - Deola">Spanish 4 - Deola</div>
                 <div class="kpi-row">
@@ -166,17 +167,17 @@
                   <span class="kpi-pct a">93.1%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Science" title="See Chemistry - Arnoldi 26.27 assignments">
                 <div class="kpi-subject">Science</div>
                 <div class="kpi-course" title="Chemistry - Arnoldi 26.27">Chemistry - Arnoldi 26.27</div>
                 <div class="kpi-row">
                   <span class="kpi-letter a">A</span>
                   <span class="kpi-pct a">94.3%</span>
-                  <span class="kpi-arrow up" title="Since last check">▲ 0.3</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Social%20Studies" title="See Hon Wld Hist - Boekamp assignments">
                 <div class="kpi-subject">Social Studies</div>
                 <div class="kpi-course" title="Hon Wld Hist - Boekamp">Hon Wld Hist - Boekamp</div>
                 <div class="kpi-row">
@@ -184,8 +185,8 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=English" title="See English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27 assignments">
                 <div class="kpi-subject">English</div>
                 <div class="kpi-course" title="English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27">English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27</div>
                 <div class="kpi-row">
@@ -193,16 +194,16 @@
                   <span class="kpi-pct a">90.6%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Math" title="See Geometry - Groden/Schilk assignments">
                 <div class="kpi-subject">Math</div>
                 <div class="kpi-course" title="Geometry - Groden/Schilk">Geometry - Groden/Schilk</div>
                 <div class="kpi-row">
                   <span class="kpi-letter b">B</span>
                   <span class="kpi-pct b">83.4%</span>
-                  <span class="kpi-arrow flat" title="No prior data yet">·</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div></div>
+              </a></div>
           <div class="chart-wrap">
             <canvas id="chart_M"></canvas>
           </div>
@@ -213,7 +214,7 @@
           var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11"], datasets: [{"label": "Spanish 4 - Deola", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 93.13, 93.13], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Chemistry - Arnoldi 26.27", "data": [90.67, 90.67, 92.47, 92.47, 96.99, 93.98, 94.29], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Wld Hist - Boekamp", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27", "data": [83.26, 83.26, 83.26, 83.26, 83.26, 90.61, 90.61], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Geometry - Groden/Schilk", "data": [null, null, null, null, null, null, 83.39], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
+            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12"], datasets: [{"label": "Spanish 4 - Deola", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 93.13, 93.13, 93.13], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Chemistry - Arnoldi 26.27", "data": [90.67, 90.67, 92.47, 92.47, 96.99, 93.98, 94.29, 94.29], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Wld Hist - Boekamp", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27", "data": [83.26, 83.26, 83.26, 83.26, 83.26, 90.61, 90.61, 90.61], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Geometry - Groden/Schilk", "data": [null, null, null, null, null, null, 83.39, 83.39], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
               maintainAspectRatio: false,
@@ -267,25 +268,25 @@
         <section class="student-block">
           <h2 class="student-name">R.</h2>
           <div class="kpi-grid">
-              <div class="kpi-card">
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Science" title="See Honors Biology - Mohl assignments">
                 <div class="kpi-subject">Science</div>
                 <div class="kpi-course" title="Honors Biology - Mohl">Honors Biology - Mohl</div>
                 <div class="kpi-row">
                   <span class="kpi-letter c">C</span>
                   <span class="kpi-pct c">75.9%</span>
-                  <span class="kpi-arrow up" title="Since last check">▲ 0.3</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Math" title="See Hon Algebra 2 2026-27 - Cislak assignments">
                 <div class="kpi-subject">Math</div>
                 <div class="kpi-course" title="Hon Algebra 2 2026-27 - Cislak">Hon Algebra 2 2026-27 - Cislak</div>
                 <div class="kpi-row">
                   <span class="kpi-letter f">F</span>
                   <span class="kpi-pct f">45.8%</span>
-                  <span class="kpi-arrow up" title="Since last check">▲ 0.5</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Spanish" title="See Spanish 2 - Merenda assignments">
                 <div class="kpi-subject">Spanish</div>
                 <div class="kpi-course" title="Spanish 2 - Merenda">Spanish 2 - Merenda</div>
                 <div class="kpi-row">
@@ -293,8 +294,8 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Social%20Studies" title="See Acl Am Civ 9 - Pacitti assignments">
                 <div class="kpi-subject">Social Studies</div>
                 <div class="kpi-course" title="Acl Am Civ 9 - Pacitti">Acl Am Civ 9 - Pacitti</div>
                 <div class="kpi-row">
@@ -302,7 +303,7 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div></div>
+              </a></div>
           <div class="chart-wrap">
             <canvas id="chart_R"></canvas>
           </div>
@@ -313,7 +314,7 @@
           var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11"], datasets: [{"label": "Honors Biology - Mohl", "data": [100.0, 100.0, 72.73, 75.59, 75.59, 75.59, 75.92], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [100.0, 100.0, 100.0, 100.0, 50.0, 45.37, 45.84], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 2 - Merenda", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Am Civ 9 - Pacitti", "data": [null, null, null, null, null, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
+            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12"], datasets: [{"label": "Honors Biology - Mohl", "data": [100.0, 100.0, 72.73, 75.59, 75.59, 75.59, 75.92, 75.92], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [100.0, 100.0, 100.0, 100.0, 50.0, 45.37, 45.84, 45.84], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 2 - Merenda", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Am Civ 9 - Pacitti", "data": [null, null, null, null, null, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
               maintainAspectRatio: false,
@@ -367,7 +368,7 @@
         <section class="student-block">
           <h2 class="student-name">E.</h2>
           <div class="kpi-grid">
-              <div class="kpi-card">
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Latin" title="See Latin 1 - Philbin assignments">
                 <div class="kpi-subject">Latin</div>
                 <div class="kpi-course" title="Latin 1 - Philbin">Latin 1 - Philbin</div>
                 <div class="kpi-row">
@@ -375,8 +376,8 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=English" title="See Honors English 9 - Simon assignments">
                 <div class="kpi-subject">English</div>
                 <div class="kpi-course" title="Honors English 9 - Simon">Honors English 9 - Simon</div>
                 <div class="kpi-row">
@@ -384,8 +385,8 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Science" title="See Honors Biology - Vierick assignments">
                 <div class="kpi-subject">Science</div>
                 <div class="kpi-course" title="Honors Biology - Vierick">Honors Biology - Vierick</div>
                 <div class="kpi-row">
@@ -393,8 +394,8 @@
                   <span class="kpi-pct a">95.7%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Social%20Studies" title="See Hon Am Civ 9 - Rapp assignments">
                 <div class="kpi-subject">Social Studies</div>
                 <div class="kpi-course" title="Hon Am Civ 9 - Rapp">Hon Am Civ 9 - Rapp</div>
                 <div class="kpi-row">
@@ -402,25 +403,25 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Math" title="See Hon Algebra 2 2026-27 - Cislak assignments">
                 <div class="kpi-subject">Math</div>
                 <div class="kpi-course" title="Hon Algebra 2 2026-27 - Cislak">Hon Algebra 2 2026-27 - Cislak</div>
                 <div class="kpi-row">
                   <span class="kpi-letter d">D-</span>
                   <span class="kpi-pct d">61.1%</span>
-                  <span class="kpi-arrow dn" title="Since last check">▼ 1.2</span>
+                  <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-subject">&nbsp;</div>
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Tech" title="See Acl Comp Sci 1 # - Lynch - 26/27 assignments">
+                <div class="kpi-subject">Tech</div>
                 <div class="kpi-course" title="Acl Comp Sci 1 # - Lynch - 26/27">Acl Comp Sci 1 # - Lynch - 26/27</div>
                 <div class="kpi-row">
                   <span class="kpi-letter a">A-</span>
                   <span class="kpi-pct a">90.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
-              </div></div>
+              </a></div>
           <div class="chart-wrap">
             <canvas id="chart_E"></canvas>
           </div>
@@ -431,7 +432,7 @@
           var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-09", "2026-09-10", "2026-09-11"], datasets: [{"label": "Latin 1 - Philbin", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors English 9 - Simon", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors Biology - Vierick", "data": [100.0, 100.0, 100.0, 95.0, 95.71, 95.71], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Am Civ 9 - Rapp", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [null, null, null, 83.33, 62.33, 61.14], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Comp Sci 1 # - Lynch - 26/27", "data": [null, null, null, null, 90.0, 90.0], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
+            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12"], datasets: [{"label": "Latin 1 - Philbin", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors English 9 - Simon", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors Biology - Vierick", "data": [100.0, 100.0, 100.0, 95.0, 95.71, 95.71, 95.71], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Am Civ 9 - Rapp", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [null, null, null, 83.33, 62.33, 61.14, 61.14], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Comp Sci 1 # - Lynch - 26/27", "data": [null, null, null, null, 90.0, 90.0, 90.0], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
               maintainAspectRatio: false,

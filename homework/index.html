@@ -98,6 +98,21 @@
   details[open] > summary .caret { transform:rotate(90deg); }
   .sec-hint { color:var(--muted); font-weight:400; font-size:0.78rem; font-family:'DM Mono',monospace; margin-left:auto; }
 
+  /* upcoming tests */
+  .badge.test { background:rgba(167,139,250,0.18); color:#a78bfa; }
+  details.sec.tests > summary { color:#a78bfa; }
+
+  /* filter bar */
+  .filters { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:2rem;
+    padding:0.9rem 1.1rem; background:var(--surface); border:1px solid var(--border); border-radius:12px; }
+  .filter-group { display:flex; align-items:center; gap:0.5rem; }
+  .filter-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); font-weight:600; }
+  .filters select { background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px;
+    padding:0.45rem 0.6rem; font-family:'DM Sans',sans-serif; font-size:0.9rem; cursor:pointer; }
+  .filter-clear { margin-left:auto; background:transparent; color:var(--accent); border:1px solid var(--border);
+    border-radius:8px; padding:0.45rem 0.9rem; font-weight:600; font-size:0.85rem; cursor:pointer; }
+  .filter-clear:hover { border-color:var(--accent); }
+
   @media (max-width:600px) {
     body { padding:1rem; }
     header h1 { font-size:1.5rem; }
@@ -105,6 +120,7 @@
     .meta { text-align:left; }
     .badge-cell { width:auto; }
     .score-cell { width:auto; }
+    .filter-clear { margin-left:0; }
   }
   footer { color:var(--muted); font-size:0.8rem; text-align:center; margin-top:3rem; font-family:'DM Mono',monospace; }
 </style>
@@ -114,124 +130,148 @@
   <div class="head-row">
     <div>
       <h1>Assignments <span>to Watch</span></h1>
-      <p class="subtitle">Council Rock · 10 missing · 34 to do · 40 done (last 7d) · Last updated 2026-09-11 16:01</p>
+      <p class="subtitle">Council Rock · 16 missing · 30 to do · 38 done (last 7d) · Last updated 2026-09-12 13:17</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/grades/">📈 Grades →</a>
   </div>
 </header>
 
-        <details class="student" open>
+    <div class="filters">
+      <div class="filter-group"><span class="filter-label">Student</span>
+        <select id="f-student"><option value="">All students</option><option value="M">M.</option><option value="R">R.</option><option value="E">E.</option></select></div>
+      <div class="filter-group"><span class="filter-label">Subject</span>
+        <select id="f-subject"><option value="">All subjects</option><option value="English">English</option><option value="Latin">Latin</option><option value="Math">Math</option><option value="Science">Science</option><option value="Social Studies">Social Studies</option><option value="Spanish">Spanish</option><option value="Tech">Tech</option></select></div>
+      <button id="f-clear" class="filter-clear">Clear filters</button>
+    </div>
+
+        <details class="student" open data-student="M">
           <summary>
             <span class="caret">▸</span>
             <span class="student-name">M.</span>
-            <span class="counts"><span class="pill missing">3 missing</span><span class="pill todo">14 to do</span><span class="pill done">13 done</span></span>
-            <span class="as-of">as of 2026-09-11 16:00</span>
+            <span class="counts"><span class="pill missing">4 missing</span><span class="pill todo">14 to do</span><span class="pill done">13 done</span></span>
+            <span class="as-of">as of 2026-09-12 13:17</span>
           </summary>
           <div class="student-body">
           <details class="sec missing" open>
-            <summary><span class="caret">▸</span> Missing · 3</summary>
+            <summary><span class="caret">▸</span> Missing · <span class="sec-count">4</span></summary>
             <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
+      <tr data-student="M" data-subject="Social Studies" data-course="Hon Wld Hist - Boekamp">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22839/assignments/1870206" target="_blank" rel="noopener">9/2/26 - Student Questionnaire</a></td>
         <td class="meta"><span class="course">Hon Wld Hist - Boekamp</span><span class="when due">Sep 2 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Social Studies" data-course="Hon Wld Hist - Boekamp">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22839/assignments/1874627" target="_blank" rel="noopener">3 Sept Map</a></td>
         <td class="meta"><span class="course">Hon Wld Hist - Boekamp</span><span class="when due">Sep 3 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/7</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1844253" target="_blank" rel="noopener">Identify Ethos, Pathos, and Logos in Advertising (W)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 10 by 11:59pm</span></td>
+      </tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
+        <td class="badge-cell"><span class="badge missing">Missing</span></td>
+        <td class="score-cell f">0/5</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1753053" target="_blank" rel="noopener">Clocking the Appeals - Science, Guided by Ethics, Can Lift Up the Poor by Freeman Dyson (RC)</a></td>
+        <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 11 by 11:59pm</span></td>
+      </tr></tbody></table></div>
+          </details>
+          <details class="sec tests" open>
+            <summary><span class="caret">▸</span> Upcoming Tests · <span class="sec-count">1</span></summary>
+            <div class="table-wrap"><table class="miss-table"><tbody>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
+        <td class="badge-cell"><span class="badge test">Test</span></td>
+        <td class="score-cell muted">–/38</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831771" target="_blank" rel="noopener">Test Module 1</a></td>
+        <td class="meta"><span class="course">Science</span><span class="when due">Sep 15 by 11:59pm</span></td>
       </tr></tbody></table></div>
           </details>
           <details class="sec todo" open>
-            <summary><span class="caret">▸</span> To Do · 14</summary>
+            <summary><span class="caret">▸</span> To Do · <span class="sec-count">14</span></summary>
             <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
-        <td class="badge-cell"><span class="badge todo">To do</span></td>
-        <td class="score-cell muted">–/5</td>
-        <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1753053" target="_blank" rel="noopener">Clocking the Appeals - Science, Guided by Ethics, Can Lift Up the Poor by Freeman Dyson (RC)</a></td>
-        <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 11 by 11:59pm</span></td>
-      </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1844252" target="_blank" rel="noopener">Membean Sessions 1-2 (9/8/26 - 9/13/26) (2 Sessions - 30 Minutes)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 13 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Social Studies" data-course="Hon Wld Hist - Boekamp">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/15</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22839/assignments/1883023" target="_blank" rel="noopener">9.11 Twenty-Five Years Later</a></td>
         <td class="meta"><span class="course">Hon Wld Hist - Boekamp</span><span class="when due">Sep 14 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/3</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1752944" target="_blank" rel="noopener">Journal - Disgusting, Just Disgusting (W)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 15 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
+        <td class="badge-cell"><span class="badge todo">To do</span></td>
+        <td class="score-cell muted">–/12</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1883326" target="_blank" rel="noopener">Born a Crime (Excerpt) by Trevor Noah (Actively Learn)</a></td>
+        <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 15 by 11:59pm</span></td>
+      </tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/38</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831771" target="_blank" rel="noopener">Test Module 1</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when due">Sep 15 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/4</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1752911" target="_blank" rel="noopener">Journal - Robopocalypse To-Do List (Process Analysis) (W)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 16 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/15</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831176" target="_blank" rel="noopener">Imperial vs SI Units Activity</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when due">Sep 17 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/4</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1752910" target="_blank" rel="noopener">&quot;In Praise of the Humble Comma&quot; by Pico Iyer - Text and Accompanying Questions (RC/W)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 18 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831112" target="_blank" rel="noopener">Dimensional Analysis Worksheet</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when due">Sep 18 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1753142" target="_blank" rel="noopener">Membean Sessions 3-5 (9/14/26 - 9/20/26) (3 Sessions - 45 Minutes)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 20 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/7</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1882948" target="_blank" rel="noopener">Practice Problems M1 Part Two</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when due">Sep 25 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1753156" target="_blank" rel="noopener">Membean Sessions 6-7 (9/21/26 - 9/27/26) (2 Sessions - 30 Minutes)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when due">Sep 27 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/6</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1882950" target="_blank" rel="noopener">Review M1 Part Two</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when due">Sep 28 by 6:30am</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/25</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831106" target="_blank" rel="noopener">Density Activity Write-up</a></td>
@@ -239,81 +279,81 @@
       </tr></tbody></table></div>
           </details>
           <details class="sec done">
-            <summary><span class="caret">▸</span> Done · 13<span class="sec-hint">last 7 days</span></summary>
+            <summary><span class="caret">▸</span> Done · <span class="sec-count">13</span><span class="sec-hint">last 7 days</span></summary>
             <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
+      <tr data-student="M" data-subject="Math" data-course="Geometry - Groden/Schilk">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell b">27/33</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21656/assignments/1883263" target="_blank" rel="noopener">Quiz 1-2 to 1-3</a></td>
         <td class="meta"><span class="course">Geometry - Groden/Schilk</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Math" data-course="Geometry - Groden/Schilk">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell d">2/3</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21656/assignments/1882584" target="_blank" rel="noopener">Classwork: 1-2 to 1-3</a></td>
         <td class="meta"><span class="course">Geometry - Groden/Schilk</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Math" data-course="Geometry - Groden/Schilk">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">10/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21656/assignments/1882583" target="_blank" rel="noopener">HW: 1-2 to 1-3</a></td>
         <td class="meta"><span class="course">Geometry - Groden/Schilk</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell f">4/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831609" target="_blank" rel="noopener">Measurement Activity Write-up</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">5/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831610" target="_blank" rel="noopener">Measurement Devices and Precision</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Social Studies" data-course="Hon Wld Hist - Boekamp">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">10/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22839/assignments/1881277" target="_blank" rel="noopener">9 Sept - Your Mystery Location</a></td>
         <td class="meta"><span class="course">Hon Wld Hist - Boekamp</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="English" data-course="English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">18/18</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22303/assignments/1848120" target="_blank" rel="noopener">11th Grade CommonLit Opening Pre-Assessment (RCC)</a></td>
         <td class="meta"><span class="course">English 11 - Bengston/McCrane - (Pers 1 &amp; 5/6) - 26/27</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Spanish" data-course="Spanish 4 - Deola">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell b">8/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21971/assignments/1864759" target="_blank" rel="noopener">La Flor</a></td>
         <td class="meta"><span class="course">Spanish 4 - Deola</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">5/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1831173" target="_blank" rel="noopener">Practice Problems Module 1</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Spanish" data-course="Spanish 4 - Deola">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">9.5/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21971/assignments/1857729" target="_blank" rel="noopener">Participacion 1</a></td>
         <td class="meta"><span class="course">Spanish 4 - Deola</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">10/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1830559" target="_blank" rel="noopener">Safety Quiz</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when done">done Sep 9</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Science" data-course="Chemistry - Arnoldi 26.27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">9/9</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/23362/assignments/1830424" target="_blank" rel="noopener">Identifying Laboratory Equipment</a></td>
         <td class="meta"><span class="course">Chemistry - Arnoldi 26.27</span><span class="when done">done Sep 7</span></td>
       </tr>
-      <tr>
+      <tr data-student="M" data-subject="Social Studies" data-course="Hon Wld Hist - Boekamp">
         <td class="badge-cell"><span class="badge done">Done</span> <span class="badge late mini">late</span></td>
         <td class="score-cell muted">–/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22839/assignments/1876703" target="_blank" rel="noopener">4 Sept Current Events Around the World</a></td>
@@ -321,52 +361,52 @@
       </tr></tbody></table></div>
           </details></div>
         </details>
-        <details class="student" open>
+        <details class="student" open data-student="R">
           <summary>
             <span class="caret">▸</span>
             <span class="student-name">R.</span>
-            <span class="counts"><span class="pill missing">1 missing</span><span class="pill todo">5 to do</span><span class="pill done">10 done</span></span>
-            <span class="as-of">as of 2026-09-11 16:01</span>
+            <span class="counts"><span class="pill missing">4 missing</span><span class="pill todo">2 to do</span><span class="pill done">9 done</span></span>
+            <span class="as-of">as of 2026-09-12 13:17</span>
           </summary>
           <div class="student-body">
           <details class="sec missing" open>
-            <summary><span class="caret">▸</span> Missing · 1</summary>
+            <summary><span class="caret">▸</span> Missing · <span class="sec-count">4</span></summary>
             <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
+      <tr data-student="R" data-subject="Spanish" data-course="Spanish 2 - Merenda">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/3</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21951/assignments/1876736" target="_blank" rel="noopener">Autoretrato-Profile</a></td>
         <td class="meta"><span class="course">Spanish 2 - Merenda</span><span class="when due">Sep 4 by 7:33am</span></td>
-      </tr></tbody></table></div>
-          </details>
-          <details class="sec todo" open>
-            <summary><span class="caret">▸</span> To Do · 5</summary>
-            <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
-        <td class="badge-cell"><span class="badge todo">To do</span></td>
-        <td class="score-cell muted">–/30</td>
+      </tr>
+      <tr data-student="R" data-subject="Science" data-course="Honors Biology - Mohl">
+        <td class="badge-cell"><span class="badge missing">Missing</span></td>
+        <td class="score-cell f">0/30</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21799/assignments/1849150" target="_blank" rel="noopener">Chapter 1 Quiz</a></td>
         <td class="meta"><span class="course">Honors Biology - Mohl</span><span class="when due">Sep 11 by 11:59pm</span></td>
       </tr>
-      <tr>
-        <td class="badge-cell"><span class="badge todo">To do</span></td>
-        <td class="score-cell muted">–/0</td>
+      <tr data-student="R" data-subject="English" data-course="English 9 - Lingman">
+        <td class="badge-cell"><span class="badge missing">Missing</span></td>
+        <td class="score-cell muted">0/0</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22703/assignments/1801612" target="_blank" rel="noopener">STUDENT HANDBOOK &quot;QUIZ&quot;</a></td>
         <td class="meta"><span class="course">English 9 - Lingman</span><span class="when due">Sep 11 by 11:59pm</span></td>
       </tr>
-      <tr>
-        <td class="badge-cell"><span class="badge todo">To do</span></td>
-        <td class="score-cell muted">–/20</td>
+      <tr data-student="R" data-subject="English" data-course="English 9 - Lingman">
+        <td class="badge-cell"><span class="badge missing">Missing</span></td>
+        <td class="score-cell f">0/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22703/assignments/1801583" target="_blank" rel="noopener">Membean Week #1</a></td>
         <td class="meta"><span class="course">English 9 - Lingman</span><span class="when due">Sep 11 by 11:59pm</span></td>
-      </tr>
-      <tr>
+      </tr></tbody></table></div>
+          </details>
+          <details class="sec todo" open>
+            <summary><span class="caret">▸</span> To Do · <span class="sec-count">2</span></summary>
+            <div class="table-wrap"><table class="miss-table"><tbody>
+      <tr data-student="R" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1883000" target="_blank" rel="noopener">Homework 1.1.3 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when due">Sep 13 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Science" data-course="Honors Biology - Mohl">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/15</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21799/assignments/1881818" target="_blank" rel="noopener">Virtual Stomata Lab</a></td>
@@ -374,206 +414,240 @@
       </tr></tbody></table></div>
           </details>
           <details class="sec done">
-            <summary><span class="caret">▸</span> Done · 10<span class="sec-hint">last 7 days</span></summary>
+            <summary><span class="caret">▸</span> Done · <span class="sec-count">9</span><span class="sec-hint">last 7 days</span></summary>
             <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
+      <tr data-student="R" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">2/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1881743" target="_blank" rel="noopener">Homework 1.1.2 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Science" data-course="Honors Biology - Mohl">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">5/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21799/assignments/1849152" target="_blank" rel="noopener">2026 Chapter 1 Problem Set</a></td>
         <td class="meta"><span class="course">Honors Biology - Mohl</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span> <span class="badge late mini">late</span></td>
         <td class="score-cell f">2/4</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1879963" target="_blank" rel="noopener">Review 1.3 - 1.4 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Social Studies" data-course="Acl Am Civ 9 - Pacitti">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">6/6</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22814/assignments/1881825" target="_blank" rel="noopener">Edpuzzle | Dances With Wolves - Buffalo Hunt &amp; Slaughter Scene</a></td>
         <td class="meta"><span class="course">Acl Am Civ 9 - Pacitti</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell f">21.5/50</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1873801" target="_blank" rel="noopener">QUIZ: Chp 1.3-1.4 🎉</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 9</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell f">0/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1859219" target="_blank" rel="noopener">Homework 1.4.2 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">2/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1859217" target="_blank" rel="noopener">Homework 1.4.1 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Science" data-course="Honors Biology - Mohl">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">4.5/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21799/assignments/1849149" target="_blank" rel="noopener">Chapter 1 vocab checkpoint</a></td>
         <td class="meta"><span class="course">Honors Biology - Mohl</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="R" data-subject="Science" data-course="Honors Biology - Mohl">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell muted">0/0</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21799/assignments/1874984" target="_blank" rel="noopener">Homeostasis Practice</a></td>
         <td class="meta"><span class="course">Honors Biology - Mohl</span><span class="when done">done Sep 7</span></td>
-      </tr>
-      <tr>
-        <td class="badge-cell"><span class="badge done">Done</span></td>
-        <td class="score-cell f">6/11</td>
-        <td class="assign"><a href="https://councilrock.instructure.com/courses/21799/assignments/1849151" target="_blank" rel="noopener">Equipment and Measurement Activity Quiz</a></td>
-        <td class="meta"><span class="course">Honors Biology - Mohl</span><span class="when done">done Sep 4</span></td>
       </tr></tbody></table></div>
           </details></div>
         </details>
-        <details class="student" open>
+        <details class="student" open data-student="E">
           <summary>
             <span class="caret">▸</span>
             <span class="student-name">E.</span>
-            <span class="counts"><span class="pill missing">6 missing</span><span class="pill todo">15 to do</span><span class="pill done">17 done</span></span>
-            <span class="as-of">as of 2026-09-11 16:01</span>
+            <span class="counts"><span class="pill missing">8 missing</span><span class="pill todo">14 to do</span><span class="pill done">16 done</span></span>
+            <span class="as-of">as of 2026-09-12 13:17</span>
           </summary>
           <div class="student-body">
           <details class="sec missing" open>
-            <summary><span class="caret">▸</span> Missing · 6</summary>
+            <summary><span class="caret">▸</span> Missing · <span class="sec-count">8</span></summary>
             <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
+      <tr data-student="E" data-subject="Latin" data-course="Latin 1 - Philbin">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21980/assignments/1746038" target="_blank" rel="noopener">Student Info Sheet</a></td>
         <td class="meta"><span class="course">Latin 1 - Philbin</span><span class="when due">Sep 2 by 2:30pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/15</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1873356" target="_blank" rel="noopener">9/3 Scales for Discussion (paper)</a></td>
         <td class="meta"><span class="course">Honors English 9 - Simon</span><span class="when due">Sep 3 by 2:15pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell muted">0/0</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845074" target="_blank" rel="noopener">Reminder #1: You will need notecards by 9/15</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 3 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell muted">0/0</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845082" target="_blank" rel="noopener">Reminder #2: You will need notecards by 9/15</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 9 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845021" target="_blank" rel="noopener">2026 Chapter 1 Problem Set</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 10 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge missing">Missing</span></td>
         <td class="score-cell f">0/15</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845023" target="_blank" rel="noopener">Virtual Homeostasis Lab (Part 2--Activity)</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 10 by 11:59pm</span></td>
-      </tr></tbody></table></div>
-          </details>
-          <details class="sec todo" open>
-            <summary><span class="caret">▸</span> To Do · 15</summary>
-            <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
-        <td class="badge-cell"><span class="badge todo">To do</span></td>
-        <td class="score-cell muted">–/25</td>
+      </tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
+        <td class="badge-cell"><span class="badge missing">Missing</span></td>
+        <td class="score-cell f">0/25</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1828233" target="_blank" rel="noopener">Chapter 1 Quiz--Taken in class</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 11 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Tech" data-course="Acl Comp Sci 1 # - Lynch - 26/27">
+        <td class="badge-cell"><span class="badge missing">Missing</span></td>
+        <td class="score-cell muted">0/0</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/21741/assignments/1778962" target="_blank" rel="noopener">Parent Survey - up to 5 EC pts</a></td>
+        <td class="meta"><span class="course">Acl Comp Sci 1 # - Lynch - 26/27</span><span class="when due">Sep 11 by 11:59pm</span></td>
+      </tr></tbody></table></div>
+          </details>
+          <details class="sec tests" open>
+            <summary><span class="caret">▸</span> Upcoming Tests · <span class="sec-count">5</span></summary>
+            <div class="table-wrap"><table class="miss-table"><tbody>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
+        <td class="badge-cell"><span class="badge test">Final</span></td>
+        <td class="score-cell muted">–/0</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845089" target="_blank" rel="noopener">Final Reminder: You will need notecards by 9/15</a></td>
+        <td class="meta"><span class="course">Science</span><span class="when due">Sep 14 by 11:59pm</span></td>
+      </tr>
+      <tr data-student="E" data-subject="Latin" data-course="Latin 1 - Philbin">
+        <td class="badge-cell"><span class="badge test">Quiz</span></td>
+        <td class="score-cell muted">–/10</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/21980/assignments/1745624" target="_blank" rel="noopener">VOCABULARY QUIZ Lesson I</a></td>
+        <td class="meta"><span class="course">Latin</span><span class="when due">Sep 15 by 11:59pm</span></td>
+      </tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
+        <td class="badge-cell"><span class="badge test">Quiz</span></td>
+        <td class="score-cell muted">–/50</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1875330" target="_blank" rel="noopener">9/18 Membean Quiz</a></td>
+        <td class="meta"><span class="course">English</span><span class="when due">Sep 18 by 11:59pm</span></td>
+      </tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
+        <td class="badge-cell"><span class="badge test">Test</span></td>
+        <td class="score-cell muted">–/60</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1871582" target="_blank" rel="noopener">Honors Biology Chapter 2 Test</a></td>
+        <td class="meta"><span class="course">Science</span><span class="when due">Sep 24 by 11:59pm</span></td>
+      </tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
+        <td class="badge-cell"><span class="badge test">Quiz</span></td>
+        <td class="score-cell muted">–/50</td>
+        <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1875331" target="_blank" rel="noopener">10/2 Membean Quiz</a></td>
+        <td class="meta"><span class="course">English</span><span class="when due">Oct 2 by 11:59pm</span></td>
+      </tr></tbody></table></div>
+          </details>
+          <details class="sec todo" open>
+            <summary><span class="caret">▸</span> To Do · <span class="sec-count">14</span></summary>
+            <div class="table-wrap"><table class="miss-table"><tbody>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1875318" target="_blank" rel="noopener">9/8 - 9/11 Membean Training</a></td>
         <td class="meta"><span class="course">Honors English 9 - Simon</span><span class="when due">Sep 13 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/0</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845054" target="_blank" rel="noopener">WEAR CLOSED TOED SHOES FOR CLASS MONDAY, 9/14!</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 13 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/0</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845089" target="_blank" rel="noopener">Final Reminder: You will need notecards by 9/15</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 14 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Latin" data-course="Latin 1 - Philbin">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21980/assignments/1745624" target="_blank" rel="noopener">VOCABULARY QUIZ Lesson I</a></td>
         <td class="meta"><span class="course">Latin 1 - Philbin</span><span class="when due">Sep 15 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/3</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1871584" target="_blank" rel="noopener">Notecards as note-taking method: Elements, Atoms, and Compounds (Sections 2.1-2.4)</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 15 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/3</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1871583" target="_blank" rel="noopener">Notecards as note-taking method: Chemical bonds (Sections 2.5-2.9)</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 16 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/50</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1875330" target="_blank" rel="noopener">9/18 Membean Quiz</a></td>
         <td class="meta"><span class="course">Honors English 9 - Simon</span><span class="when due">Sep 18 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1875319" target="_blank" rel="noopener">9/14 - 9/18 Membean Training</a></td>
         <td class="meta"><span class="course">Honors English 9 - Simon</span><span class="when due">Sep 20 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/15</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1871586" target="_blank" rel="noopener">Properties of water activity</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 21 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/3</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1871585" target="_blank" rel="noopener">Notecards as note-taking method: Water’s Life-Supporting Properties (Sections 2.10-2.16)</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 22 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1877430" target="_blank" rel="noopener">pH and Buffers Activity</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 23 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/60</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1871582" target="_blank" rel="noopener">Honors Biology Chapter 2 Test</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when due">Sep 24 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/20</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1875320" target="_blank" rel="noopener">9/21 - 9/25 Membean Training</a></td>
         <td class="meta"><span class="course">Honors English 9 - Simon</span><span class="when due">Sep 27 by 11:59pm</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge todo">To do</span></td>
         <td class="score-cell muted">–/50</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1875331" target="_blank" rel="noopener">10/2 Membean Quiz</a></td>
@@ -581,105 +655,99 @@
       </tr></tbody></table></div>
           </details>
           <details class="sec done">
-            <summary><span class="caret">▸</span> Done · 17<span class="sec-hint">last 7 days</span></summary>
+            <summary><span class="caret">▸</span> Done · <span class="sec-count">16</span><span class="sec-hint">last 7 days</span></summary>
             <div class="table-wrap"><table class="miss-table"><tbody>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell muted">–/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1883000" target="_blank" rel="noopener">Homework 1.1.3 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell f">0/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1881743" target="_blank" rel="noopener">Homework 1.1.2 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell muted">–/16</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1882560" target="_blank" rel="noopener">9/11 Identifying Mood in Written Text</a></td>
         <td class="meta"><span class="course">Honors English 9 - Simon</span><span class="when done">done Sep 11</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Tech" data-course="Acl Comp Sci 1 # - Lynch - 26/27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell b">4/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21741/assignments/1778855" target="_blank" rel="noopener">Getting to Know You</a></td>
         <td class="meta"><span class="course">Acl Comp Sci 1 # - Lynch - 26/27</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
-        <td class="badge-cell"><span class="badge done">Done</span></td>
-        <td class="score-cell muted">0/0</td>
-        <td class="assign"><a href="https://councilrock.instructure.com/courses/21741/assignments/1778962" target="_blank" rel="noopener">Parent Survey - up to 5 EC pts</a></td>
-        <td class="meta"><span class="course">Acl Comp Sci 1 # - Lynch - 26/27</span><span class="when done">done Sep 10</span></td>
-      </tr>
-      <tr>
+      <tr data-student="E" data-subject="Tech" data-course="Acl Comp Sci 1 # - Lynch - 26/27">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">5/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21741/assignments/1778964" target="_blank" rel="noopener">Student Survey - 5 pts</a></td>
         <td class="meta"><span class="course">Acl Comp Sci 1 # - Lynch - 26/27</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">2/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1845022" target="_blank" rel="noopener">Worksheet 1E</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Social Studies" data-course="Hon Am Civ 9 - Rapp">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">5/5</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22823/assignments/1881746" target="_blank" rel="noopener">Section 5.1 Graphic Organizer Notes</a></td>
         <td class="meta"><span class="course">Hon Am Civ 9 - Rapp</span><span class="when done">done Sep 10</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell d">30/50</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1873801" target="_blank" rel="noopener">QUIZ: Chp 1.3-1.4 🎉</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 9</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">9/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1828238" target="_blank" rel="noopener">Stomata Homeostasis Activity--Part 1 (Context Notes)</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when done">done Sep 9</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span> <span class="badge late mini">late</span></td>
         <td class="score-cell f">0/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1859219" target="_blank" rel="noopener">Homework 1.4.2 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">4/4</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1879963" target="_blank" rel="noopener">Review 1.3 - 1.4 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span> <span class="badge late mini">late</span></td>
         <td class="score-cell a">2/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1859217" target="_blank" rel="noopener">Homework 1.4.1 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span> <span class="badge late mini">late</span></td>
         <td class="score-cell a">2/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1859216" target="_blank" rel="noopener">Homework 1.3.2 📌</a></td>
         <td class="meta"><span class="course">Hon Algebra 2 2026-27 - Cislak</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="English" data-course="Honors English 9 - Simon">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">10/10</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/22709/assignments/1870209" target="_blank" rel="noopener">9/3 Journal - First Week</a></td>
         <td class="meta"><span class="course">Honors English 9 - Simon</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Science" data-course="Honors Biology - Vierick">
         <td class="badge-cell"><span class="badge done">Done</span></td>
         <td class="score-cell a">2/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21803/assignments/1844913" target="_blank" rel="noopener">Worksheet 1B</a></td>
         <td class="meta"><span class="course">Honors Biology - Vierick</span><span class="when done">done Sep 8</span></td>
       </tr>
-      <tr>
+      <tr data-student="E" data-subject="Math" data-course="Hon Algebra 2 2026-27 - Cislak">
         <td class="badge-cell"><span class="badge done">Done</span> <span class="badge late mini">late</span></td>
         <td class="score-cell a">2/2</td>
         <td class="assign"><a href="https://councilrock.instructure.com/courses/21624/assignments/1859215" target="_blank" rel="noopener">Homework 1.3.1 📌</a></td>
@@ -687,6 +755,63 @@
       </tr></tbody></table></div>
           </details></div>
         </details>
-<footer>Generated by canvas_grades.py · Missing = past due &amp; not submitted · To do = upcoming, not yet submitted · Done = completed in the last 7 days · scores are earned / possible</footer>
+<footer>Generated by canvas_grades.py · Missing = past due &amp; not submitted · Upcoming tests = quizzes/tests/exams still to do · To do = upcoming, not yet submitted · Done = completed in the last 7 days · scores are earned / possible</footer>
+
+    <script>
+    (function(){
+      var fs=document.getElementById('f-student'),
+          fj=document.getElementById('f-subject'),
+          fc=document.getElementById('f-clear');
+      if(!fs||!fj) return;
+      function ensureOption(sel,val){
+        if(val && !Array.prototype.some.call(sel.options,function(o){return o.value===val;})){
+          var o=document.createElement('option'); o.value=val; o.textContent=val; sel.appendChild(o);
+        }
+      }
+      function apply(){
+        var s=fs.value, j=fj.value;
+        document.querySelectorAll('details.student').forEach(function(st){
+          if(s && st.dataset.student!==s){ st.style.display='none'; return; }
+          st.style.display='';
+          st.querySelectorAll('tr[data-student]').forEach(function(tr){
+            tr.style.display=(!j || tr.dataset.subject===j)?'':'none';
+          });
+          var anySec=false;
+          st.querySelectorAll('details.sec').forEach(function(sec){
+            var vis=0;
+            sec.querySelectorAll('tr[data-student]').forEach(function(r){ if(r.style.display!=='none') vis++; });
+            sec.style.display=vis?'':'none';
+            var c=sec.querySelector('.sec-count'); if(c) c.textContent=vis;
+            if(vis) anySec=true;
+          });
+          st.querySelectorAll('.pill').forEach(function(p){
+            var cls=p.classList.contains('missing')?'missing':
+                    p.classList.contains('todo')?'todo':
+                    p.classList.contains('done')?'done':null;
+            if(!cls) return;
+            var sc=st.querySelector('details.sec.'+cls+' .sec-count');
+            var n=sc?sc.textContent:'0';
+            p.textContent=n+' '+(cls==='todo'?'to do':cls);
+            p.style.display=(n==='0')?'none':'';
+          });
+          if(j && !anySec) st.style.display='none';
+        });
+        var q=new URLSearchParams();
+        if(s) q.set('student',s);
+        if(j) q.set('subject',j);
+        history.replaceState(null,'', q.toString()?('?'+q.toString()):location.pathname);
+      }
+      function init(){
+        var q=new URLSearchParams(location.search);
+        var s=q.get('student')||'', j=q.get('subject')||'';
+        ensureOption(fs,s); ensureOption(fj,j);
+        fs.value=s; fj.value=j; apply();
+      }
+      fs.addEventListener('change',apply);
+      fj.addEventListener('change',apply);
+      if(fc) fc.addEventListener('click',function(){ fs.value=''; fj.value=''; apply(); });
+      init();
+    })();
+    </script>
 </body>
 </html>
