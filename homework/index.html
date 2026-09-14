@@ -138,7 +138,7 @@
   <div class="head-row">
     <div>
       <h1>Assignments <span>to Watch</span></h1>
-      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-14 12:08</p>
+      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-14 12:15</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/grades/">📈 Grades →</a>
   </div>
@@ -803,12 +803,68 @@
     })();
     </script>
     <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function(){
-        navigator.serviceWorker.register('/homework/sw.js', {scope:'/homework/'})
-          .catch(function(){ /* offline support is optional; ignore failures */ });
+    (function(){
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function(){
+          navigator.serviceWorker.register('/homework/sw.js', {scope:'/homework/'})
+            .catch(function(){ /* offline support is optional; ignore failures */ });
+        });
+      }
+
+      // Chrome's own install entry moves between versions and is missing
+      // entirely from in-app browsers, so surface an explicit button as soon
+      // as the browser tells us the page qualifies.
+      var deferred = null, btn = null;
+
+      function installed(){
+        return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+               || navigator.standalone === true;
+      }
+
+      function teardown(){
+        if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
+        btn = null; deferred = null;
+      }
+
+      window.addEventListener('beforeinstallprompt', function(e){
+        e.preventDefault();
+        deferred = e;
+        if (installed() || btn) return;
+
+        var row = document.querySelector('.head-row');
+        if (!row) return;
+
+        btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'nav-link';
+        btn.textContent = 'Install app';
+        btn.style.cursor = 'pointer';
+        btn.style.fontFamily = 'inherit';
+        btn.addEventListener('click', function(){
+          if (!deferred) return;
+          deferred.prompt();
+          deferred.userChoice.then(function(choice){
+            if (choice && choice.outcome === 'accepted') teardown();
+            else deferred = null;
+          });
+        });
+
+        // Keep it beside the existing nav link rather than letting
+        // space-between strand it in the middle of the header.
+        var nav = row.querySelector('.nav-link');
+        if (nav && nav.parentNode === row) {
+          var holder = document.createElement('div');
+          holder.style.cssText = 'display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;';
+          row.insertBefore(holder, nav);
+          holder.appendChild(btn);
+          holder.appendChild(nav);
+        } else {
+          row.appendChild(btn);
+        }
       });
-    }
+
+      window.addEventListener('appinstalled', teardown);
+    })();
     </script>
 </body>
 </html>
