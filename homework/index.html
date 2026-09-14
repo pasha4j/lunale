@@ -138,7 +138,7 @@
   <div class="head-row">
     <div>
       <h1>Assignments <span>to Watch</span></h1>
-      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-14 12:29</p>
+      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-14 12:31</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/grades/">📈 Grades →</a>
   </div>
@@ -872,6 +872,18 @@
           ' \u00b7 service worker: ' +
           (('serviceWorker' in navigator) && navigator.serviceWorker.controller ? 'controlling' : 'not controlling');
         panel.appendChild(d);
+
+        // Ask Chrome directly whether this app is already installed; that is
+        // the usual reason it declines to offer an install prompt.
+        if (navigator.getInstalledRelatedApps) {
+          navigator.getInstalledRelatedApps().then(function(apps){
+            d.textContent += ' · already installed: ' + (apps && apps.length ? 'YES' : 'no');
+          }).catch(function(){
+            d.textContent += ' · already installed: check failed';
+          });
+        } else {
+          d.textContent += ' · already installed: browser cannot say';
+        }
 
         var hdr = document.querySelector('header');
         if (hdr && hdr.parentNode) hdr.parentNode.insertBefore(panel, hdr.nextSibling);
