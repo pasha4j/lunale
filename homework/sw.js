@@ -1,7 +1,7 @@
 /* Service worker for the /homework/ app.
    Grades must be fresh, so pages are network-first with a cached fallback;
    icons and webfonts are cache-first. Bump CACHE to evict everything. */
-const CACHE = 'lunale-homework-v2';
+const CACHE = 'lunale-homework-v3';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {

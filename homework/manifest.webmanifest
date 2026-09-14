@@ -27,11 +27,5 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "related_applications": [
-    {
-      "platform": "webapp",
-      "url": "https://thelunale.com/homework/manifest.webmanifest"
-    }
   ]
 }

@@ -138,7 +138,7 @@
   <div class="head-row">
     <div>
       <h1>Assignments <span>to Watch</span></h1>
-      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-14 12:34</p>
+      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-14 12:39</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/grades/">📈 Grades →</a>
   </div>
@@ -811,123 +811,26 @@
         });
       }
 
-      // Chrome decides on its own whether to offer an install, and on some
-      // devices it simply never does. So the button is always present: it
-      // fires Chrome's prompt when one exists, and falls back to per-browser
-      // instructions when it does not.
-      var deferred = null, btn = null, panel = null;
+      // Chrome's own install entry moves between versions and is missing
+      // entirely from some launchers and in-app browsers, so surface a button
+      // when — and only when — the browser tells us the page qualifies.
+      var deferred = null, btn = null;
 
       function standalone(){
         return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
                || navigator.standalone === true;
       }
 
-      function steps(){
-        var ua = navigator.userAgent;
-        if (/iPhone|iPad|iPod/i.test(ua)) return [
-          'Open this page in Safari — Chrome on iOS cannot install it.',
-          'Tap the Share button.',
-          'Choose "Add to Home Screen".'];
-        if (/SamsungBrowser/i.test(ua)) return [
-          'Tap the menu button.',
-          'Choose "Add page to", then "Home screen".'];
-        if (/Android/i.test(ua)) return [
-          'Open the Chrome menu at the top right.',
-          'Look for "Install app", "Add to Home screen", or "Install".',
-          'If none of those appear, it is probably already installed — search your app drawer for "Homework".'];
-        return [
-          'In Chrome or Edge, use the install icon at the right of the address bar.',
-          'Or open the browser menu and choose "Install page as app".'];
-      }
-
-      function closePanel(){
-        if (panel && panel.parentNode) panel.parentNode.removeChild(panel);
-        panel = null;
-      }
-
-      function openPanel(){
-        panel = document.createElement('div');
-        panel.style.cssText = 'background:var(--surface); border:1px solid var(--border);' +
-          'border-radius:10px; padding:1rem 1.2rem; margin:0 0 1.75rem;' +
-          'font-size:0.9rem; line-height:1.6;';
-
-        var h = document.createElement('div');
-        h.style.cssText = 'font-weight:600; margin-bottom:0.5rem;';
-        h.textContent = 'Add this to your phone';
-        panel.appendChild(h);
-
-        var ol = document.createElement('ol');
-        ol.style.cssText = 'margin:0 0 0.8rem 1.1rem; padding:0;';
-        steps().forEach(function(t){
-          var li = document.createElement('li');
-          li.textContent = t;
-          ol.appendChild(li);
-        });
-        panel.appendChild(ol);
-
-        var d = document.createElement('div');
-        d.style.cssText = 'color:var(--muted); font-family:\'DM Mono\',monospace; font-size:0.75rem;';
-        d.textContent = 'install prompt offered: ' + (deferred ? 'yes' : 'no') +
-          ' \u00b7 display-mode: ' + (standalone() ? 'standalone' : 'browser') +
-          ' \u00b7 service worker: ' +
-          (('serviceWorker' in navigator) && navigator.serviceWorker.controller ? 'controlling' : 'not controlling');
-        panel.appendChild(d);
-
-        // Ask Chrome directly whether this app is already installed; that is
-        // the usual reason it declines to offer an install prompt.
-        if (navigator.getInstalledRelatedApps) {
-          navigator.getInstalledRelatedApps().then(function(apps){
-            d.textContent += ' · already installed: ' + (apps && apps.length ? 'YES' : 'no');
-          }).catch(function(){
-            d.textContent += ' · already installed: check failed';
-          });
-        } else {
-          d.textContent += ' · already installed: browser cannot say';
-        }
-
-        // Second line: what this browser actually is. A WebView reports
-        // '; wv)', desktop-mode drops 'Mobile', and re-branded Chromium
-        // builds (Edge, Brave, Samsung) only show up in brands.
-        var ua = document.createElement('div');
-        ua.style.cssText = "color:var(--muted); font-family:'DM Mono',monospace;" +
-          'font-size:0.75rem; margin-top:0.4rem; word-break:break-all; user-select:all;';
-        var brands = '';
-        try {
-          if (navigator.userAgentData && navigator.userAgentData.brands) {
-            brands = navigator.userAgentData.brands.map(function(b){
-              return b.brand + ' ' + b.version;
-            }).join(', ');
-          }
-        } catch (e) {}
-        ua.textContent = navigator.userAgent +
-          (brands ? '  · brands: ' + brands : '  · brands: none') +
-          '  · webview: ' + (/; wv\)/.test(navigator.userAgent) ? 'YES' : 'no') +
-          '  · mobile-ua: ' + (/Mobile/.test(navigator.userAgent) ? 'yes' : 'NO (desktop mode?)');
-        panel.appendChild(ua);
-
-        // Incognito has a far smaller quota than a normal profile, and Chrome
-        // never offers an install there.
-        if (navigator.storage && navigator.storage.estimate) {
-          navigator.storage.estimate().then(function(est){
-            var gb = est && est.quota ? (est.quota / 1073741824) : 0;
-            ua.textContent += '  · quota: ' + gb.toFixed(2) + ' GB' +
-              (gb && gb < 0.5 ? ' (looks like Incognito)' : '');
-          }).catch(function(){});
-        }
-
-        var hdr = document.querySelector('header');
-        if (hdr && hdr.parentNode) hdr.parentNode.insertBefore(panel, hdr.nextSibling);
-      }
-
       function remove(){
         if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
-        btn = null;
-        closePanel();
-        deferred = null;
+        btn = null; deferred = null;
       }
 
-      function mount(){
-        if (btn || standalone()) return;
+      window.addEventListener('beforeinstallprompt', function(e){
+        e.preventDefault();
+        deferred = e;
+        if (standalone() || btn) return;
+
         var row = document.querySelector('.head-row');
         if (!row) return;
 
@@ -938,17 +841,12 @@
         btn.style.cursor = 'pointer';
         btn.style.fontFamily = 'inherit';
         btn.addEventListener('click', function(){
-          if (deferred) {
-            deferred.prompt();
-            deferred.userChoice.then(function(choice){
-              if (choice && choice.outcome === 'accepted') remove();
-              else deferred = null;
-            });
-          } else if (panel) {
-            closePanel();
-          } else {
-            openPanel();
-          }
+          if (!deferred) return;
+          deferred.prompt();
+          deferred.userChoice.then(function(choice){
+            if (choice && choice.outcome === 'accepted') remove();
+            else deferred = null;
+          });
         });
 
         // Keep it beside the existing nav link rather than letting
@@ -963,18 +861,9 @@
         } else {
           row.appendChild(btn);
         }
-      }
-
-      window.addEventListener('beforeinstallprompt', function(e){
-        e.preventDefault();
-        deferred = e;
-        mount();
-        closePanel();   // stale instructions: the real prompt is available now
       });
-      window.addEventListener('appinstalled', remove);
 
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
-      else mount();
+      window.addEventListener('appinstalled', remove);
     })();
     </script>
 </body>
