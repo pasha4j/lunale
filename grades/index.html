@@ -151,7 +151,7 @@
   <div class="head-row">
     <div>
       <h1>Grade <span>Tracker</span></h1>
-      <p class="subtitle">Council Rock School District · Last updated 2026-09-14 13:07</p>
+      <p class="subtitle">Council Rock School District · Last updated 2026-09-14 16:01</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/homework/">📋 Homework →</a>
   </div>
@@ -313,6 +313,15 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=English" title="See English 9 - Lingman assignments">
+                <div class="kpi-subject">English</div>
+                <div class="kpi-course" title="English 9 - Lingman">English 9 - Lingman</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter a">A+</span>
+                  <span class="kpi-pct a">100.0%</span>
+                  <span class="kpi-arrow flat" title="No prior data yet">·</span>
+                </div>
               </a></div>
           <div class="chart-wrap">
             <canvas id="chart_R"></canvas>
@@ -324,7 +333,7 @@
           var isMobile = window.matchMedia('(max-width: 600px)').matches;
           new Chart(ctx, {
             type: 'line',
-            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14"], datasets: [{"label": "Honors Biology - Mohl", "data": [100.0, 100.0, 72.73, 75.59, 75.59, 75.59, 75.92, 75.92, 75.92, 76.48], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [100.0, 100.0, 100.0, 100.0, 50.0, 45.37, 45.84, 45.84, 45.84, 45.84], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 2 - Merenda", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 97.5], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Am Civ 9 - Pacitti", "data": [null, null, null, null, null, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
+            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14"], datasets: [{"label": "Honors Biology - Mohl", "data": [100.0, 100.0, 72.73, 75.59, 75.59, 75.59, 75.92, 75.92, 75.92, 76.48], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [100.0, 100.0, 100.0, 100.0, 50.0, 45.37, 45.84, 45.84, 45.84, 45.84], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 2 - Merenda", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 97.5], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Am Civ 9 - Pacitti", "data": [null, null, null, null, null, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 9 - Lingman", "data": [null, null, null, null, null, null, null, null, null, 100.0], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
             options: {
               responsive: true,
               maintainAspectRatio: false,
