@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Assignments — Council Rock</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0f1a">
+<link rel="manifest" href="/homework/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/homework/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Homework">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -131,7 +138,7 @@
   <div class="head-row">
     <div>
       <h1>Assignments <span>to Watch</span></h1>
-      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-13 16:25</p>
+      <p class="subtitle">Council Rock · 16 missing · 5 tests · 25 to do · 39 done (last 7d) · Last updated 2026-09-14 12:08</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/grades/">📈 Grades →</a>
   </div>
@@ -734,6 +741,11 @@
           fj=document.getElementById('f-subject'),
           fc=document.getElementById('f-clear');
       if(!fs||!fj) return;
+      var MEM='lunale.homework.student';
+      function recall(){ try{ return localStorage.getItem(MEM)||''; }catch(e){ return ''; } }
+      function remember(v){
+        try{ v ? localStorage.setItem(MEM,v) : localStorage.removeItem(MEM); }catch(e){}
+      }
       function ensureOption(sel,val){
         if(val && !Array.prototype.some.call(sel.options,function(o){return o.value===val;})){
           var o=document.createElement('option'); o.value=val; o.textContent=val; sel.appendChild(o);
@@ -741,6 +753,7 @@
       }
       function apply(){
         var s=fs.value, j=fj.value;
+        remember(s);
         document.querySelectorAll('details.student').forEach(function(st){
           if(s && st.dataset.student!==s){ st.style.display='none'; return; }
           st.style.display='';
@@ -775,7 +788,11 @@
       }
       function init(){
         var q=new URLSearchParams(location.search);
-        var s=q.get('student')||'', j=q.get('subject')||'';
+        // A bare launch (installed app, no ?student=) reopens on whoever was
+        // picked last; an explicit ?student= in the URL always wins, and
+        // ?student= with no value means "all students" on purpose.
+        var s=q.has('student') ? (q.get('student')||'') : recall();
+        var j=q.get('subject')||'';
         ensureOption(fs,s); ensureOption(fj,j);
         fs.value=s; fj.value=j; apply();
       }
@@ -784,6 +801,14 @@
       if(fc) fc.addEventListener('click',function(){ fs.value=''; fj.value=''; apply(); });
       init();
     })();
+    </script>
+    <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function(){
+        navigator.serviceWorker.register('/homework/sw.js', {scope:'/homework/'})
+          .catch(function(){ /* offline support is optional; ignore failures */ });
+      });
+    }
     </script>
 </body>
 </html>
