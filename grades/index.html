@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
     --bg:      #0a0f1a;
@@ -85,6 +84,18 @@
     margin-left: auto;
     font-size: 1.1rem; line-height: 1; font-weight: 700;
   }
+  .kpi-spark { margin-top: 0.4rem; }
+  .spark { display: block; width: 100%; height: 26px; opacity: 0.9; }
+  .spark polyline {
+    fill: none; stroke: currentColor; stroke-width: 1.6;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .spark circle { fill: currentColor; }
+  .spark.a { color: #4ade80; }
+  .spark.b { color: #60a5fa; }
+  .spark.c { color: #fbbf24; }
+  .spark.d { color: #f97316; }
+  .spark.f { color: #f87171; }
   .kpi-arrow.up   { color: var(--up); }
   .kpi-arrow.dn   { color: var(--dn); }
   .kpi-arrow.flat { color: var(--muted); }
@@ -94,16 +105,84 @@
   .kpi-letter.d, .kpi-pct.d { color: #f97316; }
   .kpi-letter.f, .kpi-pct.f { color: #f87171; }
 
+  /* ── Fresh-grade medals ────────────────────────────────────── */
+  .medal-strip { margin: 0 0 1.25rem; }
+  .medal-head {
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.5rem;
+  }
+  .medal-hint { text-transform: none; letter-spacing: 0; opacity: 0.7; font-weight: 400; }
+  .medal-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .medal-card {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 0.45rem 0.85rem 0.45rem 0.6rem;
+    text-decoration: none; color: inherit; max-width: 100%;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .medal-card:hover { transform: translateY(-1px); }
+  .medal-card.none   { opacity: 0.9; }
+  .medal-card.none:hover { border-color: var(--muted); }
+  .medal-card.none .medal-glyph { color: var(--muted); font-weight: 700; }
+  .medal-card.gold   { border-color: #d4af3766; }
+  .medal-card.silver { border-color: #c0c8d466; }
+  .medal-card.bronze { border-color: #cd7f3266; }
+  .medal-card.gold:hover   { border-color: #d4af37; }
+  .medal-card.silver:hover { border-color: #c0c8d4; }
+  .medal-card.bronze:hover { border-color: #cd7f32; }
+  .medal-glyph { font-size: 1.15rem; line-height: 1; }
+  .medal-text { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+  .medal-title {
+    font-size: 0.82rem; font-weight: 600; line-height: 1.2;
+    max-width: 22ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .medal-course {
+    font-size: 0.68rem; color: var(--muted); font-family: 'DM Mono', monospace;
+    max-width: 22ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .medal-score {
+    margin-left: 0.15rem; font-family: 'DM Mono', monospace;
+    font-size: 0.8rem; font-weight: 600; white-space: nowrap;
+  }
+  .medal-letter { margin-left: 0.4rem; font-weight: 700; opacity: 0.85; }
+  .medal-card.gold .medal-score   { color: #e5c158; }
+  .medal-card.silver .medal-score { color: #cbd5e1; }
+  .medal-card.bronze .medal-score { color: #e0965a; }
+  .medal-score.c { color: #fbbf24; }
+  .medal-score.d { color: #f97316; }
+  .medal-score.f { color: #f87171; }
+  .medal-head { margin-top: 0.85rem; }
+  .medal-strip .medal-head:first-child { margin-top: 0; }
+  .medal-card.due-card:hover { border-color: #fbbf24; }
+  .due-dot { color: #fbbf24; font-size: 1.1rem; }
+  .due-pts {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    color: var(--muted); white-space: nowrap;
+  }
+  .due-when {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--muted); white-space: nowrap; margin-left: 0.15rem;
+  }
+  .medal-card.submit-card { border-style: dashed; padding-right: 0.75rem; }
+  .medal-card.submit-card:hover { border-color: var(--muted); border-style: solid; }
+  .submit-card .medal-title { font-weight: 500; }
+  .submit-check { color: var(--muted); font-size: 0.95rem; font-weight: 700; }
+  .submit-time {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--muted); white-space: nowrap;
+  }
+  .submit-late {
+    font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--dn); margin-left: 0.15rem;
+  }
+  .submit-more {
+    align-self: center; font-size: 0.75rem; color: var(--muted);
+    font-family: 'DM Mono', monospace; padding: 0 0.35rem;
+  }
+
   .grade-grid { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; }
   @media (max-width: 900px) { .grade-grid { grid-template-columns: 1fr; } }
 
-  .chart-wrap {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.25rem;
-    position: relative;
-    height: 380px;
-  }
-  .chart-wrap canvas { width: 100% !important; height: 100% !important; }
   .table-wrap {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 1.25rem; overflow-x: auto;
@@ -119,7 +198,9 @@
     .kpi-letter { font-size: 1.4rem; }
     .kpi-pct { font-size: 0.8rem; }
     .kpi-arrow { font-size: 0.95rem; }
-    .chart-wrap { padding: 0.75rem; height: 320px; }
+    .spark { height: 22px; }
+    .medal-card { padding: 0.4rem 0.7rem 0.4rem 0.5rem; }
+    .medal-title, .medal-course { max-width: 16ch; }
     .table-wrap { padding: 0.75rem; }
     .grade-table th, .grade-table td { padding: 0.45rem 0.5rem; font-size: 0.8rem; }
   }
@@ -151,7 +232,7 @@
   <div class="head-row">
     <div>
       <h1>Grade <span>Tracker</span></h1>
-      <p class="subtitle">Council Rock School District · Last updated 2026-09-18 16:30</p>
+      <p class="subtitle">Council Rock School District · Last updated 2026-09-18 17:00</p>
     </div>
     <a class="nav-link" href="https://thelunale.com/homework/">📋 Homework →</a>
   </div>
@@ -168,6 +249,7 @@
                   <span class="kpi-pct b">88.2%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 88%"><title>2026-09-04 100.0% → 2026-09-18 88.2%</title><polyline points="3.0,3.0 11.8,3.0 20.5,3.0 29.3,3.0 38.1,3.0 46.8,12.6 55.6,12.6 64.4,12.6 73.2,12.6 81.9,12.6 90.7,23.0 99.5,19.7 108.2,19.4 117.0,19.4" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="19.4" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Science" title="See Chemistry - Arnoldi 26.27 assignments">
                 <div class="kpi-subject">Science</div>
@@ -177,6 +259,7 @@
                   <span class="kpi-pct b">85.9%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 91% to 86%"><title>2026-09-04 90.7% → 2026-09-18 85.9%</title><polyline points="3.0,14.4 11.8,14.4 20.5,11.2 29.3,11.2 38.1,3.0 46.8,8.4 55.6,7.9 64.4,7.9 73.2,7.9 81.9,8.2 90.7,21.1 99.5,21.1 108.2,23.0 117.0,23.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="23.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Social%20Studies" title="See Hon Wld Hist - Boekamp assignments">
                 <div class="kpi-subject">Social Studies</div>
@@ -186,6 +269,7 @@
                   <span class="kpi-pct a">98.3%</span>
                   <span class="kpi-arrow dn" title="Since last check">▼ 1.7</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 98%"><title>2026-09-04 100.0% → 2026-09-18 98.3%</title><polyline points="3.0,9.7 11.8,9.7 20.5,9.7 29.3,9.7 38.1,9.7 46.8,9.7 55.6,9.7 64.4,9.7 73.2,9.7 81.9,9.7 90.7,9.7 99.5,9.7 108.2,9.7 117.0,16.3" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="16.3" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=English" title="See English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27 assignments">
                 <div class="kpi-subject">English</div>
@@ -195,6 +279,7 @@
                   <span class="kpi-pct a">90.9%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 83% to 91%"><title>2026-09-04 83.3% → 2026-09-18 90.9%</title><polyline points="3.0,23.0 11.8,23.0 20.5,23.0 29.3,23.0 38.1,23.0 46.8,3.8 55.6,3.8 64.4,3.8 73.2,3.8 81.9,18.0 90.7,7.0 99.5,5.2 108.2,3.0 117.0,3.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="3.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Math" title="See Geometry - Groden/Schilk assignments">
                 <div class="kpi-subject">Math</div>
@@ -204,6 +289,7 @@
                   <span class="kpi-pct b">83.8%</span>
                   <span class="kpi-arrow up" title="Since last check">▲ 0.4</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 83% to 84%"><title>2026-09-11 83.4% → 2026-09-18 83.8%</title><polyline points="3.0,13.9 19.3,13.9 35.6,13.9 51.9,13.9 68.1,13.9 84.4,13.9 100.7,13.9 117.0,12.1" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="12.1" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Health" title="See 😊Finding Happiness# - DiMarco assignments">
                 <div class="kpi-subject">Health</div>
@@ -213,67 +299,84 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-09-14 100.0% → 2026-09-18 100.0%</title><polyline points="3.0,13.0 31.5,13.0 60.0,13.0 88.5,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
               </a></div>
-          <div class="chart-wrap">
-            <canvas id="chart_M"></canvas>
+          
+          <div class="medal-strip">
+            <div class="medal-head">Just graded <span class="medal-hint">last 24 hours</span></div>
+            <div class="medal-row">
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/21656/assignments/1886474"
+             title="Classwork: 1-4 to 1-5 — Geometry - Groden/Schilk">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">Classwork: 1-4 to 1-5</span>
+              <span class="medal-course">Geometry</span>
+            </span>
+            <span class="medal-score ">2/2<span class="medal-letter">A+</span></span>
+          </a>
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/21656/assignments/1886473"
+             title="HW: 1-4 to 1-5 — Geometry - Groden/Schilk">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">HW: 1-4 to 1-5</span>
+              <span class="medal-course">Geometry</span>
+            </span>
+            <span class="medal-score ">6/6<span class="medal-letter">A+</span></span>
+          </a>
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/22839/assignments/1874627"
+             title="3 Sept Map — Hon Wld Hist - Boekamp">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">3 Sept Map</span>
+              <span class="medal-course">Hon Wld Hist</span>
+            </span>
+            <span class="medal-score ">5/5<span class="medal-letter">A+</span></span>
+          </a>
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/22839/assignments/1874628"
+             title="5 Themes Quiz — Hon Wld Hist - Boekamp">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">5 Themes Quiz</span>
+              <span class="medal-course">Hon Wld Hist</span>
+            </span>
+            <span class="medal-score ">14/15<span class="medal-letter">A</span></span>
+          </a>
+            </div>
+            <div class="medal-head due-head">Due today <span class="medal-hint">not turned in</span></div>
+            <div class="medal-row">
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/21656/assignments/1886487"
+             title="Quiz 1-4 to 1-5 — Geometry - Groden/Schilk">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Quiz 1-4 to 1-5</span>
+              <span class="medal-course">Geometry</span>
+            </span>
+            <span class="due-pts">20 pts</span><span class="due-when">11:59pm</span>
+          </a>
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/23362/assignments/1831112"
+             title="Dimensional Analysis Worksheet — Chemistry - Arnoldi 26.27">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Dimensional Analysis Worksheet</span>
+              <span class="medal-course">Chemistry</span>
+            </span>
+            <span class="due-pts">5 pts</span><span class="due-when">11:59pm</span>
+          </a>
+            </div>
+            <div class="medal-head">Turned in <span class="medal-hint">awaiting grade</span></div>
+            <div class="medal-row">
+          <a class="medal-card submit-card" href="https://councilrock.instructure.com/courses/22839/assignments/1874626"
+             title="17. Sept: Constitution Day — Hon Wld Hist - Boekamp">
+            <span class="medal-glyph submit-check">&check;</span>
+            <span class="medal-text">
+              <span class="medal-title">17. Sept: Constitution Day</span>
+              <span class="medal-course">Hon Wld Hist</span>
+            </span>
+            <span class="submit-time">Sep 17 9:46pm</span>
+          </a>
+            </div>
           </div>
         </section>
-        <script>
-        (function(){
-          var ctx = document.getElementById('chart_M').getContext('2d');
-          var isMobile = window.matchMedia('(max-width: 600px)').matches;
-          new Chart(ctx, {
-            type: 'line',
-            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18"], datasets: [{"label": "Spanish 4 - Deola", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 93.13, 93.13, 93.13, 93.13, 93.13, 85.63, 88.0, 88.23, 88.23], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Chemistry - Arnoldi 26.27", "data": [90.67, 90.67, 92.47, 92.47, 96.99, 93.98, 94.29, 94.29, 94.29, 94.13, 87.01, 87.01, 85.94, 85.94], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Wld Hist - Boekamp", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 98.33], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27", "data": [83.26, 83.26, 83.26, 83.26, 83.26, 90.61, 90.61, 90.61, 90.61, 85.19, 89.38, 90.09, 90.93, 90.93], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Geometry - Groden/Schilk", "data": [null, null, null, null, null, null, 83.39, 83.39, 83.39, 83.39, 83.39, 83.39, 83.39, 83.83], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "\ud83d\ude0aFinding Happiness# - DiMarco", "data": [null, null, null, null, null, null, null, null, null, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              interaction: { mode: 'nearest', intersect: false, axis: 'xy' },
-              plugins: {
-                legend: {
-                  position: isMobile ? 'bottom' : 'top',
-                  labels: {
-                    color: '#e2e8f0',
-                    font: { family: 'DM Sans', size: isMobile ? 10 : 12 },
-                    boxWidth: isMobile ? 10 : 14,
-                    padding: isMobile ? 6 : 10
-                  }
-                },
-                tooltip: {
-                  backgroundColor: 'rgba(15,23,42,0.95)',
-                  borderColor: '#334155',
-                  borderWidth: 1,
-                  titleColor: '#e2e8f0',
-                  bodyColor: '#e2e8f0',
-                  padding: 10,
-                  displayColors: true,
-                  callbacks: {
-                    title: function(items) {
-                      if (!items || !items.length) return '';
-                      return items[0].label;
-                    },
-                    label: function(c) {
-                      var v = (c.parsed.y !== null && c.parsed.y !== undefined) ? c.parsed.y.toFixed(1) + '%' : 'N/A';
-                      return c.dataset.label + ' — ' + v;
-                    }
-                  }
-                }
-              },
-              scales: {
-                x: {
-                  ticks: { color: '#94a3b8', maxRotation: 0, autoSkip: true, maxTicksLimit: isMobile ? 4 : 8, font: { size: isMobile ? 10 : 12 } },
-                  grid: { color: '#1e293b' }
-                },
-                y: {
-                  min: 50, max: 100,
-                  ticks: { color: '#94a3b8', font: { size: isMobile ? 10 : 12 }, callback: function(v){ return v+'%'; } },
-                  grid: { color: '#1e293b' }
-                }
-              }
-            }
-          });
-        })();
-        </script>
         
         <section class="student-block">
           <h2 class="student-name">R.</h2>
@@ -286,6 +389,7 @@
                   <span class="kpi-pct c">74.6%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark c" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 75%"><title>2026-09-04 100.0% → 2026-09-18 74.6%</title><polyline points="3.0,3.0 11.8,3.0 20.5,23.0 29.3,20.9 38.1,20.9 46.8,20.9 55.6,20.7 64.4,20.7 73.2,20.7 81.9,20.2 90.7,20.2 99.5,20.5 108.2,21.7 117.0,21.7" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="21.7" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Math" title="See Hon Algebra 2 2026-27 - Cislak assignments">
                 <div class="kpi-subject">Math</div>
@@ -295,6 +399,7 @@
                   <span class="kpi-pct f">46.6%</span>
                   <span class="kpi-arrow up" title="Since last check">▲ 0.2</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark f" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 47%"><title>2026-09-04 100.0% → 2026-09-18 46.6%</title><polyline points="3.0,3.0 11.8,3.0 20.5,3.0 29.3,3.0 38.1,21.3 46.8,23.0 55.6,22.8 64.4,22.8 73.2,22.8 81.9,22.8 90.7,22.8 99.5,22.7 108.2,22.6 117.0,22.5" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="22.5" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Spanish" title="See Spanish 2 - Merenda assignments">
                 <div class="kpi-subject">Spanish</div>
@@ -304,6 +409,7 @@
                   <span class="kpi-pct a">99.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 99%"><title>2026-09-04 100.0% → 2026-09-18 99.0%</title><polyline points="3.0,8.0 11.8,8.0 20.5,8.0 29.3,8.0 38.1,8.0 46.8,8.0 55.6,8.0 64.4,8.0 73.2,8.0 81.9,18.0 90.7,18.0 99.5,18.0 108.2,12.0 117.0,12.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="12.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Social%20Studies" title="See Acl Am Civ 9 - Pacitti assignments">
                 <div class="kpi-subject">Social Studies</div>
@@ -313,6 +419,7 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-09-10 100.0% → 2026-09-18 100.0%</title><polyline points="3.0,13.0 17.2,13.0 31.5,13.0 45.8,13.0 60.0,13.0 74.2,13.0 88.5,13.0 102.8,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=English" title="See English 9 - Lingman assignments">
                 <div class="kpi-subject">English</div>
@@ -322,6 +429,7 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-09-14 100.0% → 2026-09-18 100.0%</title><polyline points="3.0,13.0 31.5,13.0 60.0,13.0 88.5,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Other" title="See Electronics1 # - Czapor assignments">
                 <div class="kpi-subject">&nbsp;</div>
@@ -331,67 +439,72 @@
                   <span class="kpi-pct a">93.7%</span>
                   <span class="kpi-arrow dn" title="Since last check">▼ 6.3</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 94%"><title>2026-09-16 100.0% → 2026-09-18 93.7%</title><polyline points="3.0,3.0 60.0,3.0 117.0,23.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="23.0" r="2.2"/></svg></div>
               </a></div>
-          <div class="chart-wrap">
-            <canvas id="chart_R"></canvas>
+          
+          <div class="medal-strip">
+            <div class="medal-head">Just graded <span class="medal-hint">last 24 hours</span></div>
+            <div class="medal-row">
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/22970/assignments/1776165"
+             title="Edpuzzle | Ohms Law — Electronics1 # - Czapor">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">Edpuzzle | Ohms Law</span>
+              <span class="medal-course">Electronics1 #</span>
+            </span>
+            <span class="medal-score ">17/17<span class="medal-letter">A+</span></span>
+          </a>
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/21624/assignments/1885295"
+             title="Homework: Extra Practice 1.1 📌 — Hon Algebra 2 2026-27 - Cislak">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">Homework: Extra Practice 1.1 📌</span>
+              <span class="medal-course">Hon Algebra 2 2026-27</span>
+            </span>
+            <span class="medal-score ">2/2<span class="medal-letter">A+</span></span>
+          </a>
+            </div>
+            <div class="medal-head due-head">Due today <span class="medal-hint">not turned in</span></div>
+            <div class="medal-row">
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/22970/assignments/1776347"
+             title="Resistor color code practice sheet — Electronics1 # - Czapor">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Resistor color code practice sheet</span>
+              <span class="medal-course">Electronics1 #</span>
+            </span>
+            <span class="due-pts">20 pts</span><span class="due-when">11:59pm</span>
+          </a>
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/22970/assignments/1776339"
+             title="Multimeter Activity — Electronics1 # - Czapor">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Multimeter Activity</span>
+              <span class="medal-course">Electronics1 #</span>
+            </span>
+            <span class="due-pts">7 pts</span><span class="due-when">11:59pm</span>
+          </a>
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/22970/assignments/1776345"
+             title="Resistor Color Code book work lesson 1 — Electronics1 # - Czapor">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Resistor Color Code book work lesson 1</span>
+              <span class="medal-course">Electronics1 #</span>
+            </span>
+            <span class="due-pts">6 pts</span><span class="due-when">11:59pm</span>
+          </a>
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/22970/assignments/1776249"
+             title="Intro to Electronics worksheet — Electronics1 # - Czapor">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Intro to Electronics worksheet</span>
+              <span class="medal-course">Electronics1 #</span>
+            </span>
+            <span class="due-pts">5 pts</span><span class="due-when">11:59pm</span>
+          </a>
+            </div>
           </div>
         </section>
-        <script>
-        (function(){
-          var ctx = document.getElementById('chart_R').getContext('2d');
-          var isMobile = window.matchMedia('(max-width: 600px)').matches;
-          new Chart(ctx, {
-            type: 'line',
-            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18"], datasets: [{"label": "Honors Biology - Mohl", "data": [100.0, 100.0, 72.73, 75.59, 75.59, 75.59, 75.92, 75.92, 75.92, 76.48, 76.48, 76.13, 74.56, 74.56], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [100.0, 100.0, 100.0, 100.0, 50.0, 45.37, 45.84, 45.84, 45.84, 45.84, 45.92, 46.2, 46.43, 46.62], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Spanish 2 - Merenda", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 97.5, 97.5, 97.5, 99.0, 99.0], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Am Civ 9 - Pacitti", "data": [null, null, null, null, null, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "English 9 - Lingman", "data": [null, null, null, null, null, null, null, null, null, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Electronics1 # - Czapor", "data": [null, null, null, null, null, null, null, null, null, null, null, 100.0, 100.0, 93.65], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              interaction: { mode: 'nearest', intersect: false, axis: 'xy' },
-              plugins: {
-                legend: {
-                  position: isMobile ? 'bottom' : 'top',
-                  labels: {
-                    color: '#e2e8f0',
-                    font: { family: 'DM Sans', size: isMobile ? 10 : 12 },
-                    boxWidth: isMobile ? 10 : 14,
-                    padding: isMobile ? 6 : 10
-                  }
-                },
-                tooltip: {
-                  backgroundColor: 'rgba(15,23,42,0.95)',
-                  borderColor: '#334155',
-                  borderWidth: 1,
-                  titleColor: '#e2e8f0',
-                  bodyColor: '#e2e8f0',
-                  padding: 10,
-                  displayColors: true,
-                  callbacks: {
-                    title: function(items) {
-                      if (!items || !items.length) return '';
-                      return items[0].label;
-                    },
-                    label: function(c) {
-                      var v = (c.parsed.y !== null && c.parsed.y !== undefined) ? c.parsed.y.toFixed(1) + '%' : 'N/A';
-                      return c.dataset.label + ' — ' + v;
-                    }
-                  }
-                }
-              },
-              scales: {
-                x: {
-                  ticks: { color: '#94a3b8', maxRotation: 0, autoSkip: true, maxTicksLimit: isMobile ? 4 : 8, font: { size: isMobile ? 10 : 12 } },
-                  grid: { color: '#1e293b' }
-                },
-                y: {
-                  min: 50, max: 100,
-                  ticks: { color: '#94a3b8', font: { size: isMobile ? 10 : 12 }, callback: function(v){ return v+'%'; } },
-                  grid: { color: '#1e293b' }
-                }
-              }
-            }
-          });
-        })();
-        </script>
         
         <section class="student-block">
           <h2 class="student-name">E.</h2>
@@ -404,6 +517,7 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-09-04 100.0% → 2026-09-18 100.0%</title><polyline points="3.0,13.0 12.5,13.0 22.0,13.0 31.5,13.0 41.0,13.0 50.5,13.0 60.0,13.0 69.5,13.0 79.0,13.0 88.5,13.0 98.0,13.0 107.5,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=English" title="See Honors English 9 - Simon assignments">
                 <div class="kpi-subject">English</div>
@@ -413,6 +527,7 @@
                   <span class="kpi-pct a">95.5%</span>
                   <span class="kpi-arrow dn" title="Since last check">▼ 4.5</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 96%"><title>2026-09-04 100.0% → 2026-09-18 95.5%</title><polyline points="3.0,4.0 12.5,4.0 22.0,4.0 31.5,4.0 41.0,4.0 50.5,4.0 60.0,4.0 69.5,4.0 79.0,4.0 88.5,4.0 98.0,4.0 107.5,4.0 117.0,22.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="22.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Science" title="See Honors Biology - Vierick assignments">
                 <div class="kpi-subject">Science</div>
@@ -422,6 +537,7 @@
                   <span class="kpi-pct c">71.7%</span>
                   <span class="kpi-arrow up" title="Since last check">▲ 0.2</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark c" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 72%"><title>2026-09-04 100.0% → 2026-09-18 71.7%</title><polyline points="3.0,3.0 12.5,3.0 22.0,3.0 31.5,6.5 41.0,6.0 50.5,6.0 60.0,6.0 69.5,6.0 79.0,22.7 88.5,23.0 98.0,23.0 107.5,23.0 117.0,22.8" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="22.8" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Social%20Studies" title="See Hon Am Civ 9 - Rapp assignments">
                 <div class="kpi-subject">Social Studies</div>
@@ -431,6 +547,7 @@
                   <span class="kpi-pct a">100.0%</span>
                   <span class="kpi-arrow flat" title="No change since last check">→</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-09-04 100.0% → 2026-09-18 100.0%</title><polyline points="3.0,13.0 12.5,13.0 22.0,13.0 31.5,13.0 41.0,13.0 50.5,13.0 60.0,13.0 69.5,13.0 79.0,13.0 88.5,13.0 98.0,13.0 107.5,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Math" title="See Hon Algebra 2 2026-27 - Cislak assignments">
                 <div class="kpi-subject">Math</div>
@@ -440,6 +557,7 @@
                   <span class="kpi-pct d">63.2%</span>
                   <span class="kpi-arrow up" title="Since last check">▲ 0.1</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark d" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 83% to 63%"><title>2026-09-09 83.3% → 2026-09-18 63.2%</title><polyline points="3.0,3.0 15.7,21.9 28.3,23.0 41.0,23.0 53.7,23.0 66.3,23.0 79.0,21.3 91.7,21.3 104.3,21.2 117.0,21.2" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="21.2" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Tech" title="See Acl Comp Sci 1 # - Lynch - 26/27 assignments">
                 <div class="kpi-subject">Tech</div>
@@ -449,67 +567,93 @@
                   <span class="kpi-pct d">60.0%</span>
                   <span class="kpi-arrow dn" title="Since last check">▼ 30.0</span>
                 </div>
+                <div class="kpi-spark"><svg class="spark d" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 90% to 60%"><title>2026-09-10 90.0% → 2026-09-18 60.0%</title><polyline points="3.0,3.0 17.2,3.0 31.5,3.0 45.8,3.0 60.0,3.0 74.2,3.0 88.5,3.0 102.8,3.0 117.0,23.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="23.0" r="2.2"/></svg></div>
               </a></div>
-          <div class="chart-wrap">
-            <canvas id="chart_E"></canvas>
+          
+          <div class="medal-strip">
+            <div class="medal-head">Just graded <span class="medal-hint">last 24 hours</span></div>
+            <div class="medal-row">
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/21624/assignments/1885295"
+             title="Homework: Extra Practice 1.1 📌 — Hon Algebra 2 2026-27 - Cislak">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">Homework: Extra Practice 1.1 📌</span>
+              <span class="medal-course">Hon Algebra 2 2026-27</span>
+            </span>
+            <span class="medal-score ">2/2<span class="medal-letter">A+</span></span>
+          </a>
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/21803/assignments/1883603"
+             title="9/16 Study Island DIAGNOSTIC test (effort grade only) — Honors Biology - Vierick">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">9/16 Study Island DIAGNOSTIC test (effort grade only)</span>
+              <span class="medal-course">Honors Biology</span>
+            </span>
+            <span class="medal-score ">5/5<span class="medal-letter">A+</span></span>
+          </a>
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/22823/assignments/1871130"
+             title="DBQ---The West — Hon Am Civ 9 - Rapp">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">DBQ---The West</span>
+              <span class="medal-course">Hon Am Civ 9</span>
+            </span>
+            <span class="medal-score ">5/5<span class="medal-letter">A+</span></span>
+          </a>
+          <a class="medal-card none" href="https://councilrock.instructure.com/courses/22709/assignments/1875330"
+             title="9/18 Membean Quiz — Honors English 9 - Simon">
+            <span class="medal-glyph">·</span>
+            <span class="medal-text">
+              <span class="medal-title">9/18 Membean Quiz</span>
+              <span class="medal-course">Honors English 9</span>
+            </span>
+            <span class="medal-score d">32/50<span class="medal-letter">D</span></span>
+          </a>
+          <a class="medal-card none" href="https://councilrock.instructure.com/courses/21741/assignments/1778886"
+             title="EX1_Name — Acl Comp Sci 1 # - Lynch - 26/27">
+            <span class="medal-glyph">·</span>
+            <span class="medal-text">
+              <span class="medal-title">EX1_Name</span>
+              <span class="medal-course">Acl Comp Sci 1 #</span>
+            </span>
+            <span class="medal-score f">0/5<span class="medal-letter">F</span></span>
+          </a>
+            </div>
+            <div class="medal-head due-head">Due today <span class="medal-hint">not turned in</span></div>
+            <div class="medal-row">
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/22709/assignments/1885776"
+             title="9/17 Reading &quot;Marionettes, Inc&quot; on Actively Learn — Honors English 9 - Simon">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">9/17 Reading &quot;Marionettes, Inc&quot; on Actively Learn</span>
+              <span class="medal-course">Honors English 9</span>
+            </span>
+            <span class="due-pts">14 pts</span><span class="due-when">6:30am</span>
+          </a>
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/22823/assignments/1885889"
+             title="Comic Strip Assignment (Paper) — Hon Am Civ 9 - Rapp">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Comic Strip Assignment (Paper)</span>
+              <span class="medal-course">Hon Am Civ 9</span>
+            </span>
+            <span class="due-pts">12 pts</span><span class="due-when">7:30am</span>
+          </a>
+            </div>
+            <div class="medal-head">Turned in <span class="medal-hint">awaiting grade</span></div>
+            <div class="medal-row">
+          <a class="medal-card submit-card" href="https://councilrock.instructure.com/courses/21624/assignments/1884449"
+             title="Homework 1.2.3 📌 — Hon Algebra 2 2026-27 - Cislak">
+            <span class="medal-glyph submit-check">&check;</span>
+            <span class="medal-text">
+              <span class="medal-title">Homework 1.2.3 📌</span>
+              <span class="medal-course">Hon Algebra 2 2026-27</span>
+            </span>
+            <span class="submit-time">3:29pm</span>
+          </a>
+            </div>
           </div>
         </section>
-        <script>
-        (function(){
-          var ctx = document.getElementById('chart_E').getContext('2d');
-          var isMobile = window.matchMedia('(max-width: 600px)').matches;
-          new Chart(ctx, {
-            type: 'line',
-            data: { labels: ["2026-09-04", "2026-09-05", "2026-09-07", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18"], datasets: [{"label": "Latin 1 - Philbin", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#6EE7B7", "backgroundColor": "#6EE7B722", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors English 9 - Simon", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 95.5], "borderColor": "#60A5FA", "backgroundColor": "#60A5FA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Honors Biology - Vierick", "data": [100.0, 100.0, 100.0, 95.0, 95.71, 95.71, 95.71, 95.71, 71.93, 71.45, 71.45, 71.45, 71.68], "borderColor": "#F472B6", "backgroundColor": "#F472B622", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Am Civ 9 - Rapp", "data": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "borderColor": "#FBBF24", "backgroundColor": "#FBBF2422", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Hon Algebra 2 2026-27 - Cislak", "data": [null, null, null, 83.33, 62.33, 61.14, 61.14, 61.14, 61.14, 63.0, 63.0, 63.09, 63.17], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA22", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}, {"label": "Acl Comp Sci 1 # - Lynch - 26/27", "data": [null, null, null, null, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 90.0, 60.0], "borderColor": "#34D399", "backgroundColor": "#34D39922", "tension": 0.3, "fill": false, "pointRadius": 5, "pointHoverRadius": 9, "pointHitRadius": 14, "borderWidth": 2, "spanGaps": true}] },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              interaction: { mode: 'nearest', intersect: false, axis: 'xy' },
-              plugins: {
-                legend: {
-                  position: isMobile ? 'bottom' : 'top',
-                  labels: {
-                    color: '#e2e8f0',
-                    font: { family: 'DM Sans', size: isMobile ? 10 : 12 },
-                    boxWidth: isMobile ? 10 : 14,
-                    padding: isMobile ? 6 : 10
-                  }
-                },
-                tooltip: {
-                  backgroundColor: 'rgba(15,23,42,0.95)',
-                  borderColor: '#334155',
-                  borderWidth: 1,
-                  titleColor: '#e2e8f0',
-                  bodyColor: '#e2e8f0',
-                  padding: 10,
-                  displayColors: true,
-                  callbacks: {
-                    title: function(items) {
-                      if (!items || !items.length) return '';
-                      return items[0].label;
-                    },
-                    label: function(c) {
-                      var v = (c.parsed.y !== null && c.parsed.y !== undefined) ? c.parsed.y.toFixed(1) + '%' : 'N/A';
-                      return c.dataset.label + ' — ' + v;
-                    }
-                  }
-                }
-              },
-              scales: {
-                x: {
-                  ticks: { color: '#94a3b8', maxRotation: 0, autoSkip: true, maxTicksLimit: isMobile ? 4 : 8, font: { size: isMobile ? 10 : 12 } },
-                  grid: { color: '#1e293b' }
-                },
-                y: {
-                  min: 50, max: 100,
-                  ticks: { color: '#94a3b8', font: { size: isMobile ? 10 : 12 }, callback: function(v){ return v+'%'; } },
-                  grid: { color: '#1e293b' }
-                }
-              }
-            }
-          });
-        })();
-        </script>
         
 <footer>Generated by canvas_grades.py · Data stored in grades_data.json</footer>
 </body>
