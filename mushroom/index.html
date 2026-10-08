@@ -17,10 +17,10 @@
     --grid:    #1a2436;
     --text:    #e2e8f0;
     --muted:   #7c8ba1;
-    --accent:  #f2b13f;
+    --accent:  #5fd38d;
     --rain:    #5b9cf0;
     --temp:    #8b9bb4;
-    --soil:    #4fc3a1;
+    --soil:    #c9a27a;
     --warn:    #fbbf24;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -84,7 +84,7 @@
     outline: 2px solid transparent; outline-offset: 1px; transition: outline-color 0.1s ease;
   }
   .cell:hover { outline-color: var(--muted); }
-  .cell.sel { outline-color: var(--accent); }
+  .cell.sel { outline-color: var(--text); }
   .legend { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.75rem; font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; flex-wrap: wrap; }
   .legend .key { display: inline-flex; align-items: center; gap: 0.35rem; }
   .legend .sw { width: 14px; height: 10px; border-radius: 3px; }
@@ -177,7 +177,7 @@
 <div id="tip"></div>
 
 <script>
-const RAMP = [[0, '#172030'], [20, '#3a301b'], [40, '#7a5a1f'], [60, '#c48a2a'], [80, '#f2b13f'], [100, '#ffd27a']];
+const RAMP = [[0, '#172030'], [20, '#1b3a2d'], [40, '#21633f'], [60, '#2e9456'], [80, '#4cc47b'], [100, '#93f0b4']];
 const BANDS = [[0, 'Poor'], [20, 'Fair'], [40, 'Good'], [60, 'Great']];
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -194,7 +194,7 @@ function rampColor(s) {
   }
   return RAMP[RAMP.length - 1][1];
 }
-const inkFor = s => s >= 55 ? '#1a1205' : '#e2e8f0';
+const inkFor = s => s >= 55 ? '#06150c' : '#e2e8f0';
 const band = s => BANDS.filter(([t]) => s >= t).pop()[1];
 const parseDay = iso => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
 const dayShort = iso => { const d = parseDay(iso); return `${DOW[d.getDay()]} ${d.getDate()}`; };

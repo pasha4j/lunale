@@ -46,7 +46,7 @@ LOCATIONS = [
                     "bolete": 0.7, "suillus": 0.5, "chicken": 0.8, "hen": 0.6, "puffball": 0.9},
     },
     {
-        "id": "pinelands", "name": "NJ Pinelands", "sub": "Atsion → Carranza Memorial",
+        "id": "pinelands", "name": "NJ Pinelands", "sub": "NJ State Forest",
         "lat": 39.76, "lng": -74.68,
         "habitat_note": "Pitch pine & oak on sandy, acidic soil that drains fast",
         "soil": (0.05, 0.15),
