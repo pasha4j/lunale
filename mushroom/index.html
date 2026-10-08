@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mushroom Forecast</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #0a0f1a;
+    --surface: #111827;
+    --sunken:  #0d1320;
+    --border:  #1e293b;
+    --grid:    #1a2436;
+    --text:    #e2e8f0;
+    --muted:   #7c8ba1;
+    --accent:  #f2b13f;
+    --rain:    #5b9cf0;
+    --temp:    #8b9bb4;
+    --soil:    #4fc3a1;
+    --warn:    #fbbf24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 2rem; line-height: 1.4; }
+  .mono { font-family: 'DM Mono', monospace; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+
+  header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+  header h1 span { color: var(--accent); }
+  .subtitle { color: var(--muted); margin-top: 0.3rem; font-size: 0.9rem; font-family: 'DM Mono', monospace; }
+  .stale {
+    margin-top: 1rem; padding: 0.6rem 0.9rem; border-radius: 10px;
+    border: 1px solid #fbbf2466; background: #fbbf2410; color: var(--warn); font-size: 0.85rem;
+  }
+
+  .section-head {
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.6rem;
+  }
+  .section-head .hint { text-transform: none; letter-spacing: 0; opacity: 0.75; font-weight: 400; }
+
+  /* ── Best bets ─────────────────────────────────────────────── */
+  .bets { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 2.5rem; }
+  .bet {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 0.85rem 0.95rem; display: flex; gap: 0.85rem; align-items: center;
+    cursor: pointer; color: inherit; text-align: left; font: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .bet:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .bet-score {
+    flex: none; width: 3.1rem; height: 3.1rem; border-radius: 10px;
+    display: grid; place-items: center; font-weight: 800; font-size: 1.25rem;
+  }
+  .bet-text { min-width: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+  .bet-name { font-weight: 600; font-size: 0.95rem; }
+  .bet-meta { font-size: 0.75rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  /* ── Location card ─────────────────────────────────────────── */
+  .loc { margin-bottom: 3rem; }
+  .loc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .loc-name { font-size: 1.4rem; font-weight: 700; padding-left: 1rem; border-left: 3px solid var(--accent); }
+  .loc-name small { font-weight: 400; color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+  .loc-note { color: var(--muted); font-size: 0.8rem; }
+  .loc-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1rem; }
+  @media (max-width: 860px) { .loc-grid { grid-template-columns: minmax(0, 1fr); } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; min-width: 0; }
+
+  /* heatmap */
+  .heat-scroll { overflow-x: auto; }
+  table.heat { border-collapse: separate; border-spacing: 2px; width: 100%; min-width: 400px; }
+  .heat th { font-weight: 500; font-size: 0.72rem; color: var(--muted); font-family: 'DM Mono', monospace; padding: 0 0 0.35rem; text-align: center; }
+  .heat th.today { color: var(--accent); }
+  .heat th.sp { text-align: left; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); font-weight: 500; padding: 0 0.6rem 0 0; white-space: nowrap; }
+  .heat th.sp i { display: block; font-size: 0.68rem; color: var(--muted); font-weight: 400; }
+  .heat td { padding: 0; }
+  .cell {
+    display: block; width: 100%; min-width: 38px; height: 34px; border: 0; border-radius: 6px;
+    font: 500 0.78rem 'DM Mono', monospace; cursor: pointer;
+    outline: 2px solid transparent; outline-offset: 1px; transition: outline-color 0.1s ease;
+  }
+  .cell:hover { outline-color: var(--muted); }
+  .cell.sel { outline-color: var(--accent); }
+  .legend { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.75rem; font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; flex-wrap: wrap; }
+  .legend .key { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .legend .sw { width: 14px; height: 10px; border-radius: 3px; }
+
+  /* detail */
+  .detail-top { display: flex; gap: 0.9rem; align-items: center; margin-bottom: 0.9rem; }
+  .detail-score { flex: none; width: 3.6rem; height: 3.6rem; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 1.5rem; }
+  .detail-title { font-weight: 700; font-size: 1.05rem; }
+  .detail-sub { color: var(--muted); font-size: 0.78rem; font-family: 'DM Mono', monospace; }
+  .factors { display: grid; grid-template-columns: auto 1fr; gap: 0.45rem 0.75rem; align-items: center; }
+  .f-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+  .f-bar { position: relative; height: 8px; background: var(--sunken); border-radius: 4px; overflow: hidden; }
+  .f-bar b { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 4px; }
+  .f-note { grid-column: 2; font-size: 0.72rem; color: var(--muted); margin-top: -0.3rem; font-family: 'DM Mono', monospace; }
+  .f-mult { font-family: 'DM Mono', monospace; font-size: 0.78rem; }
+  .season { margin-top: 1rem; }
+  .season svg { display: block; width: 100%; height: 54px; }
+  .formula { margin-top: 0.8rem; font-size: 0.68rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  /* weather */
+  .wx { margin-top: 1rem; }
+  .wx svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .wx text { font-family: 'DM Mono', monospace; font-size: 10px; fill: var(--muted); }
+  .wx-key { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
+  .wx-key i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 0.35rem; vertical-align: -1px; }
+
+  /* sightings */
+  .sightings { margin-top: 1rem; }
+  .strip { display: flex; gap: 0.6rem; overflow-x: auto; padding-bottom: 0.4rem; }
+  .sight {
+    flex: none; width: 128px; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+  .sight:hover { border-color: var(--accent); }
+  .sight img { display: block; width: 100%; height: 96px; object-fit: cover; background: var(--sunken); }
+  .sight div { padding: 0.4rem 0.5rem; }
+  .sight b { display: block; font-size: 0.75rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sight span { display: block; font-size: 0.66rem; color: var(--muted); font-family: 'DM Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .none { color: var(--muted); font-size: 0.8rem; }
+
+  #tip {
+    position: fixed; pointer-events: none; z-index: 10; display: none;
+    background: #0b1220f2; border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.45rem 0.6rem; font-size: 0.75rem; line-height: 1.45; max-width: 240px;
+    box-shadow: 0 6px 20px #0008;
+  }
+  #tip .t-head { font-weight: 600; margin-bottom: 0.15rem; }
+  #tip .mono { color: var(--muted); }
+
+  footer { border-top: 1px solid var(--border); padding-top: 1.25rem; color: var(--muted); font-size: 0.78rem; line-height: 1.6; }
+  footer a { color: var(--muted); }
+  footer p + p { margin-top: 0.5rem; }
+
+  @media (max-width: 560px) {
+    body { padding: 1rem; }
+    header h1 { font-size: 1.6rem; }
+    .panel { padding: 0.75rem; }
+    table.heat { min-width: 0; }
+    .heat th.sp { white-space: normal; font-size: 0.74rem; line-height: 1.15; max-width: 92px; padding-right: 0.3rem; }
+    .heat th.sp i { display: none; }
+    .heat th { font-size: 0.62rem; }
+    .cell { min-width: 0; height: 30px; font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Mushroom <span>Forecast</span></h1>
+    <div class="subtitle" id="subtitle">Loading…</div>
+    <div class="stale" id="stale" hidden></div>
+  </header>
+
+  <div class="section-head">Best bets this week <span class="hint">· peak day per species &amp; place</span></div>
+  <div class="bets" id="bets"></div>
+
+  <div id="locations"></div>
+
+  <footer>
+    <p><b>How the score works.</b> Each cell is a 0–100 fruiting index, not a true probability:
+      regional season (iNaturalist sightings by week) × how well the place suits the species ×
+      weather (rain in the species' lag window, soil moisture, temperature, cool nights, frost) ×
+      a small nudge for what people are finding nearby right now. Tune it against your own finds.</p>
+    <p>Weather: <a href="https://open-meteo.com/">Open-Meteo</a>. Sightings &amp; photos:
+      <a href="https://www.inaturalist.org/">iNaturalist</a> observers, used under their licences.
+      This page says when to look, not what you found — never eat a wild mushroom without an expert ID.</p>
+  </footer>
+</div>
+<div id="tip"></div>
+
+<script>
+const RAMP = [[0, '#172030'], [20, '#3a301b'], [40, '#7a5a1f'], [60, '#c48a2a'], [80, '#f2b13f'], [100, '#ffd27a']];
+const BANDS = [[0, 'Poor'], [20, 'Fair'], [40, 'Good'], [60, 'Great']];
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function rampColor(s) {
+  for (let i = 1; i < RAMP.length; i++) {
+    const [s1, c1] = RAMP[i];
+    if (s <= s1) {
+      const [s0, c0] = RAMP[i - 1], t = (s - s0) / (s1 - s0);
+      const a = hex(c0), b = hex(c1);
+      return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * t)).join(',')})`;
+    }
+  }
+  return RAMP[RAMP.length - 1][1];
+}
+const inkFor = s => s >= 55 ? '#1a1205' : '#e2e8f0';
+const band = s => BANDS.filter(([t]) => s >= t).pop()[1];
+const parseDay = iso => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+const dayShort = iso => { const d = parseDay(iso); return `${DOW[d.getDay()]} ${d.getDate()}`; };
+const dayLong = iso => { const d = parseDay(iso); return `${DOW[d.getDay()]} ${MON[d.getMonth()]} ${d.getDate()}`; };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const el = (tag, attrs = {}, html = '') => { const e = document.createElement(tag); Object.assign(e, attrs); if (html) e.innerHTML = html; return e; };
+
+/* ── tooltip ─────────────────────────────────────────────────────── */
+const tip = document.getElementById('tip');
+function showTip(html, ev) {
+  tip.innerHTML = html; tip.style.display = 'block';
+  const r = tip.getBoundingClientRect();
+  let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - 14;
+  if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - 14;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+const hideTip = () => { tip.style.display = 'none'; };
+
+/* ── render ──────────────────────────────────────────────────────── */
+let DATA, SPECIES;
+const selectors = {};   // loc.id -> select(spId, dayIdx)
+
+fetch('data.json', { cache: 'no-cache' })
+  .then(r => r.json())
+  .then(d => { DATA = d; SPECIES = Object.fromEntries(d.species.map(s => [s.id, s])); render(); })
+  .catch(err => { document.getElementById('subtitle').textContent = 'Could not load data.json — ' + err; });
+
+function render() {
+  const gen = new Date(DATA.generated);
+  document.getElementById('subtitle').textContent =
+    `Next 7 days · ${DATA.locations.length} places · updated ${dayLong(DATA.generated.slice(0, 10))} ${gen.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+  const ageH = (Date.now() - gen) / 36e5;
+  if (ageH > 36) {
+    const stale = document.getElementById('stale');
+    stale.hidden = false;
+    stale.textContent = `⚠ This forecast is ${Math.round(ageH / 24)} days old — the daily update may have failed.`;
+  }
+  renderBets();
+  const host = document.getElementById('locations');
+  DATA.locations.forEach(loc => host.appendChild(renderLocation(loc)));
+}
+
+function renderBets() {
+  const all = [];
+  DATA.locations.forEach(loc => Object.entries(loc.scores).forEach(([sid, cells]) => {
+    let bi = 0; cells.forEach((c, i) => { if (c.s > cells[bi].s) bi = i; });
+    all.push({ loc, sid, day: bi, s: cells[bi].s });
+  }));
+  all.sort((a, b) => b.s - a.s);
+  const host = document.getElementById('bets');
+  all.slice(0, 4).forEach(b => {
+    const btn = el('button', { className: 'bet' },
+      `<div class="bet-score" style="background:${rampColor(b.s)};color:${inkFor(b.s)}">${b.s}</div>
+       <div class="bet-text"><span class="bet-name">${esc(SPECIES[b.sid].name)}</span>
+       <span class="bet-meta">${esc(b.loc.name)} · ${dayShort(DATA.days[b.day])} · ${band(b.s)}</span></div>`);
+    btn.onclick = () => {
+      selectors[b.loc.id](b.sid, b.day);
+      document.getElementById('loc-' + b.loc.id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    host.appendChild(btn);
+  });
+}
+
+function renderLocation(loc) {
+  const sec = el('section', { className: 'loc', id: 'loc-' + loc.id });
+  sec.appendChild(el('div', { className: 'loc-head' },
+    `<div class="loc-name">${esc(loc.name)}<small>${esc(loc.sub)}</small></div>
+     <div class="loc-note">${esc(loc.habitat_note)}</div>`));
+
+  const grid = el('div', { className: 'loc-grid' });
+  const left = el('div', { className: 'panel' });
+  const right = el('div', { className: 'panel' });
+  grid.append(left, right);
+  sec.appendChild(grid);
+
+  // Heatmap: species rows (best this week first) x 7 days.
+  const order = DATA.species.map(s => s.id)
+    .sort((a, b) => Math.max(...loc.scores[b].map(c => c.s)) - Math.max(...loc.scores[a].map(c => c.s)));
+  const table = el('table', { className: 'heat' });
+  table.innerHTML = `<thead><tr><th></th>${DATA.days.map((d, i) =>
+    `<th class="${i === 0 ? 'today' : ''}">${i === 0 ? 'Today' : dayShort(d)}</th>`).join('')}</tr></thead>`;
+  const tbody = el('tbody');
+  const cells = {};
+  order.forEach(sid => {
+    const sp = SPECIES[sid];
+    const tr = el('tr', {}, `<th class="sp" scope="row">${esc(sp.name)}<i>${esc(sp.latin)}</i></th>`);
+    loc.scores[sid].forEach((c, i) => {
+      const td = el('td');
+      const b = el('button', { className: 'cell', textContent: c.s >= 20 ? c.s : '' });
+      b.style.background = rampColor(c.s); b.style.color = inkFor(c.s);
+      b.setAttribute('aria-label', `${sp.name}, ${dayLong(DATA.days[i])}: ${c.s}, ${band(c.s)}`);
+      b.onmousemove = ev => showTip(`<div class="t-head">${esc(sp.name)}</div>
+        <div class="mono">${dayLong(DATA.days[i])}</div><div>${c.s} · ${band(c.s)}</div>`, ev);
+      b.onmouseleave = hideTip;
+      b.onclick = () => select(sid, i);
+      cells[sid + ':' + i] = b;
+      td.appendChild(b); tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  const scroll = el('div', { className: 'heat-scroll' }); scroll.appendChild(table);
+  left.appendChild(el('div', { className: 'section-head' }, 'Fruiting index <span class="hint">· click a cell for why</span>'));
+  left.appendChild(scroll);
+  left.appendChild(legend());
+  left.appendChild(weatherChart(loc));
+
+  const detail = el('div');
+  right.appendChild(detail);
+  right.appendChild(sightingsStrip(loc));
+
+  let selKey = null;
+  function select(sid, i) {
+    if (selKey) cells[selKey].classList.remove('sel');
+    selKey = sid + ':' + i; cells[selKey].classList.add('sel');
+    detail.innerHTML = ''; detail.appendChild(renderDetail(loc, sid, i));
+  }
+  selectors[loc.id] = select;
+  const best = order[0]; let bi = 0;
+  loc.scores[best].forEach((c, i) => { if (c.s > loc.scores[best][bi].s) bi = i; });
+  select(best, bi);
+  return sec;
+}
+
+function legend() {
+  return el('div', { className: 'legend' }, BANDS.map(([t, name], k) =>
+    `<span class="key"><i class="sw" style="background:${rampColor(t + 10)}"></i>${name} ${t}${k < BANDS.length - 1 ? '–' + (BANDS[k + 1][0] - 1) : '+'}</span>`).join(''));
+}
+
+function renderDetail(loc, sid, i) {
+  const sp = SPECIES[sid], c = loc.scores[sid][i], f = c.f, x = c.x;
+  const [basis, lo, hi] = sp.temp;
+  const pct = v => Math.round(v * 100) + '%';
+  const rows = [
+    ['Season', f.season, `${pct(f.season)} of peak · week ${x.week} · ${sp.seasonTotal.toLocaleString()} regional records`],
+    ['Habitat', f.habitat, `your setting for ${loc.name}`],
+    ['Rain trigger', f.rain, `${x.rainWin.toFixed(2)}″ fell ${sp.lag[0]}–${sp.lag[1]} days before · full at ${sp.rain_in}″`],
+    ['Soil moisture', f.moisture, `${x.sm ?? '—'} m³/m³ · dry ${loc.soil[0]}, wet ${loc.soil[1]}`],
+    ['Temperature', f.temp, `${basis === 'soil' ? 'soil' : 'avg high'} ${x.tAvg ?? '—'}°F · ideal ${lo}–${hi}°F`],
+  ];
+  if (sp.cold) rows.push(['Cool nights', f.cold, `coldest night in 10 days ${x.minLow}°F · ${sp.cold === 'required' ? 'needs' : 'helped by'} ≤55°F`]);
+  if (f.frost < 1) rows.push(['Frost', f.frost, 'recent frost slows fruiting']);
+
+  const box = el('div');
+  box.innerHTML = `
+    <div class="detail-top">
+      <div class="detail-score" style="background:${rampColor(c.s)};color:${inkFor(c.s)}">${c.s}</div>
+      <div><div class="detail-title">${esc(sp.name)} · ${band(c.s)}</div>
+      <div class="detail-sub">${esc(loc.name)} · ${dayLong(DATA.days[i])} · <i>${esc(sp.latin)}</i></div></div>
+    </div>
+    <div class="factors">
+      ${rows.map(([n, v, note]) => `<div class="f-name">${n}</div><div class="f-bar"><b style="width:${pct(v)}"></b></div>
+        <div class="f-note">${esc(note)}</div>`).join('')}
+      <div class="f-name">Sightings</div><div class="f-mult">×${f.sightings.toFixed(2)}</div>
+      <div class="f-note">${loc.recent[sid]} finds within ${DATA.recentRadiusKm} km in ${DATA.recentDays} days</div>
+    </div>`;
+  box.appendChild(seasonChart(sp, x.week));
+  box.appendChild(el('div', { className: 'formula' },
+    'score = season<sup>0.6</sup> × habitat × (0.6·rain + 0.4·moisture) × temp × cool × frost × sightings'));
+  return box;
+}
+
+function seasonChart(sp, week) {
+  const W = 530, H = 54, base = 40, n = 53, gap = 2, bw = W / n - gap;
+  const bars = sp.season.map((v, k) => {
+    const h = Math.max(1, v * (base - 4)), on = k + 1 === week;
+    return `<rect x="${k * (bw + gap)}" y="${base - h}" width="${bw}" height="${h}" rx="1.5"
+      fill="${on ? 'var(--accent)' : '#334155'}"><title>Week ${k + 1}: ${Math.round(v * 100)}% of peak</title></rect>`;
+  }).join('');
+  const months = MON.map((m, k) => `<text x="${(k * 4.35 + 0.5) * (bw + gap)}" y="${H - 2}">${m[0]}</text>`).join('');
+  const wrap = el('div', { className: 'season' });
+  wrap.innerHTML = `<div class="section-head">Regional season <span class="hint">· this week highlighted</span></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(sp.name)} sightings by week of year">
+      ${bars}<g style="font:9px 'DM Mono',monospace;fill:var(--muted)">${months}</g></svg>`;
+  return wrap;
+}
+
+function weatherChart(loc) {
+  const w = loc.weather, t0 = w.today, from = t0 - 14, to = t0 + 6, n = to - from + 1;
+  const idx = Array.from({ length: n }, (_, k) => from + k);
+  const W = 560, L = 34, R = 6, colW = (W - L - R) / n;
+  const rows = { rain: [6, 62], temp: [84, 150], soil: [172, 214] };
+  const H = 236;
+  const cx = k => L + k * colW + colW / 2;
+
+  const maxRain = Math.max(1, ...idx.map(i => w.rain[i]));
+  const tLo = Math.floor(Math.min(...idx.map(i => w.tmin[i])) / 10) * 10;
+  const tHi = Math.ceil(Math.max(...idx.map(i => w.tmax[i])) / 10) * 10;
+  const [dry, wet] = loc.soil;
+  const yRain = v => rows.rain[1] - (v / maxRain) * (rows.rain[1] - rows.rain[0]);
+  const yTemp = v => rows.temp[1] - ((v - tLo) / (tHi - tLo)) * (rows.temp[1] - rows.temp[0]);
+  const wetness = v => Math.max(0, Math.min(1.15, (v - dry) / (wet - dry)));
+  const ySoil = v => rows.soil[1] - Math.min(1.15, wetness(v)) / 1.15 * (rows.soil[1] - rows.soil[0]);
+
+  let s = '';
+  // forecast shading + today marker
+  const fx = L + 14 * colW;
+  s += `<rect x="${fx}" y="0" width="${W - R - fx}" height="${rows.soil[1]}" fill="#ffffff06"/>`;
+  s += `<line x1="${fx}" x2="${fx}" y1="0" y2="${rows.soil[1]}" stroke="var(--accent)" stroke-dasharray="3 3" opacity="0.6"/>`;
+  s += `<text x="${fx + 4}" y="${rows.rain[0] + 6}" style="fill:var(--accent)">forecast</text>`;
+  // row baselines & labels
+  for (const [k, [y0, y1]] of Object.entries(rows)) s += `<line x1="${L}" x2="${W - R}" y1="${y1}" y2="${y1}" stroke="var(--grid)"/>`;
+  s += `<text x="0" y="${rows.rain[0] + 6}">${maxRain.toFixed(1)}″</text><text x="0" y="${rows.rain[1]}">rain</text>`;
+  s += `<text x="0" y="${rows.temp[0] + 6}">${tHi}°</text><text x="0" y="${rows.temp[1]}">${tLo}°</text>`;
+  s += `<text x="0" y="${rows.soil[0] + 6}">wet</text><text x="0" y="${rows.soil[1]}">soil</text>`;
+  // wet threshold for soil row
+  s += `<line x1="${L}" x2="${W - R}" y1="${ySoil(wet)}" y2="${ySoil(wet)}" stroke="var(--grid)" stroke-dasharray="2 3"/>`;
+
+  const bw = Math.max(2, colW - 2);
+  idx.forEach((i, k) => {
+    const x = L + k * colW + 1, op = i < t0 ? 1 : 0.6;
+    const r = w.rain[i];
+    if (r > 0.005) {
+      const y = yRain(r), h = rows.rain[1] - y;
+      s += `<path d="${topRounded(x, y, bw, h, 3)}" fill="var(--rain)" opacity="${op}"/>`;
+    }
+    const yh = yTemp(w.tmax[i]), yl = yTemp(w.tmin[i]);
+    s += `<rect x="${x + bw * 0.2}" y="${yh}" width="${bw * 0.6}" height="${Math.max(2, yl - yh)}" rx="2" fill="var(--temp)" opacity="${op}"/>`;
+  });
+  const pts = idx.map((i, k) => w.sm[i] == null ? null : `${cx(k)},${ySoil(w.sm[i])}`).filter(Boolean);
+  s += `<polyline points="${pts.join(' ')}" fill="none" stroke="var(--soil)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  // date ticks: every 7th column from today
+  idx.forEach((i, k) => {
+    if ((k - 14) % 7 === 0) s += `<text x="${cx(k)}" y="${H - 6}" text-anchor="middle">${k === 14 ? 'today' : dayShort(w.dates[i])}</text>`;
+  });
+  // hover columns
+  idx.forEach((i, k) => {
+    s += `<rect class="hit" data-i="${i}" x="${L + k * colW}" y="0" width="${colW}" height="${rows.soil[1]}" fill="transparent"/>`;
+  });
+
+  const wrap = el('div', { className: 'wx' });
+  wrap.innerHTML = `<div class="section-head">Weather <span class="hint">· last 14 days + forecast</span></div>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Rain, temperature and soil moisture for ${esc(loc.name)}">${s}
+      <line class="cross" x1="0" x2="0" y1="0" y2="${rows.soil[1]}" stroke="var(--muted)" opacity="0" /></svg>
+    <div class="wx-key"><span><i style="background:var(--rain)"></i>Rain (in)</span>
+      <span><i style="background:var(--temp)"></i>Low–high °F</span>
+      <span><i style="background:var(--soil)"></i>Soil moisture</span></div>`;
+  const svg = wrap.querySelector('svg'), cross = wrap.querySelector('.cross');
+  svg.querySelectorAll('.hit').forEach(r => {
+    const i = +r.dataset.i, k = i - from;
+    r.addEventListener('mousemove', ev => {
+      cross.setAttribute('x1', cx(k)); cross.setAttribute('x2', cx(k)); cross.setAttribute('opacity', 0.5);
+      showTip(`<div class="t-head">${dayLong(w.dates[i])}${i >= t0 ? ' · forecast' : ''}</div>
+        <div>Rain ${w.rain[i].toFixed(2)}″</div>
+        <div>${Math.round(w.tmin[i])}–${Math.round(w.tmax[i])}°F</div>
+        <div>Soil ${w.sm[i] ?? '—'} m³/m³ (${Math.round(wetness(w.sm[i]) * 100)}% wet)</div>`, ev);
+    });
+    r.addEventListener('mouseleave', () => { cross.setAttribute('opacity', 0); hideTip(); });
+  });
+  return wrap;
+}
+
+function topRounded(x, y, w, h, r) {
+  r = Math.min(r, w / 2, h);
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+}
+
+function sightingsStrip(loc) {
+  const wrap = el('div', { className: 'sightings' });
+  wrap.appendChild(el('div', { className: 'section-head' },
+    `Recent finds nearby <span class="hint">· ${DATA.recentRadiusKm} km, last ${DATA.recentDays} days</span>`));
+  if (!loc.sightings.length) { wrap.appendChild(el('div', { className: 'none' }, 'No tracked species reported.')); return wrap; }
+  const strip = el('div', { className: 'strip' });
+  loc.sightings.slice(0, 12).forEach(o => {
+    const a = el('a', { className: 'sight', href: o.url, target: '_blank', rel: 'noopener' });
+    a.innerHTML = `<img loading="lazy" src="${esc(o.photo)}" alt="${esc(o.name)}">
+      <div><b>${esc(o.name)}</b><span>${dayShort(o.date)} · ${o.km ?? '?'} km</span><span>© ${esc(o.by)}</span></div>`;
+    strip.appendChild(a);
+  });
+  wrap.appendChild(strip);
+  return wrap;
+}
+</script>
+</body>
+</html>
