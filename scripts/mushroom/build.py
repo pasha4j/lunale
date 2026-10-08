@@ -43,7 +43,8 @@ LOCATIONS = [
         "habitat_note": "Mixed hardwood parks, planted pines, open lawns",
         "soil": (0.12, 0.32),
         "habitat": {"morel": 0.6, "chanterelle": 0.5, "king": 0.4, "leccinum": 0.4,
-                    "bolete": 0.7, "suillus": 0.5, "chicken": 0.8, "hen": 0.6, "puffball": 0.9},
+                    "bolete": 0.7, "suillus": 0.5, "chicken": 0.8, "hen": 0.6, "puffball": 0.9,
+                    "honey": 0.8, "ringless": 0.8},
     },
     {
         "id": "pinelands", "name": "NJ Pinelands", "sub": "NJ State Forest",
@@ -51,7 +52,8 @@ LOCATIONS = [
         "habitat_note": "Pitch pine & oak on sandy, acidic soil that drains fast",
         "soil": (0.05, 0.15),
         "habitat": {"morel": 0.05, "chanterelle": 0.8, "king": 0.5, "leccinum": 0.9,
-                    "bolete": 0.8, "suillus": 0.9, "chicken": 0.3, "hen": 0.2, "puffball": 0.5},
+                    "bolete": 0.8, "suillus": 0.9, "chicken": 0.3, "hen": 0.2, "puffball": 0.5,
+                    "honey": 0.6, "ringless": 0.5},
     },
     {
         "id": "institute", "name": "Institute Woods", "sub": "Princeton, NJ",
@@ -59,7 +61,8 @@ LOCATIONS = [
         "habitat_note": "Mature oak, beech & tulip poplar on the Stony Brook floodplain",
         "soil": (0.12, 0.32),
         "habitat": {"morel": 0.6, "chanterelle": 0.5, "king": 0.5, "leccinum": 0.4,
-                    "bolete": 0.8, "suillus": 0.3, "chicken": 0.8, "hen": 0.9, "puffball": 0.7},
+                    "bolete": 0.8, "suillus": 0.3, "chicken": 0.8, "hen": 0.9, "puffball": 0.7,
+                    "honey": 0.9, "ringless": 0.9},
     },
 ]
 
@@ -68,6 +71,11 @@ LOCATIONS = [
 # lag:     (min, max) days between rain and fruiting
 # temp:    (basis, lo, hi) — ideal band for 4-day mean of daily highs, or soil temp at 6 cm
 # cold:    None | "boost" (helped by nights ≤55°F) | "required"
+# caution: optional safety note shown in the page's detail panel
+HONEY_CAUTION = ("Deadly galerina grows on the same wood, sometimes in the same cluster — "
+                 "honeys print white, galerina rusty brown. Jack-o'-lanterns also cluster on oak. "
+                 "Cook thoroughly; some people react even then.")
+
 SPECIES = [
     {"id": "morel", "name": "Morels", "latin": "Morchella", "taxa": [56830],
      "rain_in": 0.5, "lag": (5, 14), "temp": ("soil", 50, 62), "cold": None},
@@ -88,6 +96,12 @@ SPECIES = [
      "rain_in": 0.75, "lag": (5, 14), "temp": ("high", 55, 75), "cold": "required"},
     {"id": "puffball", "name": "Puffballs", "latin": "Lycoperdaceae", "taxa": [48445],
      "rain_in": 0.75, "lag": (2, 7), "temp": ("high", 62, 85), "cold": None},
+    {"id": "honey", "name": "Honey mushrooms", "latin": "Armillaria", "taxa": [55930],
+     "rain_in": 0.75, "lag": (4, 10), "temp": ("high", 50, 70), "cold": "boost",
+     "caution": HONEY_CAUTION},
+    {"id": "ringless", "name": "Ringless honey", "latin": "Desarmillaria caespitosa", "taxa": [1238700],
+     "rain_in": 0.75, "lag": (4, 10), "temp": ("high", 65, 85), "cold": None,
+     "caution": HONEY_CAUTION},
 ]
 
 
@@ -295,6 +309,7 @@ def build():
             "id": sp["id"], "name": sp["name"], "latin": sp["latin"], "taxa": sp["taxa"],
             "rain_in": sp["rain_in"], "lag": list(sp["lag"]),
             "temp": list(sp["temp"]), "cold": sp["cold"],
+            "caution": sp.get("caution"),
             "season": curve, "seasonTotal": total,
         })
 

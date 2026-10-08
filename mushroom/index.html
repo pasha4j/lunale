@@ -102,6 +102,11 @@
   .f-mult { font-family: 'DM Mono', monospace; font-size: 0.78rem; }
   .season { margin-top: 1rem; }
   .season svg { display: block; width: 100%; height: 54px; }
+  .caution {
+    margin-top: 0.9rem; padding: 0.55rem 0.75rem; border-radius: 8px; font-size: 0.75rem; line-height: 1.45;
+    border: 1px solid #fbbf2455; background: #fbbf240d; color: var(--text);
+  }
+  .caution b { color: var(--warn); }
   .formula { margin-top: 0.8rem; font-size: 0.68rem; color: var(--muted); font-family: 'DM Mono', monospace; }
 
   /* weather */
@@ -352,6 +357,7 @@ function renderDetail(loc, sid, i) {
       <div class="f-name">Sightings</div><div class="f-mult">×${f.sightings.toFixed(2)}</div>
       <div class="f-note">${loc.recent[sid]} finds within ${DATA.recentRadiusKm} km in ${DATA.recentDays} days</div>
     </div>`;
+  if (sp.caution) box.appendChild(el('div', { className: 'caution' }, `<b>⚠ Caution</b> · ${esc(sp.caution)}`));
   box.appendChild(seasonChart(sp, x.week));
   box.appendChild(el('div', { className: 'formula' },
     'score = season<sup>0.6</sup> × habitat × (0.6·rain + 0.4·moisture) × temp × cool × frost × sightings'));
