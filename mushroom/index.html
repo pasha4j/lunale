@@ -43,6 +43,21 @@
   }
   .section-head .hint { text-transform: none; letter-spacing: 0; opacity: 0.75; font-weight: 400; }
 
+  /* ── Location quick links ──────────────────────────────────── */
+  .jump { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .jump a {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+    padding: 0.35rem 0.45rem 0.35rem 0.9rem; color: var(--text); text-decoration: none;
+    font-weight: 600; font-size: 0.88rem; transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .jump a:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .jump a i {
+    font: 500 0.72rem 'DM Mono', monospace; font-style: normal;
+    border-radius: 999px; padding: 0.15rem 0.5rem; min-width: 2rem; text-align: center;
+  }
+  .loc { scroll-margin-top: 1rem; }
+
   /* ── Intro note ────────────────────────────────────────────── */
   .intro {
     background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent);
@@ -192,6 +207,7 @@
   <header>
     <h1>Mushroom <span>Forecast</span></h1>
     <div class="subtitle" id="subtitle">Loading…</div>
+    <nav class="jump" id="jump" aria-label="Locations"></nav>
     <div class="stale" id="stale" hidden></div>
   </header>
 
@@ -286,6 +302,7 @@ function render() {
     stale.textContent = `⚠ This forecast is ${Math.round(ageH / 24)} days old — the daily update may have failed.`;
   }
   renderIntro();
+  renderJump();
   renderBets();
   const host = document.getElementById('locations');
   DATA.locations.forEach(loc => host.appendChild(renderLocation(loc)));
@@ -308,6 +325,16 @@ function renderIntro() {
   intro.hidden = hidden; help.hidden = !hidden;
   document.getElementById('intro-close').onclick = () => show(false);
   help.onclick = () => { show(true); intro.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); };
+}
+
+function renderJump() {
+  const nav = document.getElementById('jump');
+  DATA.locations.forEach(loc => {
+    const best = Math.max(...Object.values(loc.scores).flat().map(c => c.s));
+    const a = el('a', { href: '#loc-' + loc.id, title: `Best this week: ${best} · ${band(best)}` },
+      `${esc(loc.name)}<i style="background:${rampColor(best)};color:${inkFor(best)}">${best}</i>`);
+    nav.appendChild(a);
+  });
 }
 
 function renderBets() {
