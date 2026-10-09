@@ -59,35 +59,7 @@
   .loc { scroll-margin-top: 1rem; }
 
   /* ── Intro note ────────────────────────────────────────────── */
-  .intro {
-    background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent);
-    border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: 2rem; position: relative;
-  }
-  .intro h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
-  .intro p { font-size: 0.88rem; color: var(--text); max-width: 70ch; }
-  .intro p.dim { color: var(--muted); margin-top: 0.6rem; }
-  .intro ul { list-style: none; display: grid; gap: 0.4rem; margin-top: 0.75rem; }
-  .intro li { display: grid; grid-template-columns: 2.6rem 4.2rem 1fr; align-items: center; gap: 0.6rem; font-size: 0.85rem; }
-  .intro li .n {
-    height: 1.7rem; border-radius: 6px; display: grid; place-items: center;
-    font: 500 0.72rem 'DM Mono', monospace;
-  }
-  .intro li b { font-weight: 600; }
-  .intro li span { color: var(--muted); }
-  .intro-close {
-    position: absolute; top: 0.7rem; right: 0.8rem; background: none; border: 1px solid var(--border);
-    border-radius: 8px; color: var(--muted); font: 500 0.75rem 'DM Sans', sans-serif;
-    padding: 0.3rem 0.6rem; cursor: pointer;
-  }
-  .intro-close:hover { color: var(--text); border-color: var(--muted); }
-  .help-link {
-    background: none; border: 0; padding: 0; margin-left: 0.6rem; cursor: pointer;
-    color: var(--accent); font: inherit; text-decoration: underline; text-underline-offset: 2px;
-  }
-  @media (max-width: 560px) {
-    .intro li { grid-template-columns: 2.4rem 1fr; }
-    .intro li span { grid-column: 2; margin-top: -0.3rem; }
-  }
+  .intro { color: var(--muted); font-size: 0.85rem; margin: -1rem 0 1.5rem; }
 
   /* ── Best bets ─────────────────────────────────────────────── */
   .bets { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 2.5rem; }
@@ -211,21 +183,7 @@
     <div class="stale" id="stale" hidden></div>
   </header>
 
-  <section class="intro" id="intro" aria-labelledby="intro-title">
-    <button class="intro-close" id="intro-close" type="button">Got it</button>
-    <h2 id="intro-title">What the numbers mean</h2>
-    <p>Each number from 0 to 100 rates how good conditions are for that mushroom, at that place,
-      on that day. It is <b>not</b> a percent chance of finding one. It combines whether the species
-      is in season, whether the place has the right trees and ground, whether rain fell at the right
-      time before that day, and whether the ground is still wet.</p>
-    <ul>
-      <li><i class="n" data-s="70">60+</i><b>Great</b><span>Everything lines up. Worth a dedicated trip.</span></li>
-      <li><i class="n" data-s="50">40–59</i><b>Good</b><span>Most pieces in place. Worth a look if you're nearby.</span></li>
-      <li><i class="n" data-s="30">20–39</i><b>Fair</b><span>Something's missing, usually recent rain or the season.</span></li>
-      <li><i class="n" data-s="5">0–19</i><b>Poor</b><span>Unlikely. Blank cells on the grid are in this range.</span></li>
-    </ul>
-    <p class="dim">Click any cell to see what's helping or holding that score back. Updated every morning.</p>
-  </section>
+  <p class="intro">Scores 0 to 100 rate daily conditions for that mushroom.</p>
 
   <div class="section-head">Best bets this week <span class="hint">· peak day per species &amp; place</span></div>
   <div class="bets" id="bets"></div>
@@ -301,30 +259,10 @@ function render() {
     stale.hidden = false;
     stale.textContent = `⚠ This forecast is ${Math.round(ageH / 24)} days old — the daily update may have failed.`;
   }
-  renderIntro();
   renderJump();
   renderBets();
   const host = document.getElementById('locations');
   DATA.locations.forEach(loc => host.appendChild(renderLocation(loc)));
-}
-
-function renderIntro() {
-  const intro = document.getElementById('intro');
-  intro.querySelectorAll('.n').forEach(n => {
-    const s = +n.dataset.s; n.style.background = rampColor(s); n.style.color = inkFor(s);
-  });
-  const KEY = 'mushroom-intro-hidden';
-  const help = el('button', { className: 'help-link', type: 'button', textContent: 'What do the numbers mean?' });
-  document.getElementById('subtitle').appendChild(help);
-  const show = on => {
-    intro.hidden = !on; help.hidden = on;
-    try { on ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, '1'); } catch (e) {}
-  };
-  let hidden = false;
-  try { hidden = localStorage.getItem(KEY) === '1'; } catch (e) {}
-  intro.hidden = hidden; help.hidden = !hidden;
-  document.getElementById('intro-close').onclick = () => show(false);
-  help.onclick = () => { show(true); intro.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); };
 }
 
 function renderJump() {
