@@ -309,7 +309,7 @@ function renderLocation(loc) {
   sec.appendChild(grid);
 
   // Heatmap: species rows (best this week first) x 7 days.
-  const order = DATA.species.map(s => s.id)
+  const order = DATA.species.map(s => s.id).filter(id => loc.scores[id])
     .sort((a, b) => Math.max(...loc.scores[b].map(c => c.s)) - Math.max(...loc.scores[a].map(c => c.s)));
   const table = el('table', { className: 'heat' });
   table.innerHTML = `<thead><tr><th></th>${DATA.days.map((d, i) =>
@@ -367,7 +367,7 @@ function renderDetail(loc, sid, i) {
   const [basis, lo, hi] = sp.temp;
   const pct = v => Math.round(v * 100) + '%';
   const rows = [
-    ['Season', f.season, `${pct(f.season)} of peak · week ${x.week} · ${sp.seasonTotal.toLocaleString()} regional records`],
+    ['Season', f.season, `${pct(f.season)} of peak · week ${x.week} · ${sp.seasonTotal.toLocaleString()} ${sp.seasonNote ? esc(sp.seasonNote) : 'regional records'}`],
     ['Habitat', f.habitat, `your setting for ${loc.name}`],
     ['Rain trigger', f.rain, `${x.rainWin.toFixed(2)}″ fell ${sp.lag[0]}–${sp.lag[1]} days before · full at ${sp.rain_in}″`],
     ['Soil moisture', f.moisture, `${x.sm ?? '—'} m³/m³ · dry ${loc.soil[0]}, wet ${loc.soil[1]}`],

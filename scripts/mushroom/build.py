@@ -33,6 +33,7 @@ RECENT_DAYS = 14
 
 # ── Locations ──────────────────────────────────────────────────────────────
 # habitat: 0–1 "are the right trees/ground here", per species id. Hand-tuned.
+#          A species left out (or 0) is not scored or shown at that location.
 # soil:    (dry, wet) soil moisture m³/m³ at 3–9 cm. The model's sandy Pinelands
 #          cells peak near 0.16 even after soaking rain, loam near 0.34.
 # Keep these to public areas — never put a specific tree's coordinates here.
@@ -53,7 +54,7 @@ LOCATIONS = [
         "soil": (0.05, 0.15),
         "habitat": {"morel": 0.05, "chanterelle": 0.8, "king": 0.5, "leccinum": 0.9,
                     "bolete": 0.8, "suillus": 0.9, "chicken": 0.3, "hen": 0.2, "puffball": 0.5,
-                    "honey": 0.6, "ringless": 0.5},
+                    "honey": 0.6, "ringless": 0.5, "matsutake": 0.6},
     },
     {
         "id": "institute", "name": "Institute Woods", "sub": "Princeton, NJ",
@@ -72,6 +73,8 @@ LOCATIONS = [
 # temp:    (basis, lo, hi) — ideal band for 4-day mean of daily highs, or soil temp at 6 cm
 # cold:    None | "boost" (helped by nights ≤55°F) | "required"
 # caution: optional safety note shown in the page's detail panel
+# season_region / season_shift / season_note: for species too rare locally to
+#          have their own curve — borrow a wider region's and shift it (weeks)
 HONEY_CAUTION = ("Deadly galerina grows on the same wood, sometimes in the same cluster — "
                  "honeys print white, galerina rusty brown. Jack-o'-lanterns also cluster on oak. "
                  "Cook thoroughly; some people react even then.")
@@ -102,6 +105,14 @@ SPECIES = [
     {"id": "ringless", "name": "Ringless honey", "latin": "Desarmillaria caespitosa", "taxa": [1238700],
      "rain_in": 0.75, "lag": (4, 10), "temp": ("high", 65, 85), "cold": None,
      "caution": HONEY_CAUTION},
+    {"id": "matsutake", "name": "Matsutake", "latin": "Tricholoma magnivelare", "taxa": [62483],
+     "rain_in": 0.75, "lag": (6, 14), "temp": ("high", 50, 66), "cold": "boost",
+     # Only 3 records within 200 km (all Pine Barrens, November). The Northeast
+     # curve peaks Sep–Oct from New England finds; NJ runs ~4 weeks later.
+     "season_region": {"lat": 41.0, "lng": -74.0, "radius": 600}, "season_shift": 4,
+     "season_note": "Northeast records shifted 4 weeks later for NJ",
+     "caution": ("Deadly white Amanitas (destroying angels) look similar. Check for a "
+                 "sac-like cup at the base, and the matsutake's spicy cinnamon smell.")},
 ]
 
 
@@ -164,10 +175,13 @@ def fetch_season(sp):
     """Regional week-of-year curve, smoothed, normalised to peak = 1."""
     d = get_json("https://api.inaturalist.org/v1/observations/histogram", {
         "taxon_id": ",".join(map(str, sp["taxa"])), "verifiable": "true",
-        "date_field": "observed", "interval": "week_of_year", **REGION,
+        "date_field": "observed", "interval": "week_of_year",
+        **sp.get("season_region", REGION),
     })
     raw = d["results"]["week_of_year"]
     weeks = [raw.get(str(w), 0) for w in range(1, 54)]
+    shift = sp.get("season_shift", 0)
+    weeks = weeks[-shift:] + weeks[:-shift] if shift else weeks
     total = sum(weeks)
     half = 2 if total >= 300 else 3          # sparse taxa get a wider window
     kernel = [half + 1 - abs(k) for k in range(-half, half + 1)]
@@ -309,7 +323,7 @@ def build():
             "id": sp["id"], "name": sp["name"], "latin": sp["latin"], "taxa": sp["taxa"],
             "rain_in": sp["rain_in"], "lag": list(sp["lag"]),
             "temp": list(sp["temp"]), "cold": sp["cold"],
-            "caution": sp.get("caution"),
+            "caution": sp.get("caution"), "seasonNote": sp.get("season_note"),
             "season": curve, "seasonTotal": total,
         })
 
@@ -321,7 +335,7 @@ def build():
         scores = {
             sp["id"]: [score_day(sp, loc, wx, t0 + n, seasons[sp["id"]], counts[sp["id"]])
                        for n in range(FORECAST_DAYS)]
-            for sp in SPECIES
+            for sp in SPECIES if loc["habitat"].get(sp["id"], 0) > 0
         }
         locations_out.append({
             **{k: loc[k] for k in ("id", "name", "sub", "lat", "lng", "habitat_note", "habitat", "soil")},
