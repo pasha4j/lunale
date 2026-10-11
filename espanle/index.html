@@ -105,6 +105,8 @@
   .sugg button:hover, .sugg button.hl { border-color: var(--gold); }
   .results b { font-weight: 600; }
   .en { color: var(--muted); font-weight: 400; }
+  .sugg button.found { border-color: var(--good); color: var(--good); cursor: default; }
+  .round-label .found { color: var(--good); font-size: 13px; font-weight: 600; margin-left: 4px; white-space: nowrap; }
   .sugg button.struck { text-decoration: line-through; color: var(--muted); opacity: .55; cursor: default; border-color: var(--border); }
   .sugg .hint { color: var(--muted); font-size: 14px; padding: 6px 2px; }
   .reveal { display: flex; align-items: center; gap: 12px; }
@@ -124,6 +126,20 @@
   .kbd button.wrong-key { background: #3a1d26; color: #f8717199; border-color: #5b2a35; }
   .kbd button.space { max-width: 240px; flex: 5; text-transform: none; font-size: 14px; color: var(--muted); }
   .kbd .spacer { flex: .5; max-width: 23px; }
+  .kbd .accents button { color: var(--gold); text-transform: none; }
+
+  /* Settings switches */
+  .setting { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); cursor: pointer; }
+  .setting:first-of-type { border-top: 0; }
+  .setting span { flex: 1; font-size: 15px; }
+  .setting small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .setting input { appearance: none; -webkit-appearance: none; width: 44px; height: 26px; border-radius: 999px; flex: none;
+    background: var(--raised); border: 1px solid var(--border); position: relative; cursor: pointer; transition: background .15s; }
+  .setting input::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--muted); transition: transform .15s, background .15s; }
+  .setting input:checked { background: var(--gold); border-color: var(--gold); }
+  .setting input:checked::after { transform: translateX(18px); background: #1b1300; }
+  .setting input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   .desk-hint { text-align: center; color: var(--muted); font-size: 12px; }
   @media (pointer: coarse) { .desk-hint { display: none; } }
   @media (max-height: 700px) { .kbd button { height: 40px; } .slot { min-height: 68px; } }
@@ -161,6 +177,7 @@
     <h1>Espa<span class="n">ñ</span>le</h1>
     <span class="pill" title="Country in this run"><b id="progress">1</b>/<span id="total">21</span></span>
     <span class="pill" title="Points: hearts left after each correct answer">★ <b id="score">0</b></span>
+    <button class="icon-btn" id="btn-settings" aria-label="Settings" title="Settings">⚙</button>
     <button class="icon-btn" id="btn-help" aria-label="How to play">?</button>
   </header>
 
@@ -204,11 +221,26 @@
       <li><b>Round 1:</b> type the country's name.</li>
       <li><b>Round 2:</b> type its capital (the red dot), with 5 new hearts.</li>
       <li><b>Every key is a try.</b> A letter that can't continue the right name costs a ♥. Correct letters stick.</li>
-      <li>Suggestions show up after 3 letters. Tapping a wrong one also costs a ♥.</li>
+      <li>Suggestions show up after 3 letters (or never, in hard mode ⚙). Tapping a wrong one also costs a ♥.</li>
       <li>Spanish or English both count (<i>España</i> or <i>Spain</i>), and you don't need accents.</li>
       <li>Hearts left are your points: up to 10 per country, 21 countries per run.</li>
     </ul>
     <div class="actions"><button class="btn" data-close>¡Vamos!</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-settings">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <button class="close" data-close aria-label="Close">×</button>
+    <h2 id="settings-title">Settings</h2>
+    <label class="setting">
+      <span>Hard mode<small>No suggestions: type the whole name from memory.</small></span>
+      <input type="checkbox" id="opt-hard">
+    </label>
+    <label class="setting">
+      <span>Spanish keyboard<small>Adds ñ and an accent row: á é í ó ú ü. Accents are still optional.</small></span>
+      <input type="checkbox" id="opt-es-kbd">
+    </label>
   </div>
 </div>
 
@@ -239,7 +271,7 @@ const C = (ll, es, en = es, ...alt) => ({ es, en, alt, ll }); // capital with [l
 const COUNTRIES = [
   { geo: 'Argentina',      flag: '🇦🇷', name: P('Argentina'),                                caps: [C([-58.38, -34.60], 'Buenos Aires')] },
   { geo: 'Bolivia',        flag: '🇧🇴', name: P('Bolivia'),                                  caps: [C([-65.26, -19.03], 'Sucre'), C([-68.15, -16.50], 'La Paz', 'La Paz', 'Nuestra Señora de La Paz')],
-    note: 'Sucre is the constitutional capital; La Paz is the seat of government. Either counts.' },
+    note: 'Sucre is the constitutional capital; La Paz is the seat of government.' },
   { geo: 'Chile',          flag: '🇨🇱', name: P('Chile'),                                    caps: [C([-70.67, -33.45], 'Santiago', 'Santiago', 'Santiago de Chile')] },
   { geo: 'Colombia',       flag: '🇨🇴', name: P('Colombia'),                                 caps: [C([-74.07, 4.71], 'Bogotá', 'Bogota', 'Santa Fe de Bogotá')] },
   { geo: 'Costa Rica',     flag: '🇨🇷', name: P('Costa Rica'),                               caps: [C([-84.08, 9.93], 'San José', 'San Jose')] },
@@ -330,6 +362,11 @@ const POOL = {
 const KEY = 'espanle.v1';
 function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} }
+// Settings live apart from the run so a new run keeps them.
+const CFG_KEY = 'espanle.settings';
+const CFG = { hard: false, esKbd: false };
+try { Object.assign(CFG, JSON.parse(localStorage.getItem(CFG_KEY))); } catch {}
+function saveCfg() { try { localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); } catch {} }
 
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
@@ -337,7 +374,7 @@ function shuffle(a) {
 }
 function freshRun(best) {
   return { order: shuffle(COUNTRIES.map((_, i) => i)), idx: 0, round: 1, phase: 'play',
-    typed: '', hearts: 5, wrong: [], struck: [], score: 0, results: [], best: best || 0 };
+    typed: '', hearts: 5, wrong: [], struck: [], found: [], score: 0, results: [], best: best || 0 };
 }
 
 let S = load();
@@ -347,7 +384,9 @@ if (!S.order || S.order.length !== COUNTRIES.length) S = freshRun(S.best);
 // ---------- Game logic ----------
 const $ = id => document.getElementById(id);
 const country = () => COUNTRIES[S.order[S.idx]];
-const places = () => S.round === 1 ? [country().name] : country().caps;
+// Round 2 asks for every capital (Bolivia has two); `found` holds the ones already named this round.
+const found = () => S.found || [];
+const places = () => S.round === 1 ? [country().name] : country().caps.filter(p => !found().includes(norm(p.es)));
 const answers = () => places().flatMap(spellings).flatMap(l => [l, dropArticle(l)]).map(label => ({ label, n: norm(label) }));
 const isPrefix = p => answers().some(a => a.n.startsWith(p));
 
@@ -363,7 +402,8 @@ function press(ch) {
   if (!isPrefix(next) && !S.typed.endsWith(' ') && S.typed && isPrefix(S.typed + ' ' + ch)) next = S.typed + ' ' + ch;
   if (isPrefix(next)) {
     S.typed = next; S.wrong = []; S.hl = -1;
-    if (answers().some(a => a.n === next)) return finish(true);
+    const hit = places().find(p => spellings(p).some(l => [norm(l), norm(dropArticle(l))].includes(next)));
+    if (hit) return solved(hit);
   } else {
     S.wrong.push(ch);
     if (loseHeart()) return;
@@ -372,8 +412,9 @@ function press(ch) {
 }
 
 function pick(item) {
-  if (S.phase !== 'play' || S.struck.includes(item.place)) return;
-  if (places().some(p => norm(p.es) === item.place)) { S.typed = item.keys.find(k => k.startsWith(S.typed)) || item.id; return finish(true); }
+  if (S.phase !== 'play' || S.struck.includes(item.place) || found().includes(item.place)) return;
+  const hit = places().find(p => norm(p.es) === item.place);
+  if (hit) { S.typed = item.keys.find(k => k.startsWith(S.typed)) || item.id; return solved(hit); }
   S.struck.push(item.place); S.hl = -1;
   if (loseHeart()) return;
   render();
@@ -384,6 +425,18 @@ function loseHeart() {
   shake(); breakHeart(S.hearts);
   if (S.hearts <= 0) { finish(false); return true; }
   return false;
+}
+
+// A correct name: finish the round, or with more capitals to go, bank it and keep the same hearts.
+function solved(place) {
+  if (places().length > 1) {
+    S.found = [...found(), norm(place.es)];
+    Object.assign(S, { typed: '', wrong: [], hl: -1 });
+    toast(`¡Sí! ${place.es}. Now the other one`);
+    render(); showCapitalLabel();
+    return;
+  }
+  finish(true);
 }
 
 function finish(won) {
@@ -400,9 +453,9 @@ function finish(won) {
 function next() {
   if (S.phase === 'play') return;
   if (S.round === 1) {
-    Object.assign(S, { round: 2, phase: 'play', typed: '', hearts: 5, wrong: [], struck: [], hl: -1 });
+    Object.assign(S, { round: 2, phase: 'play', typed: '', hearts: 5, wrong: [], struck: [], found: [], hl: -1 });
   } else if (S.idx + 1 < S.order.length) {
-    Object.assign(S, { idx: S.idx + 1, round: 1, phase: 'play', typed: '', hearts: 5, wrong: [], struck: [], hl: -1 });
+    Object.assign(S, { idx: S.idx + 1, round: 1, phase: 'play', typed: '', hearts: 5, wrong: [], struck: [], found: [], hl: -1 });
   } else {
     S.phase = 'summary';
     S.best = Math.max(S.best || 0, S.score);
@@ -421,7 +474,7 @@ const MAX_SUGG = 8;
 const SUGG_AFTER = 3; // letters typed before suggestions appear, so one right letter doesn't hand over the answer
 const lettersTyped = () => S.typed.replace(/ /g, '').length;
 function suggestions(all) {
-  if (lettersTyped() < SUGG_AFTER) return [];
+  if (CFG.hard || lettersTyped() < SUGG_AFTER) return [];
   const list = POOL[S.round].filter(p => p.keys.some(k => k.startsWith(S.typed)));
   return all ? list : list.slice(0, MAX_SUGG);
 }
@@ -433,7 +486,9 @@ function render() {
   $('score').textContent = S.score;
   $('round-label').innerHTML = S.round === 1
     ? '<span class="step">Ronda 1</span>Which country is this?'
-    : `<span class="step">Ronda 2</span>Capital of ${c.name.es}?`;
+    : c.caps.length > 1
+      ? `<span class="step">Ronda 2</span>Both capitals of ${c.name.es}?${c.caps.filter(p => found().includes(norm(p.es))).map(p => `<span class="found">✓ ${esc(p.es)}</span>`).join('')}`
+      : `<span class="step">Ronda 2</span>Capital of ${c.name.es}?`;
 
   $('hearts').innerHTML = [0, 1, 2, 3, 4].map(i => `<span class="${i < S.hearts ? '' : 'lost'}" data-i="${i}">♥</span>`).join('');
 
@@ -461,14 +516,16 @@ function render() {
     S.hl = Math.min(S.hl ?? -1, list.length - 1);
     const more = suggestions(true).length - list.length;
     $('sugg').innerHTML = list.length
-      ? list.map((p, i) => `<button type="button" data-n="${p.id}" class="${S.struck.includes(p.place) ? 'struck' : ''} ${i === S.hl ? 'hl' : ''}">${esc(p.label)}</button>`).join('')
+      ? list.map((p, i) => `<button type="button" data-n="${p.id}" class="${S.struck.includes(p.place) ? 'struck' : found().includes(p.place) ? 'found' : ''} ${i === S.hl ? 'hl' : ''}">${esc(p.label)}</button>`).join('')
         + (more > 0 ? `<span class="hint">+${more} more…</span>` : '')
-      : `<span class="hint">${lettersTyped()
+      : `<span class="hint">${CFG.hard
+          ? 'Hard mode: no suggestions. Type the whole name.'
+          : lettersTyped()
           ? `Suggestions after ${SUGG_AFTER} letters…`
-          : S.round === 1 ? 'Spanish or English name, accents optional.' : 'Look for the red dot. Spanish or English.'}</span>`;
+          : S.round === 1 ? 'Spanish or English name, accents optional.' : c.caps.length > 1 ? 'Two red dots: name both capitals, one at a time.' : 'Look for the red dot. Spanish or English.'}</span>`;
   } else if (S.phase !== 'summary') {
     const won = S.phase === 'won';
-    const label = (S.round === 1 ? c.flag + ' ' : '') + places().map(placeHtml).join(' / ');
+    const label = S.round === 1 ? `${c.flag} ${placeHtml(c.name)}` : c.caps.map(placeHtml).join(' y ');
     const note = S.round === 2 && c.note ? `<small>${c.note}</small>` : '';
     $('reveal-msg').innerHTML = won
       ? `¡Sí! ${label}${note}`
@@ -499,7 +556,7 @@ function shareText() {
   const sq = S.results.map(r => (r.r1 && r.r2) ? '🟩' : (r.r1 || r.r2) ? '🟨' : '🟥');
   const rows = [];
   for (let i = 0; i < sq.length; i += 7) rows.push(sq.slice(i, i + 7).join(''));
-  return `Españle ${S.score}/${S.order.length * 10}\n${rows.join('\n')}\n${location.origin}${location.pathname}`;
+  return `Españle ${S.score}/${S.order.length * 10}${CFG.hard ? ' · difícil' : ''}\n${rows.join('\n')}\n${location.origin}${location.pathname}`;
 }
 
 // Spanish spelling in bold, English after it when it differs.
@@ -523,12 +580,15 @@ function breakHeart(i) {
 }
 
 // ---------- Keyboard ----------
-const ROWS = ['qwertyuiop', 'asdfghjklñ', 'zxcvbnm'];
-$('kbd').innerHTML = ROWS.map((r, i) => `<div class="row">${i === 2 ? '<span class="spacer"></span>' : ''}${
-  [...r].map(k => `<button type="button" data-k="${k === 'ñ' ? 'n' : k}" aria-label="${k}">${k}</button>`).join('')
-}${i === 2 ? '<span class="spacer"></span>' : ''}</div>`).join('') +
-  '<div class="row"><button type="button" class="space" data-k=" ">espacio</button></div>';
-// ñ shares "n"'s wrong-mark, which is right since accents/tildes are ignored.
+// Accented keys count as their plain letter (accents are optional), so á shares a's wrong-mark.
+function buildKeyboard() {
+  const rows = CFG.esKbd ? ['áéíóúü', 'qwertyuiop', 'asdfghjklñ', 'zxcvbnm'] : ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  const key = k => `<button type="button" data-k="${norm(k)}" aria-label="${k}">${k}</button>`;
+  $('kbd').innerHTML = rows.map(r => {
+    const pad = r === 'zxcvbnm' || r === 'asdfghjkl' ? '<span class="spacer"></span>' : '';
+    return `<div class="row${r === 'áéíóúü' ? ' accents' : ''}">${pad}${[...r].map(key).join('')}${pad}</div>`;
+  }).join('') + '<div class="row"><button type="button" class="space" data-k=" ">espacio</button></div>';
+}
 $('kbd').addEventListener('click', e => {
   const b = e.target.closest('button[data-k]'); if (!b) return;
   if (S.phase !== 'play') { if (b.dataset.k === ' ') next(); return; }
@@ -560,7 +620,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === 'Tab') {
     if (list.length) {
       e.preventDefault();
-      const live = suggestions(true).filter(p => !S.struck.includes(p.place));
+      const live = suggestions(true).filter(p => !S.struck.includes(p.place) && !found().includes(p.place));
       // Enter with nothing highlighted only auto-picks when the remaining chips are all one place.
       const target = S.hl >= 0 ? list[S.hl] : new Set(live.map(p => p.place)).size === 1 ? live[0] : null;
       if (target) pick(target);
@@ -582,6 +642,13 @@ function closeModals() {
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeModals));
 $('modal-help').addEventListener('click', e => { if (e.target.id === 'modal-help') closeModals(); });
 $('btn-help').addEventListener('click', () => openModal('modal-help'));
+$('modal-settings').addEventListener('click', e => { if (e.target.id === 'modal-settings') closeModals(); });
+$('btn-settings').addEventListener('click', () => {
+  $('opt-hard').checked = CFG.hard; $('opt-es-kbd').checked = CFG.esKbd;
+  openModal('modal-settings');
+});
+$('opt-hard').addEventListener('change', e => { CFG.hard = e.target.checked; S.hl = -1; saveCfg(); render(); });
+$('opt-es-kbd').addEventListener('change', e => { CFG.esKbd = e.target.checked; saveCfg(); buildKeyboard(); render(); });
 $('btn-again').addEventListener('click', () => { $('modal-summary').classList.remove('open'); newRun(); });
 $('btn-share').addEventListener('click', async () => {
   const text = shareText();
@@ -719,7 +786,7 @@ function showTarget() {
   const v = viewFor(targetBox());
   flyTo(v);
   drawMarks(v);
-  if (S.phase !== 'play' && S.round === 2) showCapitalLabel();
+  showCapitalLabel();
 }
 
 function drawMarks(v) {
@@ -744,7 +811,8 @@ function showCapitalLabel() {
   if (!WORLD || !view) return;
   const c = country(), vw = view[2];
   layers.marks.querySelectorAll('text').forEach(t => t.remove());
-  c.caps.forEach(({ es: name, ll }) => {
+  if (S.round !== 2) return;
+  c.caps.filter(p => S.phase !== 'play' || found().includes(norm(p.es))).forEach(({ es: name, ll }) => {
     const [x, y] = project(...ll);
     const t = el('text', { x, y: y - vw * 0.022, 'text-anchor': 'middle', 'font-size': vw * 0.032, 'stroke-width': vw * 0.006 }, layers.marks);
     t.textContent = name;
@@ -758,7 +826,7 @@ $('btn-zoom').addEventListener('click', () => {
   const v = zoomedOut ? worldView() : viewFor(targetBox());
   flyTo(v);
   drawMarks(v);
-  if (S.phase !== 'play' && S.round === 2) showCapitalLabel();
+  showCapitalLabel();
 });
 
 let resizeTimer;
@@ -768,6 +836,7 @@ addEventListener('resize', () => {
 });
 
 // ---------- Boot ----------
+buildKeyboard();
 if (S.phase === 'summary') S = freshRun(S.best);
 render();
 if (firstVisit) openModal('modal-help');
