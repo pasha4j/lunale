@@ -103,7 +103,7 @@
   .sugg button { background: var(--raised); border: 1px solid var(--border); border-radius: 999px;
     padding: 6px 12px; font-size: 15px; font-weight: 600; }
   .sugg button:hover, .sugg button.hl { border-color: var(--gold); }
-  .sugg button b, .results b { font-weight: 600; }
+  .results b { font-weight: 600; }
   .en { color: var(--muted); font-weight: 400; }
   .sugg button.struck { text-decoration: line-through; color: var(--muted); opacity: .55; cursor: default; border-color: var(--border); }
   .sugg .hint { color: var(--muted); font-size: 14px; padding: 6px 2px; }
@@ -271,7 +271,7 @@ const COUNTRY_DECOYS = `Brasil|Brazil, Estados Unidos|United States, Canadá|Can
   Argelia|Algeria, Camerún|Cameroon, Gabón|Gabon, Nigeria, Guinea, Guinea-Bisáu|Guinea-Bissau, Ghana, Angola, Congo,
   Filipinas|Philippines, Grecia|Greece, Egipto|Egypt, Chad, Chipre|Cyprus, Malta, Mónaco|Monaco, Suiza|Switzerland,
   Bélgica|Belgium, Países Bajos|Netherlands, Irlanda|Ireland, Islandia|Iceland, Noruega|Norway, Suecia|Sweden, Rusia|Russia,
-  China, Japón|Japan, India, Australia, Nueva Zelanda|New Zealand, Sudáfrica|South Africa, Senegal, Mali, Mauritania,
+  China, Japón|Japan, India, Australia, Nueva Zelanda|New Zealand, Sudáfrica|South Africa, Senegal, Malí|Mali, Mauritania,
   Túnez|Tunisia, Libia|Libya, Etiopía|Ethiopia, Kenia|Kenya, Uganda, Costa de Marfil|Ivory Coast, Cabo Verde|Cape Verde,
   Santo Tomé y Príncipe|Sao Tome and Principe, Turquía|Turkey, Polonia|Poland, Austria, Hungría|Hungary, Rumanía|Romania,
   Ucrania|Ukraine, Estonia, Eslovaquia|Slovakia, Eslovenia|Slovenia, Croacia|Croatia, Serbia, Bulgaria, Albania,
@@ -284,7 +284,7 @@ const CAPITAL_DECOYS = `Barcelona, Sevilla|Seville, Valencia, Bilbao, Málaga, Z
   Guayaquil, Cuenca, Santa Cruz de la Sierra, Cochabamba, Rosario, Mendoza, Mar del Plata, Valparaíso, Concepción,
   Cusco|Cuzco, Arequipa, Trujillo, Maracaibo, Barquisimeto, Bata, Ponce, Ebebiyín, Santiago de los Caballeros, Puerto Plata,
   Santiago de Cuba, Camagüey, León, Masaya, San Pedro Sula, La Ceiba, Santa Ana, San Miguel, Quetzaltenango,
-  Antigua Guatemala, Limón, Alajuela, Colón, David, Ciudad del Este, Encarnación, Punta del Este, Salto, Brasilia,
+  Antigua Guatemala, Limón, Alajuela, Colón, David, Ciudad del Este, Encarnación, Punta del Este, Salto, Brasilia|Brasília,
   Lisboa|Lisbon, París|Paris, Roma|Rome, Washington, Kingston, Puerto Príncipe|Port-au-Prince, Belmopán, Georgetown,
   Paramaribo, Rabat, Yaundé|Yaounde, Libreville, Malabo, Ciudad del Cabo|Cape Town,
   Nueva York|New York, Londres|London, Pekín|Beijing, Moscú|Moscow, Atenas|Athens, Ginebra|Geneva`;
@@ -293,6 +293,10 @@ const parseDecoys = src => src.split(',').map(e => e.trim()).filter(Boolean).map
 // ---------- Text helpers ----------
 const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
   .replace(/[-‐–]/g, ' ').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
+
+// "La Habana" can also be typed as "Habana" (same for El/Los/Las).
+const dropArticle = s => s.replace(/^(la|el|los|las)\s+(?=\S)/i, '');
+const spellings = p => [p.es, p.en, ...p.alt];
 
 // Keep accents for display: map each normalized char back to the original char.
 function displayPrefix(original, n) {
@@ -305,12 +309,15 @@ function displayPrefix(original, n) {
   return out;
 }
 
-const keysOf = p => [...new Set([p.es, p.en, ...p.alt].map(norm))];
+// One chip per spelling, so "La Habana" and "Havana" are separate options; `place` ties them together.
 function buildPool(answerPlaces, decoySrc) {
   const seen = new Map();
   for (const p of [...answerPlaces, ...parseDecoys(decoySrc)]) {
-    const id = norm(p.es);
-    if (!seen.has(id)) seen.set(id, { id, es: p.es, en: p.en, keys: keysOf(p) });
+    const place = norm(p.es);
+    for (const label of spellings(p)) {
+      const id = norm(label);
+      if (!seen.has(id)) seen.set(id, { id, place, label, keys: [...new Set([id, norm(dropArticle(label))])] });
+    }
   }
   return [...seen.values()].sort((a, b) => a.id.localeCompare(b.id));
 }
@@ -341,7 +348,7 @@ if (!S.order || S.order.length !== COUNTRIES.length) S = freshRun(S.best);
 const $ = id => document.getElementById(id);
 const country = () => COUNTRIES[S.order[S.idx]];
 const places = () => S.round === 1 ? [country().name] : country().caps;
-const answers = () => places().flatMap(p => [p.es, p.en, ...p.alt]).map(label => ({ label, n: norm(label) }));
+const answers = () => places().flatMap(spellings).flatMap(l => [l, dropArticle(l)]).map(label => ({ label, n: norm(label) }));
 const isPrefix = p => answers().some(a => a.n.startsWith(p));
 
 function press(ch) {
@@ -365,9 +372,9 @@ function press(ch) {
 }
 
 function pick(item) {
-  if (S.phase !== 'play' || S.struck.includes(item.id)) return;
-  if (places().some(p => norm(p.es) === item.id)) { S.typed = item.keys.find(k => k.startsWith(S.typed)) || item.id; return finish(true); }
-  S.struck.push(item.id); S.hl = -1;
+  if (S.phase !== 'play' || S.struck.includes(item.place)) return;
+  if (places().some(p => norm(p.es) === item.place)) { S.typed = item.keys.find(k => k.startsWith(S.typed)) || item.id; return finish(true); }
+  S.struck.push(item.place); S.hl = -1;
   if (loseHeart()) return;
   render();
 }
@@ -454,7 +461,7 @@ function render() {
     S.hl = Math.min(S.hl ?? -1, list.length - 1);
     const more = suggestions(true).length - list.length;
     $('sugg').innerHTML = list.length
-      ? list.map((p, i) => `<button type="button" data-n="${p.id}" class="${S.struck.includes(p.id) ? 'struck' : ''} ${i === S.hl ? 'hl' : ''}">${placeHtml(p)}</button>`).join('')
+      ? list.map((p, i) => `<button type="button" data-n="${p.id}" class="${S.struck.includes(p.place) ? 'struck' : ''} ${i === S.hl ? 'hl' : ''}">${esc(p.label)}</button>`).join('')
         + (more > 0 ? `<span class="hint">+${more} more…</span>` : '')
       : `<span class="hint">${lettersTyped()
           ? `Suggestions after ${SUGG_AFTER} letters…`
@@ -553,9 +560,9 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === 'Tab') {
     if (list.length) {
       e.preventDefault();
-      const live = suggestions(true).filter(p => !S.struck.includes(p.id));
-      // Enter with nothing highlighted only auto-picks when a single option remains.
-      const target = S.hl >= 0 ? list[S.hl] : live.length === 1 ? live[0] : null;
+      const live = suggestions(true).filter(p => !S.struck.includes(p.place));
+      // Enter with nothing highlighted only auto-picks when the remaining chips are all one place.
+      const target = S.hl >= 0 ? list[S.hl] : new Set(live.map(p => p.place)).size === 1 ? live[0] : null;
       if (target) pick(target);
     }
     return;
