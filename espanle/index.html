@@ -103,6 +103,8 @@
   .sugg button { background: var(--raised); border: 1px solid var(--border); border-radius: 999px;
     padding: 6px 12px; font-size: 15px; font-weight: 600; }
   .sugg button:hover, .sugg button.hl { border-color: var(--gold); }
+  .sugg button b, .results b { font-weight: 600; }
+  .en { color: var(--muted); font-weight: 400; }
   .sugg button.struck { text-decoration: line-through; color: var(--muted); opacity: .55; cursor: default; border-color: var(--border); }
   .sugg .hint { color: var(--muted); font-size: 14px; padding: 6px 2px; }
   .reveal { display: flex; align-items: center; gap: 12px; }
@@ -202,7 +204,7 @@
       <li><b>Round 1:</b> type the country's name.</li>
       <li><b>Round 2:</b> type its capital (the red dot), with 5 new hearts.</li>
       <li><b>Every key is a try.</b> A letter that can't continue the right name costs a ♥. Correct letters stick.</li>
-      <li>Suggestions show up as you type. Tapping a wrong one also costs a ♥.</li>
+      <li>Suggestions show up after 3 letters. Tapping a wrong one also costs a ♥.</li>
       <li>Spanish or English both count (<i>España</i> or <i>Spain</i>), and you don't need accents.</li>
       <li>Hearts left are your points: up to 10 per country, 21 countries per run.</li>
     </ul>
@@ -228,32 +230,37 @@
 'use strict';
 
 // ---------- Data ----------
-// geo = feature name in world.js (Natural Earth). First name in each list is the one revealed.
+// Every place has a Spanish and an English spelling (same when they match) plus extra accepted forms.
+// Either spelling is accepted; the Spanish one is shown first.
+const P = (es, en = es, ...alt) => ({ es, en, alt });
+const C = (ll, es, en = es, ...alt) => ({ es, en, alt, ll }); // capital with [lon, lat]
+
+// geo = feature name in world.js (Natural Earth).
 const COUNTRIES = [
-  { geo: 'Argentina',      flag: '🇦🇷', names: ['Argentina'],                                       caps: ['Buenos Aires'],                                   ll: [[-58.38, -34.60]] },
-  { geo: 'Bolivia',        flag: '🇧🇴', names: ['Bolivia'],                                         caps: ['Sucre', 'La Paz'],                                ll: [[-65.26, -19.03], [-68.15, -16.50]],
+  { geo: 'Argentina',      flag: '🇦🇷', name: P('Argentina'),                                caps: [C([-58.38, -34.60], 'Buenos Aires')] },
+  { geo: 'Bolivia',        flag: '🇧🇴', name: P('Bolivia'),                                  caps: [C([-65.26, -19.03], 'Sucre'), C([-68.15, -16.50], 'La Paz', 'La Paz', 'Nuestra Señora de La Paz')],
     note: 'Sucre is the constitutional capital; La Paz is the seat of government. Either counts.' },
-  { geo: 'Chile',          flag: '🇨🇱', names: ['Chile'],                                           caps: ['Santiago', 'Santiago de Chile'],                  ll: [[-70.67, -33.45]] },
-  { geo: 'Colombia',       flag: '🇨🇴', names: ['Colombia'],                                        caps: ['Bogotá'],                                         ll: [[-74.07, 4.71]] },
-  { geo: 'Costa Rica',     flag: '🇨🇷', names: ['Costa Rica'],                                      caps: ['San José'],                                       ll: [[-84.08, 9.93]] },
-  { geo: 'Cuba',           flag: '🇨🇺', names: ['Cuba'],                                            caps: ['La Habana', 'Havana'],                            ll: [[-82.37, 23.11]] },
-  { geo: 'Dominican Rep.', flag: '🇩🇴', names: ['República Dominicana', 'Dominican Republic'],      caps: ['Santo Domingo'],                                  ll: [[-69.93, 18.49]] },
-  { geo: 'Ecuador',        flag: '🇪🇨', names: ['Ecuador'],                                         caps: ['Quito'],                                          ll: [[-78.47, -0.18]] },
-  { geo: 'El Salvador',    flag: '🇸🇻', names: ['El Salvador'],                                     caps: ['San Salvador'],                                   ll: [[-89.22, 13.69]] },
-  { geo: 'Eq. Guinea',     flag: '🇬🇶', names: ['Guinea Ecuatorial', 'Equatorial Guinea'],          caps: ['Malabo'],                                         ll: [[8.78, 3.75]],
-    note: 'Malabo sits on Bioko island, not the mainland.' },
-  { geo: 'Guatemala',      flag: '🇬🇹', names: ['Guatemala'],                                       caps: ['Ciudad de Guatemala', 'Guatemala City'],          ll: [[-90.51, 14.63]] },
-  { geo: 'Honduras',       flag: '🇭🇳', names: ['Honduras'],                                        caps: ['Tegucigalpa'],                                    ll: [[-87.19, 14.07]] },
-  { geo: 'Mexico',         flag: '🇲🇽', names: ['México', 'Mexico'],                                caps: ['Ciudad de México', 'Mexico City', 'CDMX'],         ll: [[-99.13, 19.43]] },
-  { geo: 'Nicaragua',      flag: '🇳🇮', names: ['Nicaragua'],                                       caps: ['Managua'],                                        ll: [[-86.24, 12.11]] },
-  { geo: 'Panama',         flag: '🇵🇦', names: ['Panamá', 'Panama'],                                caps: ['Ciudad de Panamá', 'Panama City'],                ll: [[-79.52, 8.98]] },
-  { geo: 'Paraguay',       flag: '🇵🇾', names: ['Paraguay'],                                        caps: ['Asunción'],                                       ll: [[-57.58, -25.26]] },
-  { geo: 'Peru',           flag: '🇵🇪', names: ['Perú', 'Peru'],                                    caps: ['Lima'],                                           ll: [[-77.04, -12.05]] },
-  { geo: 'Puerto Rico',    flag: '🇵🇷', names: ['Puerto Rico'],                                     caps: ['San Juan'],                                       ll: [[-66.11, 18.47]],
+  { geo: 'Chile',          flag: '🇨🇱', name: P('Chile'),                                    caps: [C([-70.67, -33.45], 'Santiago', 'Santiago', 'Santiago de Chile')] },
+  { geo: 'Colombia',       flag: '🇨🇴', name: P('Colombia'),                                 caps: [C([-74.07, 4.71], 'Bogotá', 'Bogota', 'Santa Fe de Bogotá')] },
+  { geo: 'Costa Rica',     flag: '🇨🇷', name: P('Costa Rica'),                               caps: [C([-84.08, 9.93], 'San José', 'San Jose')] },
+  { geo: 'Cuba',           flag: '🇨🇺', name: P('Cuba'),                                     caps: [C([-82.37, 23.11], 'La Habana', 'Havana')] },
+  { geo: 'Dominican Rep.', flag: '🇩🇴', name: P('República Dominicana', 'Dominican Republic'), caps: [C([-69.93, 18.49], 'Santo Domingo')] },
+  { geo: 'Ecuador',        flag: '🇪🇨', name: P('Ecuador'),                                  caps: [C([-78.47, -0.18], 'Quito', 'Quito', 'San Francisco de Quito')] },
+  { geo: 'El Salvador',    flag: '🇸🇻', name: P('El Salvador'),                              caps: [C([-89.22, 13.69], 'San Salvador')] },
+  { geo: 'Eq. Guinea',     flag: '🇬🇶', name: P('Guinea Ecuatorial', 'Equatorial Guinea'),   caps: [C([10.82, 1.58], 'Ciudad de la Paz', 'Ciudad de la Paz', 'Oyala')],
+    note: 'Capital since January 2026, replacing Malabo on Bioko island.' },
+  { geo: 'Guatemala',      flag: '🇬🇹', name: P('Guatemala'),                                caps: [C([-90.51, 14.63], 'Ciudad de Guatemala', 'Guatemala City', 'Nueva Guatemala de la Asunción')] },
+  { geo: 'Honduras',       flag: '🇭🇳', name: P('Honduras'),                                 caps: [C([-87.19, 14.07], 'Tegucigalpa')] },
+  { geo: 'Mexico',         flag: '🇲🇽', name: P('México', 'Mexico'),                         caps: [C([-99.13, 19.43], 'Ciudad de México', 'Mexico City', 'CDMX', 'México D.F.')] },
+  { geo: 'Nicaragua',      flag: '🇳🇮', name: P('Nicaragua'),                                caps: [C([-86.24, 12.11], 'Managua')] },
+  { geo: 'Panama',         flag: '🇵🇦', name: P('Panamá', 'Panama'),                         caps: [C([-79.52, 8.98], 'Ciudad de Panamá', 'Panama City')] },
+  { geo: 'Paraguay',       flag: '🇵🇾', name: P('Paraguay'),                                 caps: [C([-57.58, -25.26], 'Asunción', 'Asuncion')] },
+  { geo: 'Peru',           flag: '🇵🇪', name: P('Perú', 'Peru'),                             caps: [C([-77.04, -12.05], 'Lima')] },
+  { geo: 'Puerto Rico',    flag: '🇵🇷', name: P('Puerto Rico'),                              caps: [C([-66.11, 18.47], 'San Juan')],
     note: 'Puerto Rico is a U.S. territory, so San Juan is its capital rather than a national one.' },
-  { geo: 'Spain',          flag: '🇪🇸', names: ['España', 'Spain'],                                 caps: ['Madrid'],                                         ll: [[-3.70, 40.42]] },
-  { geo: 'Uruguay',        flag: '🇺🇾', names: ['Uruguay'],                                         caps: ['Montevideo'],                                     ll: [[-56.16, -34.90]] },
-  { geo: 'Venezuela',      flag: '🇻🇪', names: ['Venezuela'],                                       caps: ['Caracas'],                                        ll: [[-66.90, 10.48]] },
+  { geo: 'Spain',          flag: '🇪🇸', name: P('España', 'Spain'),                          caps: [C([-3.70, 40.42], 'Madrid')] },
+  { geo: 'Uruguay',        flag: '🇺🇾', name: P('Uruguay'),                                  caps: [C([-56.16, -34.90], 'Montevideo')] },
+  { geo: 'Venezuela',      flag: '🇻🇪', name: P('Venezuela'),                                caps: [C([-66.90, 10.48], 'Caracas')] },
 ];
 
 // Decoys keep the suggestion list honest: after a letter or two there are still look-alikes to choose from.
@@ -275,12 +282,13 @@ const COUNTRY_DECOYS = `Brasil|Brazil, Estados Unidos|United States, Canadá|Can
 const CAPITAL_DECOYS = `Barcelona, Sevilla|Seville, Valencia, Bilbao, Málaga, Zaragoza, Salamanca, Toledo, Granada, Córdoba,
   Guadalajara, Monterrey, Puebla, Tijuana, Cancún, Oaxaca, Mérida, Ciudad Juárez, Medellín, Cali, Cartagena, Barranquilla,
   Guayaquil, Cuenca, Santa Cruz de la Sierra, Cochabamba, Rosario, Mendoza, Mar del Plata, Valparaíso, Concepción,
-  Cusco|Cuzco, Arequipa, Trujillo, Maracaibo, Barquisimeto, Bata, Ponce, Santiago de los Caballeros, Puerto Plata,
+  Cusco|Cuzco, Arequipa, Trujillo, Maracaibo, Barquisimeto, Bata, Ponce, Ebebiyín, Santiago de los Caballeros, Puerto Plata,
   Santiago de Cuba, Camagüey, León, Masaya, San Pedro Sula, La Ceiba, Santa Ana, San Miguel, Quetzaltenango,
   Antigua Guatemala, Limón, Alajuela, Colón, David, Ciudad del Este, Encarnación, Punta del Este, Salto, Brasilia,
   Lisboa|Lisbon, París|Paris, Roma|Rome, Washington, Kingston, Puerto Príncipe|Port-au-Prince, Belmopán, Georgetown,
-  Paramaribo, Rabat, Yaundé|Yaounde, Libreville`;
-const parseDecoys = src => src.split(/[,|]/).map(s => s.trim()).filter(Boolean);
+  Paramaribo, Rabat, Yaundé|Yaounde, Libreville, Malabo, Ciudad del Cabo|Cape Town,
+  Nueva York|New York, Londres|London, Pekín|Beijing, Moscú|Moscow, Atenas|Athens, Ginebra|Geneva`;
+const parseDecoys = src => src.split(',').map(e => e.trim()).filter(Boolean).map(e => P(...e.split('|')));
 
 // ---------- Text helpers ----------
 const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
@@ -297,17 +305,18 @@ function displayPrefix(original, n) {
   return out;
 }
 
-function buildPool(answerLists, decoySrc) {
+const keysOf = p => [...new Set([p.es, p.en, ...p.alt].map(norm))];
+function buildPool(answerPlaces, decoySrc) {
   const seen = new Map();
-  for (const label of [...answerLists.flat(), ...parseDecoys(decoySrc)]) {
-    const n = norm(label);
-    if (n && !seen.has(n)) seen.set(n, label);
+  for (const p of [...answerPlaces, ...parseDecoys(decoySrc)]) {
+    const id = norm(p.es);
+    if (!seen.has(id)) seen.set(id, { id, es: p.es, en: p.en, keys: keysOf(p) });
   }
-  return [...seen].map(([n, label]) => ({ n, label })).sort((a, b) => a.n.localeCompare(b.n));
+  return [...seen.values()].sort((a, b) => a.id.localeCompare(b.id));
 }
 const POOL = {
-  1: buildPool(COUNTRIES.map(c => c.names), COUNTRY_DECOYS),
-  2: buildPool(COUNTRIES.map(c => c.caps), CAPITAL_DECOYS),
+  1: buildPool(COUNTRIES.map(c => c.name), COUNTRY_DECOYS),
+  2: buildPool(COUNTRIES.flatMap(c => c.caps), CAPITAL_DECOYS),
 };
 
 // ---------- Storage ----------
@@ -331,7 +340,8 @@ if (!S.order || S.order.length !== COUNTRIES.length) S = freshRun(S.best);
 // ---------- Game logic ----------
 const $ = id => document.getElementById(id);
 const country = () => COUNTRIES[S.order[S.idx]];
-const answers = () => (S.round === 1 ? country().names : country().caps).map(label => ({ label, n: norm(label) }));
+const places = () => S.round === 1 ? [country().name] : country().caps;
+const answers = () => places().flatMap(p => [p.es, p.en, ...p.alt]).map(label => ({ label, n: norm(label) }));
 const isPrefix = p => answers().some(a => a.n.startsWith(p));
 
 function press(ch) {
@@ -355,9 +365,9 @@ function press(ch) {
 }
 
 function pick(item) {
-  if (S.phase !== 'play' || S.struck.includes(item.n)) return;
-  if (answers().some(a => a.n === item.n)) { S.typed = item.n; return finish(true); }
-  S.struck.push(item.n); S.hl = -1;
+  if (S.phase !== 'play' || S.struck.includes(item.id)) return;
+  if (places().some(p => norm(p.es) === item.id)) { S.typed = item.keys.find(k => k.startsWith(S.typed)) || item.id; return finish(true); }
+  S.struck.push(item.id); S.hl = -1;
   if (loseHeart()) return;
   render();
 }
@@ -401,9 +411,11 @@ function newRun() {
 
 // ---------- Rendering ----------
 const MAX_SUGG = 8;
+const SUGG_AFTER = 3; // letters typed before suggestions appear, so one right letter doesn't hand over the answer
+const lettersTyped = () => S.typed.replace(/ /g, '').length;
 function suggestions(all) {
-  if (!S.typed) return [];
-  const list = POOL[S.round].filter(p => p.n.startsWith(S.typed));
+  if (lettersTyped() < SUGG_AFTER) return [];
+  const list = POOL[S.round].filter(p => p.keys.some(k => k.startsWith(S.typed)));
   return all ? list : list.slice(0, MAX_SUGG);
 }
 
@@ -414,7 +426,7 @@ function render() {
   $('score').textContent = S.score;
   $('round-label').innerHTML = S.round === 1
     ? '<span class="step">Ronda 1</span>Which country is this?'
-    : `<span class="step">Ronda 2</span>Capital of ${c.names[0]}?`;
+    : `<span class="step">Ronda 2</span>Capital of ${c.name.es}?`;
 
   $('hearts').innerHTML = [0, 1, 2, 3, 4].map(i => `<span class="${i < S.hearts ? '' : 'lost'}" data-i="${i}">♥</span>`).join('');
 
@@ -442,19 +454,18 @@ function render() {
     S.hl = Math.min(S.hl ?? -1, list.length - 1);
     const more = suggestions(true).length - list.length;
     $('sugg').innerHTML = list.length
-      ? list.map((p, i) => `<button type="button" data-n="${p.n}" class="${S.struck.includes(p.n) ? 'struck' : ''} ${i === S.hl ? 'hl' : ''}">${esc(p.label)}</button>`).join('')
+      ? list.map((p, i) => `<button type="button" data-n="${p.id}" class="${S.struck.includes(p.id) ? 'struck' : ''} ${i === S.hl ? 'hl' : ''}">${placeHtml(p)}</button>`).join('')
         + (more > 0 ? `<span class="hint">+${more} more…</span>` : '')
-      : `<span class="hint">${S.round === 1 ? 'Spanish or English name, accents optional.' : 'Look for the red dot. Spanish or English.'}</span>`;
+      : `<span class="hint">${lettersTyped()
+          ? `Suggestions after ${SUGG_AFTER} letters…`
+          : S.round === 1 ? 'Spanish or English name, accents optional.' : 'Look for the red dot. Spanish or English.'}</span>`;
   } else if (S.phase !== 'summary') {
     const won = S.phase === 'won';
-    const full = ans.filter((a, i, arr) => arr.findIndex(b => b.n === a.n) === i && a.label !== 'CDMX').map(a => a.label);
-    const label = S.round === 1 ? `${c.flag} ${full[0]}` : (c.geo === 'Bolivia' ? 'Sucre and La Paz' : full[0]);
-    const alt = S.round === 1 ? full.slice(1) : (c.geo === 'Bolivia' ? [] : full.slice(1).filter(x => !/^santiago de chile$/i.test(x)));
-    const extra = alt.length ? ` (${alt.join(' / ')})` : '';
+    const label = (S.round === 1 ? c.flag + ' ' : '') + places().map(placeHtml).join(' / ');
     const note = S.round === 2 && c.note ? `<small>${c.note}</small>` : '';
     $('reveal-msg').innerHTML = won
-      ? `¡Sí! <b>${esc(label)}</b>${esc(extra)}${note}`
-      : `It was <b>${esc(label)}</b>${esc(extra)}${note}`;
+      ? `¡Sí! ${label}${note}`
+      : `It was ${label}${note}`;
     $('btn-next').textContent = S.round === 1 ? 'Capital →' : (S.idx + 1 < S.order.length ? 'Next country →' : 'See results');
   }
 
@@ -471,7 +482,7 @@ function renderSummary() {
   $('sum-table').innerHTML = S.results.map(r => {
     const c = COUNTRIES[r.c];
     const cell = v => `<span class="${v ? 'hit' : 'miss'}">${v ? '♥'.repeat(v) : '✗'}</span>`;
-    return `<tr><td>${c.flag} ${esc(c.names[0])}<br><small style="color:var(--muted)">${esc(c.caps[0])}</small></td>
+    return `<tr><td>${c.flag} ${placeHtml(c.name)}<br><small style="color:var(--muted)">${c.caps.map(placeHtml).join(' / ')}</small></td>
       <td class="r">${cell(r.r1)}<br>${cell(r.r2)}</td></tr>`;
   }).join('');
   openModal('modal-summary');
@@ -483,6 +494,9 @@ function shareText() {
   for (let i = 0; i < sq.length; i += 7) rows.push(sq.slice(i, i + 7).join(''));
   return `Españle ${S.score}/${S.order.length * 10}\n${rows.join('\n')}\n${location.origin}${location.pathname}`;
 }
+
+// Spanish spelling in bold, English after it when it differs.
+const placeHtml = p => `<b>${esc(p.es)}</b>` + (norm(p.en) !== norm(p.es) ? ` <span class="en">${esc(p.en)}</span>` : '');
 
 const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 
@@ -516,7 +530,7 @@ $('kbd').addEventListener('click', e => {
 
 $('sugg').addEventListener('click', e => {
   const b = e.target.closest('button[data-n]'); if (!b) return;
-  pick(POOL[S.round].find(p => p.n === b.dataset.n));
+  pick(POOL[S.round].find(p => p.id === b.dataset.n));
 });
 $('btn-next').addEventListener('click', next);
 
@@ -539,7 +553,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === 'Tab') {
     if (list.length) {
       e.preventDefault();
-      const live = suggestions(true).filter(p => !S.struck.includes(p.n));
+      const live = suggestions(true).filter(p => !S.struck.includes(p.id));
       // Enter with nothing highlighted only auto-picks when a single option remains.
       const target = S.hl >= 0 ? list[S.hl] : live.length === 1 ? live[0] : null;
       if (target) pick(target);
@@ -683,7 +697,7 @@ function flyTo(target, ms = 900) {
 function targetBox() {
   const c = country(), s = shapes[c.geo];
   if (S.round === 1) return s.mainBox;
-  const pts = c.ll.map(([lo, la]) => project(lo, la));
+  const pts = c.caps.map(p => project(...p.ll));
   return unionBox([s.mainBox, ...pts.map(([x, y]) => [x, y, x, y])]);
 }
 
@@ -711,8 +725,8 @@ function drawMarks(v) {
     el('circle', { class: 'ring', cx: (box[0] + box[2]) / 2, cy: (box[1] + box[3]) / 2, r: size / 2 + vw * 0.035 }, layers.marks);
   }
   if (S.round === 2) {
-    for (const [lo, la] of c.ll) {
-      const [x, y] = project(lo, la);
+    for (const cap of c.caps) {
+      const [x, y] = project(...cap.ll);
       el('circle', { class: 'cap-halo', cx: x, cy: y, r: vw * 0.012 }, layers.marks);
       el('circle', { class: 'cap-dot', cx: x, cy: y, r: vw * 0.007 }, layers.marks);
     }
@@ -723,8 +737,8 @@ function showCapitalLabel() {
   if (!WORLD || !view) return;
   const c = country(), vw = view[2];
   layers.marks.querySelectorAll('text').forEach(t => t.remove());
-  c.caps.slice(0, c.geo === 'Bolivia' ? 2 : 1).forEach((name, i) => {
-    const [x, y] = project(...c.ll[i]);
+  c.caps.forEach(({ es: name, ll }) => {
+    const [x, y] = project(...ll);
     const t = el('text', { x, y: y - vw * 0.022, 'text-anchor': 'middle', 'font-size': vw * 0.032, 'stroke-width': vw * 0.006 }, layers.marks);
     t.textContent = name;
   });
