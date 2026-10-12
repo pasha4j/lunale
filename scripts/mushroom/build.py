@@ -36,6 +36,9 @@ RECENT_DAYS = 14
 #          A species left out (or 0) is not scored or shown at that location.
 # soil:    (dry, wet) soil moisture m³/m³ at 3–9 cm. The model's sandy Pinelands
 #          cells peak near 0.16 even after soaking rain, loam near 0.34.
+# frost_offset: °F colder than the forecast grid on clear nights, for frost
+#          checks. Pine Barrens sand and bogs radiate heat fast; hollows often
+#          run 5–10°F below the forecast.
 # Keep these to public areas — never put a specific tree's coordinates here.
 LOCATIONS = [
     {
@@ -51,7 +54,7 @@ LOCATIONS = [
         "id": "pinelands", "name": "NJ Pinelands", "sub": "NJ State Forest",
         "lat": 39.76, "lng": -74.68,
         "habitat_note": "Pitch pine & oak on sandy, acidic soil that drains fast",
-        "soil": (0.05, 0.15),
+        "soil": (0.05, 0.15), "frost_offset": 5,
         "habitat": {"morel": 0.05, "chanterelle": 0.8, "king": 0.5, "leccinum": 0.9,
                     "bolete": 0.8, "suillus": 0.9, "chicken": 0.3, "hen": 0.2, "puffball": 0.5,
                     "honey": 0.6, "ringless": 0.5, "matsutake": 0.6},
@@ -73,6 +76,9 @@ LOCATIONS = [
 # temp:    (basis, lo, hi) — ideal band for 4-day mean of daily highs, or soil temp at 6 cm
 # cold:    None | "boost" (helped by nights ≤55°F) | "required"
 # caution: optional safety note shown in the page's detail panel
+# hardy:   True for cool-season species that shrug off light frost
+# soil_min: optional soil temp (°F, 6 cm) below which a warm-season species
+#          shuts down — full above soil_min + 5, down to 0.2 at soil_min - 1
 # season_region / season_shift / season_note: for species too rare locally to
 #          have their own curve — borrow a wider region's and shift it (weeks)
 HONEY_CAUTION = ("Deadly galerina grows on the same wood, sometimes in the same cluster — "
@@ -86,27 +92,27 @@ SPECIES = [
      "rain_in": 1.0, "lag": (4, 10), "temp": ("high", 70, 86), "cold": None},
     {"id": "king", "name": "King boletes", "latin": "Boletus edulis group",
      "taxa": [48701, 194218, 350217, 194181, 543052],
-     "rain_in": 1.0, "lag": (4, 9), "temp": ("high", 68, 85), "cold": None},
+     "rain_in": 1.0, "lag": (4, 9), "temp": ("high", 68, 85), "cold": None, "soil_min": 50},
     {"id": "leccinum", "name": "Leccinum Bolete", "latin": "Leccinum spp.", "taxa": [54203],
-     "rain_in": 0.75, "lag": (3, 8), "temp": ("high", 60, 82), "cold": None},
+     "rain_in": 0.75, "lag": (3, 8), "temp": ("high", 60, 82), "cold": None, "hardy": True},
     {"id": "bolete", "name": "Boletes (all)", "latin": "Boletaceae", "taxa": [48702],
-     "rain_in": 1.0, "lag": (3, 9), "temp": ("high", 65, 85), "cold": None},
+     "rain_in": 1.0, "lag": (3, 9), "temp": ("high", 65, 85), "cold": None, "soil_min": 50},
     {"id": "suillus", "name": "Slippery jacks & jills", "latin": "Suillus", "taxa": [53490],
-     "rain_in": 0.75, "lag": (3, 8), "temp": ("high", 55, 75), "cold": "boost"},
+     "rain_in": 0.75, "lag": (3, 8), "temp": ("high", 55, 75), "cold": "boost", "hardy": True},
     {"id": "chicken", "name": "Chicken of the woods", "latin": "Laetiporus", "taxa": [48431],
      "rain_in": 0.75, "lag": (4, 10), "temp": ("high", 60, 85), "cold": None},
     {"id": "hen", "name": "Hen of the woods", "latin": "Grifola frondosa", "taxa": [53714],
-     "rain_in": 0.75, "lag": (5, 14), "temp": ("high", 55, 75), "cold": "required"},
+     "rain_in": 0.75, "lag": (5, 14), "temp": ("high", 55, 75), "cold": "required", "hardy": True},
     {"id": "puffball", "name": "Puffballs", "latin": "Lycoperdaceae", "taxa": [48445],
      "rain_in": 0.75, "lag": (2, 7), "temp": ("high", 62, 85), "cold": None},
     {"id": "honey", "name": "Honey mushrooms", "latin": "Armillaria", "taxa": [55930],
-     "rain_in": 0.75, "lag": (4, 10), "temp": ("high", 50, 70), "cold": "boost",
+     "rain_in": 0.75, "lag": (4, 10), "temp": ("high", 50, 70), "cold": "boost", "hardy": True,
      "caution": HONEY_CAUTION},
     {"id": "ringless", "name": "Ringless honey", "latin": "Desarmillaria caespitosa", "taxa": [1238700],
      "rain_in": 0.75, "lag": (4, 10), "temp": ("high", 65, 85), "cold": None,
      "caution": HONEY_CAUTION},
     {"id": "matsutake", "name": "Matsutake", "latin": "Tricholoma magnivelare", "taxa": [62483],
-     "rain_in": 0.75, "lag": (6, 14), "temp": ("high", 50, 66), "cold": "boost",
+     "rain_in": 0.75, "lag": (6, 14), "temp": ("high", 50, 66), "cold": "boost", "hardy": True,
      # Only 3 records within 200 km (all Pine Barrens, November). The Northeast
      # curve peaks Sep–Oct from New England finds; NJ runs ~4 weeks later.
      "season_region": {"lat": 41.0, "lng": -74.0, "radius": 600}, "season_shift": 4,
@@ -286,8 +292,21 @@ def score_day(sp, loc, wx, i, season, recent):
     else:
         cold = 1.0
 
+    offset = loc.get("frost_offset", 0)
     min_low3 = min(v for v in wx["tmin"][i - 2:i + 1] if v is not None)
-    frost = 0.3 if min_low3 <= 28 else 0.7 if min_low3 <= 32 else 1.0
+    ground_low = min_low3 - offset
+    if sp.get("hardy"):
+        frost = 0.6 if ground_low <= 28 else 0.9 if ground_low <= 32 else 1.0
+    else:
+        frost = 0.3 if ground_low <= 28 else 0.7 if ground_low <= 32 else 1.0
+
+    # Warm-season species stop once the soil cools (2-day mean at 6 cm;
+    # a 3-day mean lagged a sudden cold snap by too much).
+    st3 = [v for v in wx["st"][i - 1:i + 1] if v is not None]
+    soil_t = sum(st3) / len(st3) if st3 else None
+    soil_cold = 1.0
+    if sp.get("soil_min") and soil_t is not None:
+        soil_cold = 0.2 + 0.8 * clamp((soil_t - (sp["soil_min"] - 1)) / 6)
 
     # Gentle nudge from recent regional sightings (people are finding it now).
     sightings = 0.85 + 0.3 * clamp(recent / 5)
@@ -296,16 +315,19 @@ def score_day(sp, loc, wx, i, season, recent):
     week = min(d.isocalendar().week, 53) - 1
     s_season = season[week]
     habitat = loc["habitat"][sp["id"]]
-    weather = (0.6 * rain + 0.4 * moisture) * temp * cold * frost
+    weather = (0.6 * rain + 0.4 * moisture) * temp * cold * frost * soil_cold
 
     score = 100 * (s_season ** 0.6) * habitat * weather * sightings
     return {
         "s": round(clamp(score, 0, 100)),
         "f": {k: round(v, 2) for k, v in {
             "season": s_season, "habitat": habitat, "rain": rain, "moisture": moisture,
-            "temp": temp, "cold": cold, "frost": frost, "sightings": sightings}.items()},
+            "temp": temp, "cold": cold, "frost": frost, "soilCold": soil_cold,
+            "sightings": sightings}.items()},
         "x": {"rainWin": round(raw, 2), "sm": sm, "tAvg": round(t_avg, 1) if t_avg else None,
-              "minLow": round(min_low10), "week": week + 1},
+              "minLow": round(min_low10), "week": week + 1,
+              "low3": round(min_low3), "groundLow": round(ground_low),
+              "soilT": round(soil_t, 1) if soil_t is not None else None},
     }
 
 
@@ -322,7 +344,7 @@ def build():
         species_out.append({
             "id": sp["id"], "name": sp["name"], "latin": sp["latin"], "taxa": sp["taxa"],
             "rain_in": sp["rain_in"], "lag": list(sp["lag"]),
-            "temp": list(sp["temp"]), "cold": sp["cold"],
+            "temp": list(sp["temp"]), "cold": sp["cold"], "soilMin": sp.get("soil_min"),
             "caution": sp.get("caution"), "seasonNote": sp.get("season_note"),
             "season": curve, "seasonTotal": total,
         })
@@ -339,6 +361,7 @@ def build():
         }
         locations_out.append({
             **{k: loc[k] for k in ("id", "name", "sub", "lat", "lng", "habitat_note", "habitat", "soil")},
+            "frostOffset": loc.get("frost_offset", 0),
             "weather": wx, "scores": scores, "recent": counts, "sightings": sightings,
         })
 

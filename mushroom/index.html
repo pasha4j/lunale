@@ -374,7 +374,12 @@ function renderDetail(loc, sid, i) {
     ['Temperature', f.temp, `${basis === 'soil' ? 'soil' : 'avg high'} ${x.tAvg ?? '—'}°F · ideal ${lo}–${hi}°F`],
   ];
   if (sp.cold) rows.push(['Cool nights', f.cold, `coldest night in 10 days ${x.minLow}°F · ${sp.cold === 'required' ? 'needs' : 'helped by'} ≤55°F`]);
-  if (f.frost < 1) rows.push(['Frost', f.frost, 'recent frost slows fruiting']);
+  if (f.frost < 1 || (loc.frostOffset && x.groundLow <= 34)) rows.push(['Frost', f.frost,
+    loc.frostOffset
+      ? `coldest night in 3 days ${x.low3}°F · ~${x.groundLow}°F in low spots (−${loc.frostOffset}°F)`
+      : `coldest night in 3 days ${x.low3}°F · frost slows fruiting`]);
+  if (sp.soilMin) rows.push(['Soil warmth', f.soilCold,
+    `soil ${x.soilT ?? '—'}°F · warm-season, shuts down near ${sp.soilMin}°F`]);
 
   const box = el('div');
   box.innerHTML = `
@@ -392,7 +397,7 @@ function renderDetail(loc, sid, i) {
   if (sp.caution) box.appendChild(el('div', { className: 'caution' }, `<b>⚠ Caution</b> · ${esc(sp.caution)}`));
   box.appendChild(seasonChart(sp, x.week));
   box.appendChild(el('div', { className: 'formula' },
-    'score = season<sup>0.6</sup> × habitat × (0.6·rain + 0.4·moisture) × temp × cool × frost × sightings'));
+    'score = season<sup>0.6</sup> × habitat × (0.6·rain + 0.4·moisture) × temp × cool × frost × soil warmth × sightings'));
   return box;
 }
 
