@@ -66,6 +66,12 @@
   .map-btn { position: absolute; right: 8px; bottom: 8px; font-size: 12px; font-weight: 600;
     background: #0b1220cc; border: 1px solid var(--border); border-radius: 999px; padding: 5px 10px; color: var(--muted); }
   .map-btn:hover { color: var(--text); }
+  .flag-stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: radial-gradient(circle at 50% 40%, var(--raised), var(--surface)); }
+  .flag-stage img { height: 100%; width: auto; max-width: 100%; object-fit: contain;
+    border-radius: 6px; box-shadow: 0 6px 24px #0008, 0 0 0 1px #ffffff1a; }
+  .flag-inline { height: 1.3em; width: auto; vertical-align: -1px; border-radius: 2px; box-shadow: 0 0 0 1px #ffffff26; margin-right: 2px; }
+  .flag-mini { position: absolute; left: 8px; top: 8px; width: 80px; border-radius: 3px; box-shadow: 0 0 0 1px #ffffff33, 0 2px 8px #0008; }
   .loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 14px; }
 
   /* Round bar */
@@ -159,6 +165,7 @@
   .big-score small { font-size: 18px; color: var(--muted); font-weight: 600; }
   .sub { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 14px; }
   .results { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .results .flag-inline { height: 1.6em; vertical-align: -6px; margin-right: 4px; }
   .results td { padding: 5px 4px; border-top: 1px solid var(--border); }
   .results td.r { text-align: right; font-family: 'DM Mono', monospace; white-space: nowrap; }
   .results .hit { color: var(--heart); letter-spacing: 1px; }
@@ -185,6 +192,8 @@
     <svg id="map" role="img" aria-label="World map with one country highlighted"></svg>
     <div class="loading" id="loading">Loading map…</div>
     <button class="map-btn" id="btn-zoom" type="button">🌍 World</button>
+    <img class="flag-mini" id="flag-mini" alt="" hidden>
+    <div class="flag-stage" id="flag-stage" hidden><img id="flag-img" alt="Flag of the country to guess"></div>
   </div>
 
   <div class="roundbar">
@@ -233,6 +242,10 @@
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
     <button class="close" data-close aria-label="Close">×</button>
     <h2 id="settings-title">Settings</h2>
+    <label class="setting">
+      <span>Play by flag<small>Round 1 shows the country's flag instead of the map. The map comes back for the capital.</small></span>
+      <input type="checkbox" id="opt-flag">
+    </label>
     <label class="setting">
       <span>Hard mode<small>No suggestions: type the whole name from memory.</small></span>
       <input type="checkbox" id="opt-hard">
@@ -364,7 +377,7 @@ function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } ca
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} }
 // Settings live apart from the run so a new run keeps them.
 const CFG_KEY = 'espanle.settings';
-const CFG = { hard: false, esKbd: false };
+const CFG = { hard: false, esKbd: false, flag: false };
 try { Object.assign(CFG, JSON.parse(localStorage.getItem(CFG_KEY))); } catch {}
 function saveCfg() { try { localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); } catch {} }
 
@@ -485,7 +498,7 @@ function render() {
   $('total').textContent = S.order.length;
   $('score').textContent = S.score;
   $('round-label').innerHTML = S.round === 1
-    ? '<span class="step">Ronda 1</span>Which country is this?'
+    ? `<span class="step">Ronda 1</span>${CFG.flag ? 'Whose flag is this?' : 'Which country is this?'}`
     : c.caps.length > 1
       ? `<span class="step">Ronda 2</span>Both capitals of ${c.name.es}?${c.caps.filter(p => found().includes(norm(p.es))).map(p => `<span class="found">✓ ${esc(p.es)}</span>`).join('')}`
       : `<span class="step">Ronda 2</span>Capital of ${c.name.es}?`;
@@ -525,13 +538,21 @@ function render() {
           : S.round === 1 ? 'Spanish or English name, accents optional.' : c.caps.length > 1 ? 'Two red dots: name both capitals, one at a time.' : 'Look for the red dot. Spanish or English.'}</span>`;
   } else if (S.phase !== 'summary') {
     const won = S.phase === 'won';
-    const label = S.round === 1 ? `${c.flag} ${placeHtml(c.name)}` : c.caps.map(placeHtml).join(' y ');
+    const label = S.round === 1 ? `${flagImg(c)} ${placeHtml(c.name)}` : c.caps.map(placeHtml).join(' y ');
     const note = S.round === 2 && c.note ? `<small>${c.note}</small>` : '';
     $('reveal-msg').innerHTML = won
       ? `¡Sí! ${label}${note}`
       : `It was ${label}${note}`;
     $('btn-next').textContent = S.round === 1 ? 'Capital →' : (S.idx + 1 < S.order.length ? 'Next country →' : 'See results');
   }
+
+  // Flag mode: the flag replaces the map while the country is being guessed, then shrinks to a corner badge.
+  const flagSrc = `flags/${flagCode(c)}.svg`;
+  const bigFlag = CFG.flag && S.round === 1 && S.phase === 'play';
+  $('flag-stage').hidden = !bigFlag;
+  $('flag-mini').hidden = !CFG.flag || bigFlag;
+  $('btn-zoom').hidden = bigFlag;
+  for (const id of ['flag-img', 'flag-mini']) if ($(id).getAttribute('src') !== flagSrc) $(id).src = flagSrc;
 
   // Keyboard wrong-key marks
   for (const b of $('kbd').querySelectorAll('button[data-k]')) b.classList.toggle('wrong-key', playing && S.wrong.includes(b.dataset.k));
@@ -546,7 +567,7 @@ function renderSummary() {
   $('sum-table').innerHTML = S.results.map(r => {
     const c = COUNTRIES[r.c];
     const cell = v => `<span class="${v ? 'hit' : 'miss'}">${v ? '♥'.repeat(v) : '✗'}</span>`;
-    return `<tr><td>${c.flag} ${placeHtml(c.name)}<br><small style="color:var(--muted)">${c.caps.map(placeHtml).join(' / ')}</small></td>
+    return `<tr><td>${flagImg(c)} ${placeHtml(c.name)}<br><small style="color:var(--muted)">${c.caps.map(placeHtml).join(' / ')}</small></td>
       <td class="r">${cell(r.r1)}<br>${cell(r.r2)}</td></tr>`;
   }).join('');
   openModal('modal-summary');
@@ -556,8 +577,13 @@ function shareText() {
   const sq = S.results.map(r => (r.r1 && r.r2) ? '🟩' : (r.r1 || r.r2) ? '🟨' : '🟥');
   const rows = [];
   for (let i = 0; i < sq.length; i += 7) rows.push(sq.slice(i, i + 7).join(''));
-  return `Españle ${S.score}/${S.order.length * 10}${CFG.hard ? ' · difícil' : ''}\n${rows.join('\n')}\n${location.origin}${location.pathname}`;
+  return `Españle ${S.score}/${S.order.length * 10}${CFG.flag ? ' · bandera' : ''}${CFG.hard ? ' · difícil' : ''}\n${rows.join('\n')}\n${location.origin}${location.pathname}`;
 }
+
+// 🇧🇴 -> 'bo': regional-indicator letters back to the ISO code used for flags/<code>.svg.
+const flagCode = c => [...c.flag].map(ch => String.fromCharCode(ch.codePointAt(0) - 0x1F1E6 + 97)).join('');
+// SVG rather than the emoji itself, which Windows renders as two letters.
+const flagImg = c => `<img class="flag-inline" src="flags/${flagCode(c)}.svg" alt="">`;
 
 // Spanish spelling in bold, English after it when it differs.
 const placeHtml = p => `<b>${esc(p.es)}</b>` + (norm(p.en) !== norm(p.es) ? ` <span class="en">${esc(p.en)}</span>` : '');
@@ -644,10 +670,11 @@ $('modal-help').addEventListener('click', e => { if (e.target.id === 'modal-help
 $('btn-help').addEventListener('click', () => openModal('modal-help'));
 $('modal-settings').addEventListener('click', e => { if (e.target.id === 'modal-settings') closeModals(); });
 $('btn-settings').addEventListener('click', () => {
-  $('opt-hard').checked = CFG.hard; $('opt-es-kbd').checked = CFG.esKbd;
+  $('opt-hard').checked = CFG.hard; $('opt-es-kbd').checked = CFG.esKbd; $('opt-flag').checked = CFG.flag;
   openModal('modal-settings');
 });
 $('opt-hard').addEventListener('change', e => { CFG.hard = e.target.checked; S.hl = -1; saveCfg(); render(); });
+$('opt-flag').addEventListener('change', e => { CFG.flag = e.target.checked; saveCfg(); render(); });
 $('opt-es-kbd').addEventListener('change', e => { CFG.esKbd = e.target.checked; saveCfg(); buildKeyboard(); render(); });
 $('btn-again').addEventListener('click', () => { $('modal-summary').classList.remove('open'); newRun(); });
 $('btn-share').addEventListener('click', async () => {
@@ -830,10 +857,15 @@ $('btn-zoom').addEventListener('click', () => {
 });
 
 let resizeTimer;
-addEventListener('resize', () => {
+// Refit whenever the stage changes shape (window resizes, orientation changes).
+new ResizeObserver(() => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => { if (view) { view = zoomedOut ? worldView() : viewFor(targetBox()); setViewBox(view); } }, 100);
-});
+  resizeTimer = setTimeout(() => {
+    if (!view) return;
+    view = zoomedOut ? worldView() : viewFor(targetBox());
+    setViewBox(view); drawMarks(view); showCapitalLabel();
+  }, 100);
+}).observe(document.querySelector('.stage'));
 
 // ---------- Boot ----------
 buildKeyboard();
