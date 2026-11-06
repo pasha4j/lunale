@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marking Periods — Council Rock</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0f1a; --surface:#111827; --border:#1e293b;
+    --text:#e2e8f0; --muted:#7c8ba1; --accent:#6EE7B7;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; padding:2rem; }
+  header { border-bottom:1px solid var(--border); padding-bottom:1.5rem; margin-bottom:2.5rem; }
+  .head-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  header h1 { font-size:2rem; font-weight:800; letter-spacing:-0.03em; }
+  header h1 span { color:var(--accent); }
+  .subtitle { color:var(--muted); margin-top:0.3rem; font-size:0.9rem; font-family:'DM Mono',monospace; }
+  .nav-link {
+    display:inline-flex; align-items:center; gap:0.4rem; background:var(--surface);
+    border:1px solid var(--border); border-radius:10px; padding:0.6rem 1rem; color:var(--accent);
+    text-decoration:none; font-weight:600; font-size:0.9rem; white-space:nowrap;
+  }
+  .nav-link:hover { border-color:var(--accent); }
+  .student-block { margin-bottom:3rem; max-width:860px; }
+  .student-name { font-size:1.4rem; font-weight:700; margin-bottom:1.25rem; padding-left:1rem; border-left:3px solid var(--accent); }
+  .grid { width:100%; table-layout:fixed; border-collapse:separate; border-spacing:0 4px; }
+  .grid thead th {
+    font-size:0.8rem; font-weight:700; color:var(--text); text-align:center; padding:0 0.25rem 0.4rem;
+  }
+  .grid .state { display:block; font-size:0.68rem; font-weight:400; color:var(--muted); font-family:'DM Mono',monospace; }
+  .grid .corner { width:36%; }
+  .subject {
+    background:var(--surface); text-align:left; font-weight:600; font-size:0.92rem; padding:0.6rem 0.75rem;
+    border:1px solid var(--border); border-right:none; border-radius:10px 0 0 10px; overflow-wrap:anywhere;
+  }
+  .subject .course { display:block; font-weight:400; font-size:0.72rem; color:var(--muted); margin-top:0.1rem; }
+  .cell {
+    background:var(--surface); text-align:center; padding:0.5rem 0.2rem;
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  }
+  .cell:last-child { border-right:1px solid var(--border); border-radius:0 10px 10px 0; }
+  .cell.live { background:#0d1420; }
+  .cell.empty { color:var(--border); }
+  .letter { display:block; font-size:1.3rem; font-weight:800; line-height:1.15; }
+  .pct { display:block; font-size:0.72rem; color:var(--muted); font-family:'DM Mono',monospace; }
+  .letter.a { color:#4ade80; } .letter.b { color:#60a5fa; } .letter.c { color:#fbbf24; }
+  .letter.d { color:#f97316; } .letter.f { color:#f87171; }
+  .note { color:var(--muted); font-size:0.8rem; max-width:860px; line-height:1.5; }
+  footer { color:var(--muted); font-size:0.8rem; text-align:center; margin-top:3rem; font-family:'DM Mono',monospace; }
+  @media (max-width:560px) {
+    body { padding:1rem; }
+    header h1 { font-size:1.6rem; }
+    .grid .corner { width:30%; }
+    .subject { padding:0.5rem; font-size:0.8rem; }
+    .subject .course { display:none; }
+    .letter { font-size:1.05rem; }
+    .pct { font-size:0.62rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="head-row">
+    <div>
+      <h1>Marking <span>Periods</span></h1>
+      <p class="subtitle">Last updated 2026-11-05 21:26</p>
+    </div>
+    <a class="nav-link" href="https://thelunale.com/grades/">📈 Grades →</a>
+  </div>
+</header>
+
+    <section class="student-block">
+      <h2 class="student-name">M.</h2>
+      <table class="grid">
+        <thead><tr><th class="corner"></th><th title="Marking Period 1">MP1<span class="state">final</span></th><th title="Marking Period 2">MP2<span class="state">so far</span></th><th title="Marking Period 3">MP3<span class="state">&nbsp;</span></th><th title="Marking Period 4">MP4<span class="state">&nbsp;</span></th></tr></thead>
+        <tbody><tr><th scope="row" class="subject">Math<span class="course">Geometry</span></th><td class="cell"><span class="letter b">B</span><span class="pct">86.3%</span></td><td class="cell live"><span class="letter a">A-</span><span class="pct">90.9%</span></td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Science<span class="course">Chemistry</span></th><td class="cell"><span class="letter c">C+</span><span class="pct">79.3%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">English<span class="course">English 11</span></th><td class="cell"><span class="letter a">A-</span><span class="pct">89.7%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Social Studies<span class="course">Hon Wld Hist</span></th><td class="cell"><span class="letter b">B</span><span class="pct">85.2%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Spanish<span class="course">Spanish 4</span></th><td class="cell"><span class="letter a">A-</span><span class="pct">90.8%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Phys Ed<span class="course">Weight Training &amp; Yoga</span></th><td class="cell"><span class="letter a">A+</span><span class="pct">100.0%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Health<span class="course">😊Finding Happiness#</span></th><td class="cell"><span class="letter a">A+</span><span class="pct">100.0%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr></tbody>
+      </table>
+    </section>
+    <section class="student-block">
+      <h2 class="student-name">R.</h2>
+      <table class="grid">
+        <thead><tr><th class="corner"></th><th title="Marking Period 1">MP1<span class="state">final</span></th><th title="Marking Period 2">MP2<span class="state">so far</span></th><th title="Marking Period 3">MP3<span class="state">&nbsp;</span></th><th title="Marking Period 4">MP4<span class="state">&nbsp;</span></th></tr></thead>
+        <tbody><tr><th scope="row" class="subject">Math<span class="course">Hon Algebra 2 2026-27</span></th><td class="cell"><span class="letter d">D-</span><span class="pct">59.6%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Science<span class="course">Honors Biology</span></th><td class="cell"><span class="letter c">C+</span><span class="pct">78.0%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">English<span class="course">English 9</span></th><td class="cell"><span class="letter a">A+</span><span class="pct">99.8%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Social Studies<span class="course">Acl Am Civ 9</span></th><td class="cell"><span class="letter a">A+</span><span class="pct">98.9%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Spanish<span class="course">Spanish 2</span></th><td class="cell"><span class="letter a">A</span><span class="pct">94.5%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Phys Ed<span class="course">9th Grade PE Lynch</span></th><td class="cell"><span class="letter a">A+</span><span class="pct">100.0%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Tech<span class="course">Electronics1 #</span></th><td class="cell"><span class="letter d">D</span><span class="pct">65.4%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr></tbody>
+      </table>
+    </section>
+    <section class="student-block">
+      <h2 class="student-name">E.</h2>
+      <table class="grid">
+        <thead><tr><th class="corner"></th><th title="Marking Period 1">MP1<span class="state">final</span></th><th title="Marking Period 2">MP2<span class="state">so far</span></th><th title="Marking Period 3">MP3<span class="state">&nbsp;</span></th><th title="Marking Period 4">MP4<span class="state">&nbsp;</span></th></tr></thead>
+        <tbody><tr><th scope="row" class="subject">Math<span class="course">Hon Algebra 2 2026-27</span></th><td class="cell"><span class="letter c">C</span><span class="pct">74.2%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Science<span class="course">Honors Biology</span></th><td class="cell"><span class="letter b">B+</span><span class="pct">87.8%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">English<span class="course">Honors English 9</span></th><td class="cell"><span class="letter b">B-</span><span class="pct">80.4%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Social Studies<span class="course">Hon Am Civ 9</span></th><td class="cell"><span class="letter a">A</span><span class="pct">93.1%</span></td><td class="cell live"><span class="letter d">D</span><span class="pct">67.0%</span></td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Latin<span class="course">Latin 1</span></th><td class="cell"><span class="letter a">A-</span><span class="pct">91.4%</span></td><td class="cell live"><span class="letter a">A+</span><span class="pct">100.0%</span></td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Phys Ed<span class="course">9th Grade PE Young</span></th><td class="cell"><span class="letter a">A+</span><span class="pct">100.0%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr><tr><th scope="row" class="subject">Tech<span class="course">Acl Comp Sci 1 #</span></th><td class="cell"><span class="letter b">B</span><span class="pct">84.6%</span></td><td class="cell empty live">—</td><td class="cell empty">—</td><td class="cell empty">—</td></tr></tbody>
+      </table>
+    </section>
+<p class="note">Grades as Canvas reports them for each marking period. “So far” is still moving, and a “final” can still change if a teacher posts late work.</p>
+<footer>Generated by canvas_grades.py</footer>
+</body>
+</html>

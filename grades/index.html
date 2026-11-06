@@ -99,6 +99,9 @@
   .kpi-arrow.up   { color: var(--up); }
   .kpi-arrow.dn   { color: var(--dn); }
   .kpi-arrow.flat { color: var(--muted); }
+  .kpi-letter.none, .kpi-pct.none, .kpi-prior { color: var(--muted); }
+  .kpi-pct.none { font-size: 0.72rem; white-space: nowrap; }
+  .kpi-prior { font-size: 0.75rem; font-family: 'DM Mono', monospace; margin-top: 0.35rem; }
   .kpi-letter.a, .kpi-pct.a { color: #4ade80; }
   .kpi-letter.b, .kpi-pct.b { color: #60a5fa; }
   .kpi-letter.c, .kpi-pct.c { color: #fbbf24; }
@@ -237,84 +240,72 @@
   <div class="head-row">
     <div>
       <h1>Grade <span>Tracker</span></h1>
-      <p class="subtitle">Council Rock School District · Last updated 2026-11-05 18:03</p>
+      <p class="subtitle">Council Rock School District · Last updated 2026-11-05 21:26</p>
     </div>
-    <a class="nav-link" href="https://thelunale.com/homework/">📋 Homework →</a>
+    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+      <a class="nav-link" href="https://thelunale.com/grades/finals/">🏁 Marking periods →</a>
+      <a class="nav-link" href="https://thelunale.com/homework/">📋 Homework →</a>
+    </div>
   </div>
 </header>
 
         <section class="student-block">
           <h2 class="student-name">M.</h2>
           <div class="kpi-grid">
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Spanish" title="See Spanish 4 - Deola assignments">
-                <div class="kpi-subject">Spanish</div>
-                <div class="kpi-course" title="Spanish 4 - Deola">Spanish 4 - Deola</div>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Math" title="See Geometry - Groden/Schilk assignments">
+                <div class="kpi-subject">Math</div>
+                <div class="kpi-course" title="Geometry - Groden/Schilk">Geometry - Groden/Schilk</div>
                 <div class="kpi-row">
                   <span class="kpi-letter a">A-</span>
-                  <span class="kpi-pct a">90.8%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-pct a">90.9%</span>
+                  <span class="kpi-arrow flat" title="No prior data yet">·</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 89% to 91%"><title>2026-10-22 89.2% → 2026-11-04 90.8%</title><polyline points="3.0,16.3 11.8,13.7 20.5,13.7 29.3,13.7 38.1,13.7 46.8,14.9 55.6,14.9 64.4,14.9 73.2,14.9 81.9,14.9 90.7,14.9 99.5,9.7 108.2,9.7 117.0,9.7" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="9.7" r="2.2"/></svg></div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 91% to 91%"><title>2026-11-05 90.9% → 2026-11-05 90.9%</title><polyline points="60.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="60.0" cy="13.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Science" title="See Chemistry - Arnoldi 26.27 assignments">
                 <div class="kpi-subject">Science</div>
                 <div class="kpi-course" title="Chemistry - Arnoldi 26.27">Chemistry - Arnoldi 26.27</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter c">C+</span>
-                  <span class="kpi-pct c">79.3%</span>
-                  <span class="kpi-arrow dn" title="Since last check">▼ 0.1</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark c" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 80% to 79%"><title>2026-10-22 80.2% → 2026-11-04 79.3%</title><polyline points="3.0,13.6 11.8,13.6 20.5,13.6 29.3,13.6 38.1,10.9 46.8,8.8 55.6,17.2 64.4,17.2 73.2,17.2 81.9,17.2 90.7,17.2 99.5,16.8 108.2,16.8 117.0,17.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="17.0" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: C+ 79.3%</div>
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Spanish" title="See Spanish 4 - Deola assignments">
+                <div class="kpi-subject">Spanish</div>
+                <div class="kpi-course" title="Spanish 4 - Deola">Spanish 4 - Deola</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
+                </div>
+                <div class="kpi-prior">MP1 final: A- 90.8%</div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Social%20Studies" title="See Hon Wld Hist - Boekamp assignments">
                 <div class="kpi-subject">Social Studies</div>
                 <div class="kpi-course" title="Hon Wld Hist - Boekamp">Hon Wld Hist - Boekamp</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter b">B</span>
-                  <span class="kpi-pct b">85.2%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 99% to 85%"><title>2026-10-22 99.3% → 2026-11-04 85.2%</title><polyline points="3.0,3.0 11.8,3.0 20.5,3.0 29.3,3.0 38.1,9.9 46.8,9.9 55.6,9.9 64.4,9.9 73.2,9.1 81.9,9.1 90.7,9.1 99.5,9.1 108.2,23.0 117.0,23.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="23.0" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=English" title="See English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27 assignments">
-                <div class="kpi-subject">English</div>
-                <div class="kpi-course" title="English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27">English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter a">A-</span>
-                  <span class="kpi-pct a">89.7%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 89% to 90%"><title>2026-10-22 89.2% → 2026-11-04 89.7%</title><polyline points="3.0,4.4 11.8,4.4 20.5,4.4 29.3,4.4 38.1,4.4 46.8,4.4 55.6,4.4 64.4,6.1 73.2,23.0 81.9,23.0 90.7,23.0 99.5,3.0 108.2,3.0 117.0,3.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="3.0" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Math" title="See Geometry - Groden/Schilk assignments">
-                <div class="kpi-subject">Math</div>
-                <div class="kpi-course" title="Geometry - Groden/Schilk">Geometry - Groden/Schilk</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter b">B</span>
-                  <span class="kpi-pct b">90.9%</span>
-                  <span class="kpi-arrow up" title="Since last check">▲ 4.6</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 86% to 91%"><title>2026-10-23 85.8% → 2026-11-05 90.9%</title><polyline points="3.0,22.2 11.8,22.2 20.5,22.2 29.3,22.2 38.1,23.0 46.8,20.5 55.6,20.5 64.4,20.5 73.2,20.5 81.9,20.5 90.7,20.5 99.5,20.5 108.2,20.5 117.0,3.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="3.0" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: B 85.2%</div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Health" title="See 😊Finding Happiness# - DiMarco assignments">
                 <div class="kpi-subject">Health</div>
                 <div class="kpi-course" title="😊Finding Happiness# - DiMarco">😊Finding Happiness# - DiMarco</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter a">A+</span>
-                  <span class="kpi-pct a">86.2%</span>
-                  <span class="kpi-arrow up" title="Since last check">▲ 3.4</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 94% to 86%"><title>2026-10-22 93.9% → 2026-11-04 86.2%</title><polyline points="3.0,6.1 11.8,6.1 20.5,6.1 29.3,6.1 38.1,6.1 46.8,3.6 55.6,3.6 64.4,3.0 73.2,3.0 81.9,3.0 90.7,3.0 99.5,23.0 108.2,23.0 117.0,17.8" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="17.8" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: A+ 100.0%</div>
               </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=Phys%20Ed" title="See Weight Training & Yoga assignments">
-                <div class="kpi-subject">Phys Ed</div>
-                <div class="kpi-course" title="Weight Training & Yoga">Weight Training & Yoga</div>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=M&subject=English" title="See English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27 assignments">
+                <div class="kpi-subject">English</div>
+                <div class="kpi-course" title="English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27">English 11 - Bengston/McCrane - (Pers 1 & 5/6) - 26/27</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter a">A+</span>
-                  <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-10-22 100.0% → 2026-11-04 100.0%</title><polyline points="3.0,13.0 11.8,13.0 20.5,13.0 29.3,13.0 38.1,13.0 46.8,13.0 55.6,13.0 64.4,13.0 73.2,13.0 81.9,13.0 90.7,13.0 99.5,13.0 108.2,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: A- 89.7%</div>
               </a></div>
           
           <div class="medal-strip">
@@ -338,6 +329,15 @@
             </span>
             <span class="medal-score ">16/16<span class="medal-letter">A+</span></span>
           </a>
+          <a class="medal-card gold" href="https://councilrock.instructure.com/courses/23362/assignments/1831744"
+             title="Spectroscope Lab — Chemistry - Arnoldi 26.27">
+            <span class="medal-glyph">🥇</span>
+            <span class="medal-text">
+              <span class="medal-title">Spectroscope Lab</span>
+              <span class="medal-course">Chemistry</span>
+            </span>
+            <span class="medal-score ">9/10<span class="medal-letter">A-</span></span>
+          </a>
           <a class="medal-card silver" href="https://councilrock.instructure.com/courses/21656/assignments/1909061"
              title="HW: 3-6 to Test Review — Geometry - Groden/Schilk">
             <span class="medal-glyph">🥈</span>
@@ -346,6 +346,15 @@
               <span class="medal-course">Geometry</span>
             </span>
             <span class="medal-score ">7/8<span class="medal-letter">B+</span></span>
+          </a>
+          <a class="medal-card none" href="https://councilrock.instructure.com/courses/23362/assignments/1905580"
+             title="POGIL Electron Energy and Light — Chemistry - Arnoldi 26.27">
+            <span class="medal-glyph">·</span>
+            <span class="medal-text">
+              <span class="medal-title">POGIL Electron Energy and Light</span>
+              <span class="medal-course">Chemistry</span>
+            </span>
+            <span class="medal-score f">0/15<span class="medal-letter">F</span></span>
           </a>
             </div>
             <div class="medal-head due-head">Due today <span class="medal-hint">not turned in</span></div>
@@ -358,6 +367,15 @@
               <span class="medal-course">Geometry</span>
             </span>
             <span class="due-pts">50 pts</span><span class="due-when">11:59pm</span>
+          </a>
+          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/23362/assignments/1830913"
+             title="Bohr Activity — Chemistry - Arnoldi 26.27">
+            <span class="medal-glyph due-dot">&bull;</span>
+            <span class="medal-text">
+              <span class="medal-title">Bohr Activity</span>
+              <span class="medal-course">Chemistry</span>
+            </span>
+            <span class="due-pts">15 pts</span><span class="due-when">11:59pm</span>
           </a>
           <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/22839/assignments/1909584"
              title="5. Nov: French Rev Events — Hon Wld Hist - Boekamp">
@@ -378,6 +396,18 @@
             <span class="due-when">11:59pm</span>
           </a>
             </div>
+            <div class="medal-head">Turned in <span class="medal-hint">awaiting grade</span></div>
+            <div class="medal-row">
+          <a class="medal-card submit-card" href="https://councilrock.instructure.com/courses/23362/assignments/1831726"
+             title="Review M4 — Chemistry - Arnoldi 26.27">
+            <span class="medal-glyph submit-check">&check;</span>
+            <span class="medal-text">
+              <span class="medal-title">Review M4</span>
+              <span class="medal-course">Chemistry</span>
+            </span>
+            <span class="submit-time">2:56pm</span>
+          </a>
+            </div>
           </div>
         </section>
         
@@ -388,71 +418,55 @@
                 <div class="kpi-subject">Science</div>
                 <div class="kpi-course" title="Honors Biology - Mohl">Honors Biology - Mohl</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter c">C+</span>
-                  <span class="kpi-pct c">77.9%</span>
-                  <span class="kpi-arrow dn" title="Since last check">▼ 0.2</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark c" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 77% to 78%"><title>2026-10-22 77.2% → 2026-11-04 77.9%</title><polyline points="3.0,13.2 11.8,13.2 20.5,13.2 29.3,13.2 38.1,12.4 46.8,7.4 55.6,7.4 64.4,10.1 73.2,10.1 81.9,10.1 90.7,18.6 99.5,9.8 108.2,9.8 117.0,10.5" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="10.5" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Math" title="See Hon Algebra 2 2026-27 - Cislak assignments">
-                <div class="kpi-subject">Math</div>
-                <div class="kpi-course" title="Hon Algebra 2 2026-27 - Cislak">Hon Algebra 2 2026-27 - Cislak</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter d">D-</span>
-                  <span class="kpi-pct d">59.6%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark d" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 59% to 60%"><title>2026-10-22 59.3% → 2026-11-04 59.6%</title><polyline points="3.0,13.5 11.8,13.5 20.5,13.5 29.3,13.5 38.1,13.5 46.8,13.6 55.6,13.6 64.4,13.3 73.2,13.3 81.9,13.3 90.7,13.3 99.5,13.0 108.2,12.4 117.0,12.4" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="12.4" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Spanish" title="See Spanish 2 - Merenda assignments">
-                <div class="kpi-subject">Spanish</div>
-                <div class="kpi-course" title="Spanish 2 - Merenda">Spanish 2 - Merenda</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter a">A</span>
-                  <span class="kpi-pct a">94.4%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 94% to 94%"><title>2026-10-22 94.5% → 2026-11-04 94.4%</title><polyline points="3.0,12.3 11.8,12.3 20.5,12.3 29.3,12.3 38.1,12.3 46.8,13.7 55.6,13.2 64.4,13.1 73.2,12.7 81.9,12.7 90.7,12.7 99.5,12.7 108.2,12.7 117.0,12.7" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="12.7" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Social%20Studies" title="See Acl Am Civ 9 - Pacitti assignments">
-                <div class="kpi-subject">Social Studies</div>
-                <div class="kpi-course" title="Acl Am Civ 9 - Pacitti">Acl Am Civ 9 - Pacitti</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter a">A+</span>
-                  <span class="kpi-pct a">98.9%</span>
-                  <span class="kpi-arrow up" title="Since last check">▲ 0.3</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 98% to 99%"><title>2026-10-22 98.3% → 2026-11-04 98.9%</title><polyline points="3.0,14.2 11.8,14.2 20.5,14.2 29.3,14.2 38.1,13.2 46.8,13.2 55.6,13.2 64.4,13.1 73.2,13.1 81.9,13.1 90.7,13.1 99.5,13.1 108.2,13.1 117.0,11.8" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="11.8" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: C+ 78.0%</div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=English" title="See English 9 - Lingman assignments">
                 <div class="kpi-subject">English</div>
                 <div class="kpi-course" title="English 9 - Lingman">English 9 - Lingman</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter a">A+</span>
-                  <span class="kpi-pct a">99.8%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-10-22 99.7% → 2026-11-04 99.8%</title><polyline points="3.0,13.1 11.8,13.1 20.5,13.1 29.3,13.1 38.1,13.1 46.8,13.1 55.6,12.9 64.4,12.9 73.2,12.9 81.9,12.9 90.7,12.9 99.5,12.9 108.2,12.9 117.0,12.9" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="12.9" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: A+ 99.8%</div>
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Math" title="See Hon Algebra 2 2026-27 - Cislak assignments">
+                <div class="kpi-subject">Math</div>
+                <div class="kpi-course" title="Hon Algebra 2 2026-27 - Cislak">Hon Algebra 2 2026-27 - Cislak</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
+                </div>
+                <div class="kpi-prior">MP1 final: D- 59.6%</div>
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Spanish" title="See Spanish 2 - Merenda assignments">
+                <div class="kpi-subject">Spanish</div>
+                <div class="kpi-course" title="Spanish 2 - Merenda">Spanish 2 - Merenda</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
+                </div>
+                <div class="kpi-prior">MP1 final: A 94.5%</div>
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Social%20Studies" title="See Acl Am Civ 9 - Pacitti assignments">
+                <div class="kpi-subject">Social Studies</div>
+                <div class="kpi-course" title="Acl Am Civ 9 - Pacitti">Acl Am Civ 9 - Pacitti</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
+                </div>
+                <div class="kpi-prior">MP1 final: A+ 98.9%</div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Tech" title="See Electronics1 # - Czapor assignments">
                 <div class="kpi-subject">Tech</div>
                 <div class="kpi-course" title="Electronics1 # - Czapor">Electronics1 # - Czapor</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter d">D-</span>
-                  <span class="kpi-pct d">61.3%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark d" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 47% to 61%"><title>2026-10-22 47.4% → 2026-11-04 61.3%</title><polyline points="3.0,23.0 11.8,14.4 20.5,15.4 29.3,15.4 38.1,15.4 46.8,6.7 55.6,6.7 64.4,6.7 73.2,5.7 81.9,5.7 90.7,5.7 99.5,3.3 108.2,3.0 117.0,3.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="3.0" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=R&subject=Phys%20Ed" title="See 9th Grade PE Lynch assignments">
-                <div class="kpi-subject">Phys Ed</div>
-                <div class="kpi-course" title="9th Grade PE Lynch">9th Grade PE Lynch</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter a">A+</span>
-                  <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-10-22 100.0% → 2026-11-04 100.0%</title><polyline points="3.0,13.0 11.8,13.0 20.5,13.0 29.3,13.0 38.1,13.0 46.8,13.0 55.6,13.0 64.4,13.0 73.2,13.0 81.9,13.0 90.7,13.0 99.5,13.0 108.2,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: D 65.4%</div>
               </a></div>
           
           <div class="medal-strip">
@@ -522,18 +536,6 @@
             <span class="medal-score f">0/4<span class="medal-letter">F</span></span>
           </a>
             </div>
-            <div class="medal-head due-head">Due today <span class="medal-hint">not turned in</span></div>
-            <div class="medal-row">
-          <a class="medal-card due-card" href="https://councilrock.instructure.com/courses/21624/assignments/1909808"
-             title="Homework 3.3 (Day 2) 📌 — Hon Algebra 2 2026-27 - Cislak">
-            <span class="medal-glyph due-dot">&bull;</span>
-            <span class="medal-text">
-              <span class="medal-title">Homework 3.3 (Day 2) 📌</span>
-              <span class="medal-course">Hon Algebra 2 2026-27</span>
-            </span>
-            <span class="due-pts">2 pts</span><span class="due-when">11:59pm</span>
-          </a>
-            </div>
             <div class="tests-block" hidden>
             <div class="medal-head tests-head">Tests <span class="tests-when">tomorrow</span></div>
             <div class="medal-row">
@@ -550,6 +552,15 @@
             </div></div>
             <div class="medal-head">Turned in <span class="medal-hint">awaiting grade</span></div>
             <div class="medal-row">
+          <a class="medal-card submit-card" href="https://councilrock.instructure.com/courses/21624/assignments/1909808"
+             title="Homework 3.3 (Day 2) 📌 — Hon Algebra 2 2026-27 - Cislak">
+            <span class="medal-glyph submit-check">&check;</span>
+            <span class="medal-text">
+              <span class="medal-title">Homework 3.3 (Day 2) 📌</span>
+              <span class="medal-course">Hon Algebra 2 2026-27</span>
+            </span>
+            <span class="submit-time">7:13pm</span>
+          </a>
           <a class="medal-card submit-card" href="https://councilrock.instructure.com/courses/22970/assignments/1776268"
              title="Lab 11 Transistor Oscillator In-person build — Electronics1 # - Czapor">
             <span class="medal-glyph submit-check">&check;</span>
@@ -566,75 +577,61 @@
         <section class="student-block">
           <h2 class="student-name">E.</h2>
           <div class="kpi-grid">
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Social%20Studies" title="See Hon Am Civ 9 - Rapp assignments">
+                <div class="kpi-subject">Social Studies</div>
+                <div class="kpi-course" title="Hon Am Civ 9 - Rapp">Hon Am Civ 9 - Rapp</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter d">D</span>
+                  <span class="kpi-pct d">67.0%</span>
+                  <span class="kpi-arrow flat" title="No prior data yet">·</span>
+                </div>
+                <div class="kpi-spark"><svg class="spark d" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 67% to 67%"><title>2026-11-05 67.0% → 2026-11-05 67.0%</title><polyline points="60.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="60.0" cy="13.0" r="2.2"/></svg></div>
+              </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Latin" title="See Latin 1 - Philbin assignments">
                 <div class="kpi-subject">Latin</div>
                 <div class="kpi-course" title="Latin 1 - Philbin">Latin 1 - Philbin</div>
                 <div class="kpi-row">
                   <span class="kpi-letter a">A+</span>
                   <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow up" title="Since last check">▲ 8.6</span>
+                  <span class="kpi-arrow flat" title="No prior data yet">·</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 95% to 100%"><title>2026-10-23 95.0% → 2026-11-05 100.0%</title><polyline points="3.0,14.2 11.8,14.2 20.5,14.2 29.3,14.2 38.1,14.2 46.8,23.0 55.6,19.9 64.4,19.9 73.2,19.9 81.9,22.3 90.7,22.3 99.5,22.3 108.2,22.3 117.0,3.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="3.0" r="2.2"/></svg></div>
+                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-11-05 100.0% → 2026-11-05 100.0%</title><polyline points="60.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="60.0" cy="13.0" r="2.2"/></svg></div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=English" title="See Honors English 9 - Simon assignments">
                 <div class="kpi-subject">English</div>
                 <div class="kpi-course" title="Honors English 9 - Simon">Honors English 9 - Simon</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter b">B-</span>
-                  <span class="kpi-pct b">80.2%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 81% to 80%"><title>2026-10-22 81.5% → 2026-11-04 80.2%</title><polyline points="3.0,10.0 11.8,16.0 20.5,16.0 29.3,16.0 38.1,13.0 46.8,13.0 55.6,13.0 64.4,13.0 73.2,15.6 81.9,15.6 90.7,15.6 99.5,14.9 108.2,14.9 117.0,14.9" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="14.9" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Science" title="See Honors Biology - Vierick assignments">
-                <div class="kpi-subject">Science</div>
-                <div class="kpi-course" title="Honors Biology - Vierick">Honors Biology - Vierick</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter b">B+</span>
-                  <span class="kpi-pct b">87.8%</span>
-                  <span class="kpi-arrow dn" title="Since last check">▼ 0.6</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 89% to 88%"><title>2026-10-22 89.1% → 2026-11-04 87.8%</title><polyline points="3.0,10.3 11.8,13.6 20.5,13.6 29.3,13.6 38.1,12.9 46.8,12.0 55.6,11.1 64.4,13.2 73.2,13.2 81.9,13.2 90.7,13.2 99.5,13.2 108.2,13.2 117.0,15.7" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="15.7" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Social%20Studies" title="See Hon Am Civ 9 - Rapp assignments">
-                <div class="kpi-subject">Social Studies</div>
-                <div class="kpi-course" title="Hon Am Civ 9 - Rapp">Hon Am Civ 9 - Rapp</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter a">A+</span>
-                  <span class="kpi-pct a">67.0%</span>
-                  <span class="kpi-arrow dn" title="Since last check">▼ 26.1</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 93% to 67%"><title>2026-10-23 93.0% → 2026-11-05 67.0%</title><polyline points="3.0,3.1 11.8,3.1 20.5,3.1 29.3,3.1 38.1,3.1 46.8,3.0 55.6,3.0 64.4,3.0 73.2,3.0 81.9,3.0 90.7,3.0 99.5,3.1 108.2,3.0 117.0,23.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="23.0" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: B- 80.4%</div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Math" title="See Hon Algebra 2 2026-27 - Cislak assignments">
                 <div class="kpi-subject">Math</div>
                 <div class="kpi-course" title="Hon Algebra 2 2026-27 - Cislak">Hon Algebra 2 2026-27 - Cislak</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter c">C</span>
-                  <span class="kpi-pct c">74.4%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark c" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 77% to 74%"><title>2026-10-22 76.8% → 2026-11-04 74.4%</title><polyline points="3.0,8.4 11.8,8.4 20.5,8.4 29.3,8.4 38.1,8.4 46.8,9.6 55.6,8.3 64.4,8.0 73.2,8.0 81.9,8.0 90.7,8.0 99.5,7.9 108.2,18.1 117.0,18.1" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="18.1" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: C 74.2%</div>
+              </a>
+              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Science" title="See Honors Biology - Vierick assignments">
+                <div class="kpi-subject">Science</div>
+                <div class="kpi-course" title="Honors Biology - Vierick">Honors Biology - Vierick</div>
+                <div class="kpi-row">
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
+                </div>
+                <div class="kpi-prior">MP1 final: B+ 87.8%</div>
               </a>
               <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Tech" title="See Acl Comp Sci 1 # - Lynch - 26/27 assignments">
                 <div class="kpi-subject">Tech</div>
                 <div class="kpi-course" title="Acl Comp Sci 1 # - Lynch - 26/27">Acl Comp Sci 1 # - Lynch - 26/27</div>
                 <div class="kpi-row">
-                  <span class="kpi-letter b">B</span>
-                  <span class="kpi-pct b">84.6%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
+                  <span class="kpi-letter none">—</span>
+                  <span class="kpi-pct none">no grades yet</span>
                 </div>
-                <div class="kpi-spark"><svg class="spark b" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 97% to 85%"><title>2026-10-22 96.7% → 2026-11-04 84.6%</title><polyline points="3.0,3.0 11.8,5.6 20.5,5.6 29.3,5.6 38.1,5.6 46.8,5.6 55.6,5.6 64.4,5.6 73.2,5.6 81.9,23.0 90.7,23.0 99.5,23.0 108.2,23.0 117.0,23.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="23.0" r="2.2"/></svg></div>
-              </a>
-              <a class="kpi-card" href="https://thelunale.com/homework/?student=E&subject=Phys%20Ed" title="See 9th Grade PE Young assignments">
-                <div class="kpi-subject">Phys Ed</div>
-                <div class="kpi-course" title="9th Grade PE Young">9th Grade PE Young</div>
-                <div class="kpi-row">
-                  <span class="kpi-letter a">A+</span>
-                  <span class="kpi-pct a">100.0%</span>
-                  <span class="kpi-arrow flat" title="No change since last check">→</span>
-                </div>
-                <div class="kpi-spark"><svg class="spark a" viewBox="0 0 120 26" preserveAspectRatio="none" role="img" aria-label="Trend 100% to 100%"><title>2026-10-22 100.0% → 2026-11-04 100.0%</title><polyline points="3.0,13.0 11.8,13.0 20.5,13.0 29.3,13.0 38.1,13.0 46.8,13.0 55.6,13.0 64.4,13.0 73.2,13.0 81.9,13.0 90.7,13.0 99.5,13.0 108.2,13.0 117.0,13.0" vector-effect="non-scaling-stroke"/><circle cx="117.0" cy="13.0" r="2.2"/></svg></div>
+                <div class="kpi-prior">MP1 final: B 84.6%</div>
               </a></div>
           
           <div class="medal-strip">
